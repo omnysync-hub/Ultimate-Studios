@@ -1,0 +1,475 @@
+/* Inspiration lock: full-viewport halves, type + video flush to center line */
+
+.pageWrap {
+  --nav-h: 0px;
+  --pad-x: clamp(0.5rem, 1.2vw, 1.25rem);
+  --pad-y: 0.35rem;
+  --half: calc((100vh - 3rem - (var(--pad-y) * 2) - 1px) / 2);
+  --gap: clamp(0.4rem, 0.9vw, 0.85rem);
+
+  box-sizing: border-box;
+  width: 100%;
+  height: calc(100vh - 3rem);
+  max-height: calc(100dvh - 3rem);
+  margin: 0;
+  padding: var(--pad-y) var(--pad-x);
+  background: #000;
+  color: #f2f0e8;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ——— Preloader ——— */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #0a0a0a;
+  display: grid;
+  place-items: center;
+  gap: 2rem;
+  overflow: hidden;
+}
+
+.preloaderOpen {
+  animation: preloaderReveal 1s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+.preloaderOpen .stairs {
+  animation: stairsOpen 0.9s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+.preloaderOpen .preloaderTitle {
+  animation: titleExit 0.55s ease forwards;
+}
+
+.stairs {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.55rem;
+  height: 110px;
+  transform-origin: center bottom;
+}
+
+.stair {
+  display: block;
+  width: 18px;
+  background: #f2f0e8;
+  animation: stairBounce 1s infinite ease-in-out;
+}
+
+.stair:nth-child(1) {
+  height: 25%;
+  animation-delay: 0s;
+}
+.stair:nth-child(2) {
+  height: 38%;
+  animation-delay: 0.08s;
+}
+.stair:nth-child(3) {
+  height: 50%;
+  animation-delay: 0.16s;
+}
+.stair:nth-child(4) {
+  height: 65%;
+  animation-delay: 0.24s;
+}
+.stair:nth-child(5) {
+  height: 80%;
+  animation-delay: 0.32s;
+}
+.stair:nth-child(6) {
+  height: 100%;
+  animation-delay: 0.4s;
+}
+
+.preloaderTitle {
+  margin: 0;
+  font-size: clamp(2rem, 8vw, 5.4rem);
+  letter-spacing: 0.16em;
+  font-weight: 900;
+  color: #f2f0e8;
+  text-transform: uppercase;
+  animation: breathe 1.2s infinite ease-in-out;
+}
+
+/* ——— Shell ——— */
+.heroPage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+}
+
+.heroVisible {
+  opacity: 1;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.topNav {
+  height: var(--nav-h);
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.navIn {
+  animation: navFade 0.65s ease 0.1s forwards;
+}
+
+.brand {
+  text-decoration: none;
+  color: inherit;
+}
+
+.brandMark {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid #8a867c;
+  border-radius: 50%;
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.navList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navList a {
+  text-decoration: none;
+  color: #e8e4da;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: clamp(0.85rem, 1.15vw, 1.35rem);
+  font-weight: 500;
+}
+
+/* ——— Hero: two stacked halves meeting at the line ——— */
+.hero {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.heroRow {
+  height: auto;
+  min-height: 0;
+  display: flex;
+  align-items: stretch;
+  gap: var(--gap);
+  width: 100%;
+}
+
+.topRow {
+  align-items: stretch;
+}
+
+.bottomRow {
+  align-items: stretch;
+  padding-top: 0.28rem;
+}
+
+/* Word sizes to the type; video fills leftover space at the same height */
+.wordClip {
+  flex: 0 1 auto;
+  width: max-content;
+  max-width: 58%;
+  min-width: 0;
+  height: auto;
+  overflow-x: visible;
+  overflow-y: hidden;
+  display: flex;
+}
+
+.fromLineUp {
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+
+.fromLineDown {
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.heroWord {
+  margin: 0;
+  padding: 0;
+  color: #f2f0e8;
+  font-family: var(--font-display), "Arial Narrow", Impact, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.025em;
+  line-height: 0.8;
+  white-space: nowrap;
+  user-select: none;
+  /* JS fit sets the real size; this is the starting/fallback density */
+  font-size: var(--half);
+  opacity: 0;
+  max-width: 100%;
+}
+
+.fromLineUp .heroWord {
+  transform: translateY(105%);
+}
+
+.fromLineDown .heroWord {
+  transform: translateY(-105%);
+  text-align: right;
+}
+
+.revealed .fromLineUp .heroWord {
+  animation: fromLineUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+}
+
+.revealed .fromLineDown .heroWord {
+  animation: fromLineDown 1s cubic-bezier(0.16, 1, 0.3, 1) 0.65s forwards;
+}
+
+.dividerWrap {
+  flex-shrink: 0;
+  height: 1px;
+  overflow: hidden;
+}
+
+.heroDivider {
+  margin: 0;
+  border: none;
+  height: 1px;
+  background: #8a867c;
+  transform: scaleX(0);
+  transform-origin: center;
+}
+
+.revealed .heroDivider {
+  animation: lineDraw 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.05s forwards;
+}
+
+.videoSlot {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  max-width: none;
+  height: auto;
+  align-self: stretch;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(1.06);
+  clip-path: inset(0 48% 0 48%);
+}
+
+.revealed .videoCinematic {
+  animation: videoCinematic 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.95s forwards;
+}
+
+.revealed .videoDelay {
+  animation-delay: 1.1s;
+}
+
+.videoPlaceholder {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 30% 35%, #3a3a36, transparent 42%),
+    radial-gradient(circle at 75% 70%, #2a2a27, transparent 40%),
+    linear-gradient(120deg, #1c1c19, #0c0c0b 55%, #171714);
+  position: relative;
+}
+
+.videoPlaceholder::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 50%,
+    transparent 100%
+  );
+  transform: translateX(-120%);
+}
+
+.revealed .videoPlaceholder::after {
+  animation: scan 3.5s linear 2.1s infinite;
+}
+
+@keyframes stairBounce {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes stairsOpen {
+  to {
+    transform: scaleY(18) translateY(40%);
+    opacity: 0;
+  }
+}
+
+@keyframes titleExit {
+  to {
+    opacity: 0;
+    letter-spacing: 0.4em;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes preloaderReveal {
+  to {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes navFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lineDraw {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes fromLineUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fromLineDown {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes videoCinematic {
+  to {
+    opacity: 1;
+    transform: scale(1);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes scan {
+  to {
+    transform: translateX(120%);
+  }
+}
+
+@media (max-width: 900px) {
+  .pageWrap {
+    height: auto;
+    max-height: none;
+    min-height: calc(100dvh - 3rem);
+    overflow: visible;
+    --half: 42vw;
+  }
+
+  .heroRow {
+    height: auto;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .wordClip {
+    flex: none;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    min-height: 18vw;
+  }
+
+  .videoSlot {
+    flex: none;
+    width: 100%;
+    height: clamp(150px, 40vw, 240px);
+  }
+
+  .fromLineDown {
+    justify-content: flex-start;
+  }
+
+  .fromLineDown .heroWord {
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stair,
+  .preloaderTitle,
+  .preloaderOpen,
+  .preloaderOpen .stairs,
+  .preloaderOpen .preloaderTitle,
+  .navIn,
+  .revealed .heroDivider,
+  .revealed .fromLineUp .heroWord,
+  .revealed .fromLineDown .heroWord,
+  .revealed .videoCinematic,
+  .revealed .videoPlaceholder::after {
+    animation: none !important;
+  }
+
+  .preloader {
+    display: none;
+  }
+
+  .heroPage,
+  .topNav,
+  .fromLineUp .heroWord,
+  .fromLineDown .heroWord,
+  .videoSlot,
+  .heroDivider {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+  }
+}

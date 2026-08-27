@@ -1,0 +1,155 @@
+## ROLE & OBJECTIVE
+
+You are building a production-grade, high-performance website using **Next.js (App Router) + TypeScript**, optimized end-to-end for:
+1. Search engine ranking (technical SEO + content SEO)
+2. Mobile performance and usability (Core Web Vitals)
+3. Google AdSense monetization — **ads must render only inside the `/blog` section**, never on the homepage, landing pages, or other site sections
+
+---
+
+## 1. TECH STACK
+
+- **Framework:** Next.js 15 (App Router, React Server Components, TypeScript strict mode)
+- **Styling:** Tailwind CSS + `clsx`/`cva` for variant management
+- **Content/Blog:** MDX via `next-mdx-remote` or a headless CMS (Sanity/Contentful/Payload) — use MDX if blog is developer-authored, headless CMS if non-technical writers will publish
+- **Images:** `next/image` everywhere, AVIF/WebP output, responsive `sizes`
+- **Fonts:** `next/font` (self-hosted, zero layout shift, no external font requests)
+- **Hosting:** Vercel (native Next.js edge caching, ISR support, image optimization built-in)
+- **Database (if needed):** PostgreSQL via Prisma/Drizzle — only if the site has dynamic data beyond blog content
+- **Analytics:** Google Analytics 4 + Google Search Console verification
+- **Ads:** Google AdSense (`react-adsense` or raw script injection, scoped only to blog templates)
+- **Forms/Consent:** A CMP (Cookiebot, Osano, or custom) for GDPR/CCPA consent before ads/analytics load in EU/CA traffic
+
+---
+
+## 2. PROJECT STRUCTURE
+
+```
+app/
+  (marketing)/          -> homepage, landing pages, about, contact — NO ads here
+    page.tsx
+    about/page.tsx
+  blog/                 -> ONLY place AdSense components are allowed to render
+    layout.tsx          -> wraps all blog pages, injects AdSense script + ad slots
+    page.tsx            -> blog index
+    [slug]/page.tsx      -> individual post, in-article + sidebar ad slots
+  sitemap.ts
+  robots.ts
+  layout.tsx             -> root layout, global metadata, fonts
+components/
+  ads/
+    AdUnit.tsx           -> reusable ad slot, only imported inside app/blog/**
+    AdScriptLoader.tsx   -> lazy-loads adsbygoogle.js, consent-gated
+  seo/
+    JsonLd.tsx           -> structured data injector
+lib/
+  seo.ts                 -> shared metadata generator
+public/
+  ads.txt
+  robots.txt (or generate via robots.ts)
+```
+
+**Enforcement rule for the AI:** Ad components must live only under `components/ads/` and only ever be imported by files inside `app/blog/`. Do a final pass checking no `AdUnit` import exists outside that directory.
+
+---
+
+## 3. SEO REQUIREMENTS (TECHNICAL)
+
+### Metadata
+- Use the Next.js Metadata API (`generateMetadata`) on every route — dynamic title, description, canonical URL, Open Graph, and Twitter Card tags per page.
+- Unique, keyword-relevant `<title>` (50–60 chars) and meta description (140–160 chars) per page — never duplicate across pages.
+- Canonical tags (`alternates.canonical`) on every page, including paginated blog listings (`?page=2` etc.) to avoid duplicate content penalties.
+
+### Structured Data (JSON-LD)
+- `Organization` + `WebSite` schema on the homepage (with `SearchAction` for sitelinks search box).
+- `BlogPosting` schema on every blog post (headline, image, datePublished, dateModified, author).
+- `BreadcrumbList` schema on all nested pages.
+- `FAQPage` schema on any page with an FAQ block.
+
+### Site Infrastructure
+- `app/sitemap.ts` — dynamically generated XML sitemap including all static pages + every blog post, auto-updating on new publish.
+- `app/robots.ts` — allow all crawlers, explicitly point to sitemap, disallow `/api/`, `/admin/`, draft/preview routes.
+- Submit sitemap to Google Search Console + Bing Webmaster Tools post-launch.
+- `hreflang` tags if multi-language.
+- 404 and 500 pages that are still crawlable/branded, not dead ends.
+- Set up 301 redirects map (`next.config.js` redirects) for any legacy URLs — never break existing indexed links.
+
+### Content-Level SEO
+- One `<h1>` per page, logical `h2`/`h3` hierarchy.
+- Semantic HTML5 (`<article>`, `<nav>`, `<header>`, `<main>`, `<footer>`) — not div-soup.
+- Descriptive, keyword-rich `alt` text on every image.
+- Internal linking: every blog post links to 2–4 related posts/pages.
+- Slug format: `/blog/short-keyword-rich-slug`, no query-string IDs.
+- Target Flesch reading ease appropriate for the audience; short paragraphs, scannable subheadings.
+
+---
+
+## 4. MOBILE OPTIMIZATION & CORE WEB VITALS
+
+**Targets (Lighthouse mobile, real device throttling):**
+- LCP (Largest Contentful Paint): **< 2.5s**
+- INP (Interaction to Next Paint): **< 200ms**
+- CLS (Cumulative Layout Shift): **< 0.1**
+- Performance score: **90+**
+
+**How to hit these:**
+- `next/image` with explicit `width`/`height` (or `fill` + aspect-ratio container) to eliminate layout shift.
+- `next/font` with `display: swap` and font subsetting — no FOIT, no external font CDN calls.
+- Lazy-load everything below the fold (images `loading="lazy"` by default via `next/image`; ads especially — see Section 5).
+- Code-split aggressively: dynamic `import()` for heavy client components (carousels, modals, share widgets) with `ssr: false` where appropriate.
+- Minimize client-side JS: default to Server Components; only mark `"use client"` where interactivity is strictly needed.
+- Responsive breakpoints tested at 360px, 390px, 414px, 768px, 1024px+.
+- Touch targets ≥ 44×44px, no hover-dependent functionality.
+- Avoid render-blocking third-party scripts in `<head>` — load analytics/ads via `next/script` with `strategy="lazyOnload"` or `afterInteractive`.
+- Preconnect/preload critical resources only (`<link rel="preconnect">` for font/CDN origins, `rel="preload"` for LCP image).
+- Enable HTTP caching headers / ISR (`revalidate`) for blog pages so repeat visits are near-instant.
+
+---
+
+## 5. ADSENSE INTEGRATION — BLOG-ONLY CONSTRAINT
+
+This is the critical business rule: **ads appear only within `/blog/**` routes.**
+
+### Implementation approach
+1. Do **not** put the AdSense script (`adsbygoogle.js`) in the root `app/layout.tsx`. Instead, load it only inside `app/blog/layout.tsx`, so it never downloads on non-blog pages (also better for performance/CWV site-wide).
+2. Build `<AdUnit slot="..." format="auto" />` as a client component, imported only by:
+   - `app/blog/layout.tsx` (e.g., sidebar/sticky ad)
+   - `app/blog/[slug]/page.tsx` (in-article ads between sections, max 1 per 300–400 words)
+   - `app/blog/page.tsx` (blog index, e.g., native ad every 6th post card)
+3. Lazy-load ad slots with `IntersectionObserver` (`react-intersection-observer`) so ads only initialize when scrolled into view — improves both CWV and viewability metrics AdSense rewards.
+4. Reserve fixed height/width containers for every ad slot before the ad loads, to prevent CLS spikes.
+5. Gate ad + analytics script loading behind consent (CMP) for EU/UK/California traffic — required for AdSense policy compliance (GDPR/CCPA).
+6. Add `public/ads.txt` with your publisher ID (`google.com, pub-XXXXXXXXXXXX, DIRECT, f08c47fec0942fa0`).
+7. Respect AdSense policy limits: don't stack more than 3 display ads per blog post, no ads above the fold pushing content down excessively, no ads on thin/low-content pages (AdSense will reject pages with < ~300 words of unique content).
+8. Never place ads on: homepage, contact, about, legal pages, or any page outside `/blog` — enforce this as a lint rule/code review checklist, not just a convention.
+
+### Pre-monetization checklist (AdSense approval requirements)
+- Original, substantial content (typically 20–30+ published posts recommended before applying).
+- Privacy Policy page (required — must disclose use of cookies/ads).
+- Terms of Service page.
+- About + Contact pages with real info.
+- Site fully navigable, no broken links, HTTPS enforced.
+- Mobile-responsive (AdSense checks this explicitly).
+- No copyrighted/restricted content per AdSense program policies.
+
+---
+
+## 6. ANALYTICS & MONITORING
+
+- GA4 via `next/script` (`afterInteractive`, consent-gated).
+- Google Search Console: verify via DNS or HTML tag, submit sitemap, monitor Core Web Vitals report and coverage errors weekly.
+- Vercel Analytics or a Real User Monitoring tool to track actual field CWV data (lab data from Lighthouse isn't enough).
+- Set up alerts for crawl errors, 404 spikes, and Core Web Vitals regressions.
+
+---
+
+## 7. DELIVERABLE INSTRUCTIONS FOR THE AI
+
+When generating the project:
+1. Scaffold the full folder structure above.
+2. Implement `lib/seo.ts` as a single source of truth for generating metadata, reused via `generateMetadata` across all routes.
+3. Build the `AdUnit`/`AdScriptLoader` components with the lazy-load + consent-gate logic described, and only wire them into blog routes.
+4. Generate `sitemap.ts`, `robots.ts`, and a placeholder `ads.txt`.
+5. Set up a base Privacy Policy and Terms page (placeholder legal copy, flagged for legal review).
+6. Configure `next.config.js` for image domains, security headers (CSP, X-Frame-Options, Referrer-Policy), and compression.
+7. After scaffolding, run through the Core Web Vitals + AdSense checklists above as a final self-review before calling the build complete.

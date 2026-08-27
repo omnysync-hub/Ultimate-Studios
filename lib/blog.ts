@@ -1,0 +1,119 @@
+export type BlogPost = {
+  slug: string;
+  title: string;
+  description: string;
+  datePublished: string; // ISO
+  dateModified: string; // ISO
+  author: string;
+  tags: string[];
+  // Keep content long enough to avoid "thin content" rejections during AdSense review.
+  content: string;
+};
+
+export const blogPosts: BlogPost[] = [
+  {
+    slug: "stage-ready-production-workflows",
+    title: "Stage-Ready Production Workflows",
+    description:
+      "A practical checklist for getting a shoot moving fast—before the first camera rolls.",
+    datePublished: "2026-06-12",
+    dateModified: "2026-06-12",
+    author: "Ultimate Studio Team",
+    tags: ["stages", "workflow", "production"],
+    content:
+      "A great shoot starts long before call time. Stage-ready workflows reduce friction so your team can focus on the creative work. In this guide we walk through prep tasks, equipment verification, and set readiness.\n\nFirst, confirm your shot list and lighting needs. Then verify power, cabling, and audio routing. Keep a simple run of show and assign roles so every transition is predictable.\n\nNext, stage your gear in the same way you intend to build the day. Label cases, pre-assemble what can be pre-assembled, and make sure each item is easy to hand off. The goal is to remove “where is that?” moments.\n\nWhen you arrive, do a fast readiness sweep. Check camera settings defaults, wipe lenses, test batteries, and confirm that storage targets are reachable. If you’re using external recorders, confirm sync and take a short test clip.\n\nA useful tip: prepare for the editing pipeline while you still have set-friendly conditions. Confirm naming conventions, audio file formats, and card labeling. Even if you plan to rename later, reduce the chance of mistakes by deciding early.\n\nFinally, plan for the real world: weather changes, last-minute talent updates, and the extra five minutes everything seems to need. With a reliable workflow, you’ll protect your schedule and keep production smooth from setup through wrap. "
+  },
+  {
+    slug: "facility-features-that-speed-up-shoots",
+    title: "Facility Features That Speed Up Shoots",
+    description:
+      "How the right stage layout and amenities cut setup time and improve on-set flow.",
+    datePublished: "2026-06-20",
+    dateModified: "2026-06-20",
+    author: "Ultimate Studio Team",
+    tags: ["facilities", "speed", "stages"],
+    content:
+      "When time is tight, the facility has to work with your production plan. The best stage layouts help teams move quickly between setups, keep gear organized, and reduce the number of repeated trips.\n\nLook for clear zones: a dedicated production area, a camera and lighting footprint, and space for crew traffic. When those zones are obvious, your team naturally moves faster and makes fewer routing mistakes.\n\nPay attention to power distribution. Ready-to-use outlets, clearly labeled circuits, and safe cable routing prevent the “we need power right now” scramble. The less time spent managing power, the more time you spend on creative decisions.\n\nAmenities matter too. Reliable ventilation helps keep heat down, especially during long lighting sessions. Sound control, such as appropriate room treatments, reduces unexpected echoes that can create additional audio clean-up later.\n\nAnother overlooked speed factor is furniture and work surface availability. When you have dedicated spaces for talent checks, wardrobe staging, and client reviews, you avoid repeated repositioning of gear and people.\n\nFor transitions between takes, consider how quickly the stage can be reset. A facility that supports fast resets—clear storage paths, walkable layout, and predictable access—turns a “whole room reset” into a controlled set of small actions.\n\nThis article explores how everyday facility details translate into real time saved—so you can focus on framing the shot, not fighting the environment."
+  },
+  {
+    slug: "equipment-selection-for-real-world-productions",
+    title: "Equipment Selection for Real-World Productions",
+    description:
+      "Choosing cameras, lenses, and audio gear that match your production constraints.",
+    datePublished: "2026-07-02",
+    dateModified: "2026-07-02",
+    author: "Ultimate Studio Team",
+    tags: ["equipment", "audio", "camera"],
+    content:
+      "Picking equipment is more than matching a spec sheet—it’s about selecting tools that behave well on set. In this guide, we cover a straightforward approach to camera, lens, lighting, and audio selection.\n\nStart with your capture goals: resolution targets, movement, and how you’ll handle low-light conditions. If you need consistent results across different setups, choose tools that allow stable settings and quick repeatability.\n\nThen think about operator comfort and workflow. A camera that takes time to configure every time someone touches the menu creates hidden delays. Prefer equipment that supports predictable presets and simple monitoring.\n\nLenses should match your real shooting constraints. Consider how you’ll frame, how often you plan to change focal lengths, and whether your team has the time for frequent lens swaps. When you can keep your plan stable, you can keep your schedule stable.\n\nLighting equipment selection deserves the same practical mindset. Choose modifiers and diffusion that behave predictably and can be shaped without long adjustment cycles. When lighting changes are fast, your take cadence improves.\n\nFinally, we emphasize audio planning. Cleaner audio reduces edits and lets your team spend time on storytelling instead of repair. Confirm microphone placement strategy, record levels, and backup recording paths.\n\nThe best equipment choices reduce uncertainty. With the right combination, your production team can move confidently from setup to capture and back again without losing creative momentum."
+  },
+  {
+    slug: "planning-a-studio-session-from-call-time",
+    title: "Planning a Studio Session From Call Time",
+    description:
+      "A time-aware plan to coordinate crew, setup, and content capture without chaos.",
+    datePublished: "2026-07-15",
+    dateModified: "2026-07-15",
+    author: "Ultimate Studio Team",
+    tags: ["workflow", "production", "scheduling"],
+    content:
+      "A studio session becomes stressful when the plan is fuzzy. A time-aware plan keeps your crew in sync and protects creative momentum.\n\nBuild your schedule around call time milestones. Pre-light where possible, verify connectivity, and confirm file naming before recording. Assign responsibilities so every crew member knows what “done” looks like.\n\nA strong plan includes buffer time for real transitions. For example, after a talent adjustment or lens change, include a short verification step. That way, the team doesn’t skip checks to “save time,” only to lose more time later.\n\nBefore recording begins, do a quick workflow rehearsal. That means test audio routing, check monitor output, and confirm that your recording targets are healthy. If your capture pipeline is stable early, you can keep it stable all day.\n\nDuring production, track what changes between takes. If your lighting stays the same, you can increase cadence. If something must change, make it a controlled process: one person owns the change, and everyone else knows when it happens.\n\nAlso plan client review time. In studios, reviews often determine how quickly you get to approval. Build in a review cadence that doesn’t interrupt the crew’s focus.\n\nWhen you plan for transitions—setup to rehearsal to take—you reduce downtime. This guide shows a practical way to keep your day moving smoothly, so your final footage benefits from calm, deliberate production."
+  },
+  {
+    slug: "lighting-design-basics-for-quick-setups",
+    title: "Lighting Design Basics for Quick Setups",
+    description:
+      "Simple lighting strategies that look great and still respect your production schedule.",
+    datePublished: "2026-08-01",
+    dateModified: "2026-08-01",
+    author: "Ultimate Studio Team",
+    tags: ["lighting", "stages", "workflow"],
+    content:
+      "Good lighting doesn’t need to be complicated. In this guide, we share quick-start lighting approaches that work across a variety of productions.\n\nBegin by choosing a consistent direction and shaping your light with modifiers appropriate to the space. When direction is consistent, your face and background behave predictably, which makes multiple takes easier.\n\nKeep your adjustments modular so you can return to a baseline between setups. For example, decide where your key light sits relative to talent and keep that geometry stable, then swap only the modifier or intensity as needed.\n\nUse test frames early. A short test at the start of the day helps your team calibrate camera settings, exposure targets, and white balance strategies. That prevents the cascading “we changed settings but forgot to re-check audio/monitors” issue.\n\nPay attention to the background. Even if the primary goal is the subject, the background lights set the mood and also affect the overall exposure and contrast. A simple background strategy can prevent unwanted hotspots and banding.\n\nIf you need speed, standardize your lighting kit. A kit that matches your most common looks reduces setup time. When every modifier is labeled and stored in a consistent location, the crew can assemble lighting faster.\n\nFinally, test at the start of the day. A few deliberate checks improve the entire session and help your team move from setup to capture with confidence. With a repeatable lighting plan, your production day feels lighter—and the results feel more consistent."
+  },
+  {
+    slug: "studio-gear-setup-checklist-and-mistakes-to-avoid",
+    title: "Studio Gear Setup Checklist (and Mistakes to Avoid)",
+    description:
+      "A practical checklist to set up faster and avoid the common studio mistakes that ruin schedules.",
+    datePublished: "2026-08-10",
+    dateModified: "2026-08-10",
+    author: "Ultimate Studio Team",
+    tags: ["workflow", "stages", "equipment"],
+    content:
+      "A studio shoot can move quickly when the team follows a simple gear setup checklist. The biggest schedule risk usually isn’t the camera or lights—it’s the small missing piece you only notice once recording should have started.\n\nStart with a “power and connectivity” pass. Confirm outlet access, check extension cords, and verify that every device that needs power has it. Then verify connectivity: storage devices, HDMI/SDI links, audio routing, and network targets.\n\nNext, do a “camera and monitoring” check. Confirm lens is seated, confirm focus mode and exposure settings are consistent with your plan, and confirm the correct monitoring feed is on the right screen. Monitoring errors are quiet time killers because they can hide mistakes until the moment you review footage.\n\nThen run a short “audio reality check.” Make sure the right microphones are active, levels are sane, and that you have a backup recording path if possible. Many studio production headaches come from late discovery of poor audio levels.\n\nBefore you ask talent to settle into pose, do a quick rehearsal. In practice, that means a minute of test recording and a quick review of the first frames. If anything is off—composition, exposure, audio—you fix it during rehearsal, not after you’re already behind.\n\nMistakes to avoid: skipping labels on cables, moving gear without noting positions, and forgetting to re-check battery and storage. If you label and standardize your kit placement, your transitions become calm and predictable.\n\nWrap up your setup by confirming file naming conventions and folder structure for the day. When the team knows how you’ll organize the footage, handoffs to editing become easier. With this checklist, you can protect your schedule and keep production smooth from setup through wrap."
+  },
+  {
+    slug: "studio-equipment-care-and-daily-maintenance",
+    title: "Studio Equipment Care and Daily Maintenance",
+    description:
+      "Simple daily maintenance routines that keep gear reliable and reduce downtime on set.",
+    datePublished: "2026-08-18",
+    dateModified: "2026-08-18",
+    author: "Ultimate Studio Team",
+    tags: ["equipment", "workflow", "maintenance"],
+    content:
+      "Reliable production depends on reliable gear. Equipment care isn’t a complex task—it’s a set of daily habits that prevent avoidable failures. In this guide we share practical routines studios use to keep cameras, lights, and audio gear stable.\n\nStart with cleaning and inspection. Wipe lenses with appropriate microfiber materials, check cable condition, and confirm that connectors are free of dust. Even a small amount of dust can affect video quality and create intermittent issues that take time to diagnose.\n\nNext, verify power and battery health. Charge routines should be consistent and scheduled. Keep spare batteries labeled and stored in a predictable place. If your team knows where power lives, you reduce interruptions.\n\nFor lighting, confirm mounts, clamps, and modifiers are secure. Inspect stands for wear, check sandbag setups, and verify that your diffusion frames are clean and undamaged. When you standardize your lighting pack layout, setup becomes faster and errors drop.\n\nAudio deserves special attention. Confirm microphone caps, check windscreens, and test recorder levels early. If you use adapters or cables, verify them as a group during your first audio check. This is the fastest way to eliminate “works in rehearsal but not in the take” problems.\n\nThen capture a short maintenance log. A simple note about what was cleaned, replaced, or found can help you spot patterns across weeks. Over time, logs reduce guesswork and help you decide when gear needs service.\n\nThe point isn’t perfection; it’s consistency. With daily care and a light maintenance routine, your production day stays calm, your equipment stays dependable, and your team keeps moving."
+  }
+];
+
+export function getPostBySlug(slug: string) {
+  return blogPosts.find((p) => p.slug === slug) ?? null;
+}
+
+export function getRelatedPosts(slug: string, limit = 3) {
+  const current = getPostBySlug(slug);
+  if (!current) return blogPosts.slice(0, limit);
+
+  const scored = blogPosts
+    .filter((p) => p.slug !== slug)
+    .map((p) => {
+      const score = p.tags.reduce((acc, t) => acc + (current.tags.includes(t) ? 1 : 0), 0);
+      return { post: p, score };
+    })
+    .sort((a, b) => b.score - a.score || b.post.datePublished.localeCompare(a.post.datePublished));
+
+  const selected = scored.map((s) => s.post);
+  return selected.slice(0, limit);
+}
+
