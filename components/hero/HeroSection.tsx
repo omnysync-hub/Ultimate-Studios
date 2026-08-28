@@ -49,11 +49,21 @@ function useFitHeroType(
     scheduleFit();
     void document.fonts?.ready?.then(scheduleFit);
 
+    const idleId =
+      typeof requestIdleCallback !== "undefined"
+        ? requestIdleCallback(scheduleFit, { timeout: 1800 })
+        : window.setTimeout(scheduleFit, 300);
+
     const ro = new ResizeObserver(scheduleFit);
     ro.observe(document.documentElement);
     window.addEventListener("resize", scheduleFit);
     return () => {
       cancelAnimationFrame(fitRaf);
+      if (typeof cancelIdleCallback !== "undefined") {
+        cancelIdleCallback(idleId as number);
+      } else {
+        clearTimeout(idleId as number);
+      }
       ro.disconnect();
       window.removeEventListener("resize", scheduleFit);
     };

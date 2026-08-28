@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { loadGsap } from "@/lib/gsap";
+import { useInViewOnce } from "@/lib/useInViewOnce";
 import { ClosingStatements } from "./ClosingStatements";
 import { DominationIntro } from "./DominationIntro";
 import { StatsBento } from "./StatsBento";
@@ -10,14 +10,22 @@ import styles from "./DominationSection.module.css";
 
 export function DominationSection() {
   const rootRef = useRef<HTMLElement | null>(null);
+  const inView = useInViewOnce(rootRef);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    if (!inView) return;
+
     const root = rootRef.current;
     if (!root) return;
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const ctx = gsap.context(() => {
+    let ctx: { revert: () => void } | null = null;
+    let cancelled = false;
+
+    void loadGsap().then(({ gsap }) => {
+      if (cancelled || !root) return;
+
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      ctx = gsap.context(() => {
       const redFill = root.querySelector<HTMLElement>('[data-row-fill="red"]');
       const whiteFill = root.querySelector<HTMLElement>('[data-row-fill="white"]');
       const redText = root.querySelector<HTMLElement>('[data-row-text="red"]');
@@ -304,9 +312,13 @@ export function DominationSection() {
         });
       }
     }, root);
+    });
 
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+    };
+  }, [inView]);
 
   return (
     <section

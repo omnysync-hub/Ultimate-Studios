@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useInViewOnce } from "@/lib/useInViewOnce";
 import styles from "./StudioCtaSection.module.css";
 
 const FULL_COPY =
@@ -69,6 +70,7 @@ function LetterUnit({
 
 export function StudioCtaSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const inView = useInViewOnce(sectionRef, "50% 0px");
   const [revealedCount, setRevealedCount] = useState(0);
   const doneRef = useRef(false);
   const reduceMotion = useMemo(() => {
@@ -77,6 +79,8 @@ export function StudioCtaSection() {
   }, []);
 
   useEffect(() => {
+    if (!inView) return;
+
     if (reduceMotion) {
       setRevealedCount(letters.length);
       doneRef.current = true;
@@ -133,7 +137,7 @@ export function StudioCtaSection() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [reduceMotion]);
+  }, [inView, reduceMotion]);
 
   return (
     <section

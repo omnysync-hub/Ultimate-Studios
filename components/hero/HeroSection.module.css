@@ -406,6 +406,30 @@
   }
 }
 
+/* Return visitors: hero is visible immediately — improves LCP */
+:global(html.us-preloader-seen) .fromLineUp .heroWord,
+:global(html.us-preloader-seen) .fromLineDown .heroWord {
+  opacity: 1;
+  transform: translateY(0);
+  animation: none;
+}
+
+:global(html.us-preloader-seen) .heroDivider {
+  transform: scaleX(1);
+  animation: none;
+}
+
+:global(html.us-preloader-seen) .videoSlot {
+  opacity: 1;
+  transform: scale(1);
+  clip-path: inset(0 0 0 0);
+  animation: none;
+}
+
+:global(html.us-preloader-seen) .videoPlaceholder::after {
+  animation: none;
+}
+
 @media (max-width: 900px) {
   .pageWrap {
     height: auto;

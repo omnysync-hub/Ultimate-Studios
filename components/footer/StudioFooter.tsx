@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useId, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { loadGsap } from "@/lib/gsap";
+import { useInViewOnce } from "@/lib/useInViewOnce";
 import {
   footerReelSrc,
   studioContact,
@@ -15,13 +15,14 @@ export function StudioFooter() {
   const rootRef = useRef<HTMLElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const maskId = `us-footer-mask-${useId().replace(/:/g, "")}`;
+  const inView = useInViewOnce(rootRef, "40% 0px");
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    if (!inView) return;
+
     const root = rootRef.current;
     if (!root) return;
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const shell = root.querySelector<HTMLElement>("[data-footer-shell]");
     const bits = root.querySelectorAll<HTMLElement>("[data-footer-anim]");
     const letters = root.querySelectorAll<HTMLElement>("[data-letter]");
@@ -33,7 +34,6 @@ export function StudioFooter() {
       if (!wordSolid || !wordmark) return;
       const markW = mark?.offsetWidth ?? 0;
       const gap = 12;
-      // italic glyphs hang past the box — leave a little air on the right
       const pad = 28;
       const available = Math.max(120, wordmark.clientWidth - markW - gap - pad);
 
@@ -54,95 +54,105 @@ export function StudioFooter() {
     void document.fonts.ready.then(scheduleFitWordmark);
     scheduleFitWordmark();
 
-    if (reduce) {
-      gsap.set(shell, { clearProps: "all" });
-      gsap.set(bits, { clearProps: "all", opacity: 1, y: 0 });
-      gsap.set(letters, { clearProps: "all", opacity: 1, y: 0, yPercent: 0 });
-      return () => ro.disconnect();
-    }
+    let ctx: { revert: () => void } | null = null;
+    let cancelled = false;
 
-    gsap.set(shell, {
-      yPercent: 100,
-      borderRadius: "2.5rem 2.5rem 0 0"
-    });
-    gsap.set(bits, { y: 28, opacity: 0 });
-    gsap.set(letters, { yPercent: 115, opacity: 0, rotate: 6 });
+    void loadGsap().then(({ gsap, ScrollTrigger }) => {
+      if (cancelled || !root) return;
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (reduce) {
+        gsap.set(shell, { clearProps: "all" });
+        gsap.set(bits, { clearProps: "all", opacity: 1, y: 0 });
+        gsap.set(letters, { clearProps: "all", opacity: 1, y: 0, yPercent: 0 });
+        return;
+      }
+
+      gsap.set(shell, {
+        yPercent: 100,
+        borderRadius: "2.5rem 2.5rem 0 0"
+      });
+      gsap.set(bits, { y: 28, opacity: 0 });
+      gsap.set(letters, { yPercent: 115, opacity: 0, rotate: 6 });
+
+      ctx = gsap.context(() => {
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: root,
+            start: "top bottom",
+            end: "bottom bottom",
+            scrub: 0.55,
+            invalidateOnRefresh: true,
+            onRefresh: scheduleFitWordmark
+          }
+        });
+
+        tl.to(
+          shell,
+          {
+            yPercent: 0,
+            borderRadius: "0px 0px 0px 0px",
+            duration: 0.75,
+            ease: "none",
+            force3D: true
+          },
+          0
+        );
+
+        tl.to(
+          bits,
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.3,
+            stagger: 0.04,
+            ease: "none"
+          },
+          0.4
+        );
+
+        tl.to(
+          letters,
+          {
+            yPercent: 0,
+            opacity: 1,
+            rotate: 0,
+            duration: 0.4,
+            stagger: 0.018,
+            ease: "none"
+          },
+          0.48
+        );
+
+        ScrollTrigger.create({
           trigger: root,
-          start: "top bottom",
-          end: "bottom bottom",
-          scrub: 0.55,
-          invalidateOnRefresh: true,
-          onRefresh: scheduleFitWordmark
-        }
-      });
-
-      tl.to(
-        shell,
-        {
-          yPercent: 0,
-          borderRadius: "0px 0px 0px 0px",
-          duration: 0.75,
-          ease: "none",
-          force3D: true
-        },
-        0
-      );
-
-      tl.to(
-        bits,
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.3,
-          stagger: 0.04,
-          ease: "none"
-        },
-        0.4
-      );
-
-      tl.to(
-        letters,
-        {
-          yPercent: 0,
-          opacity: 1,
-          rotate: 0,
-          duration: 0.4,
-          stagger: 0.018,
-          ease: "none"
-        },
-        0.48
-      );
-
-      ScrollTrigger.create({
-        trigger: root,
-        start: "bottom bottom",
-        once: true,
-        onEnter: () => {
-          gsap.to(letters, {
-            y: -3,
-            duration: 1.8,
-            ease: "sine.inOut",
-            yoyo: true,
-            repeat: -1,
-            stagger: {
-              each: 0.045,
-              from: "start"
-            }
-          });
-        }
-      });
-    }, root);
+          start: "bottom bottom",
+          once: true,
+          onEnter: () => {
+            gsap.to(letters, {
+              y: -3,
+              duration: 1.8,
+              ease: "sine.inOut",
+              yoyo: true,
+              repeat: -1,
+              stagger: {
+                each: 0.045,
+                from: "start"
+              }
+            });
+          }
+        });
+      }, root);
+    });
 
     return () => {
+      cancelled = true;
       cancelAnimationFrame(fitRaf);
       ro.disconnect();
-      ctx.revert();
+      ctx?.revert();
     };
-  }, []);
+  }, [inView]);
 
   const playReel = () => {
     const v = videoRef.current;

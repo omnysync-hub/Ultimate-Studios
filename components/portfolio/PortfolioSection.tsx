@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { loadGsap } from "@/lib/gsap";
+import { useInViewOnce } from "@/lib/useInViewOnce";
 import type { Swiper as SwiperType } from "swiper";
 import { EffectCoverflow } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -18,16 +18,24 @@ type Props = {
 
 export function PortfolioSection({ videos }: Props) {
   const rootRef = useRef<HTMLElement | null>(null);
+  const inView = useInViewOnce(rootRef);
   const swiperRef = useRef<SwiperType | null>(null);
   const slides = videos.length > 0 ? videos : [];
   const lastSlide = Math.max(slides.length - 1, 1);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    if (!inView) return;
+
     const root = rootRef.current;
     if (!root) return;
 
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let ctx: { revert: () => void } | null = null;
+    let cancelled = false;
+
+    void loadGsap().then(({ gsap }) => {
+      if (cancelled || !root) return;
+
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const pin = root.querySelector<HTMLElement>("[data-portfolio-pin]");
     const heading = root.querySelector<HTMLElement>("[data-portfolio-heading]");
     const lines = root.querySelectorAll<SVGPathElement>("[data-draw-line]");
@@ -69,7 +77,7 @@ export function PortfolioSection({ videos }: Props) {
     gsap.set(workCta, { y: 18, opacity: 0 });
     gsap.set(workSweep, { xPercent: -120, opacity: 0 });
 
-    const ctx = gsap.context(() => {
+    ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root,
@@ -126,9 +134,13 @@ export function PortfolioSection({ videos }: Props) {
       tl.to(workSweep, { xPercent: 120, duration: 0.14, ease: "none" }, 0.86);
       tl.to(workSweep, { opacity: 0, duration: 0.04, ease: "none" }, 0.98);
     }, root);
+    });
 
-    return () => ctx.revert();
-  }, [lastSlide]);
+    return () => {
+      cancelled = true;
+      ctx?.revert();
+    };
+  }, [inView, lastSlide]);
 
   return (
     <section

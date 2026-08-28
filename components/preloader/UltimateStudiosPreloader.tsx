@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
 import styles from "./UltimateStudiosPreloader.module.css";
 
 const SESSION_KEY = "us-architectural-preloader-v2";
@@ -65,19 +64,28 @@ export function UltimateStudiosPreloader({ onComplete, onReady }: Props) {
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    if (reduce) {
-      const tl = gsap.timeline({
-        onComplete: () => {
+    let cleanup = () => {
+      document.body.style.overflow = prevOverflow;
+    };
+    let cancelled = false;
+
+    void import("gsap").then(({ default: gsap }) => {
+      if (cancelled) return;
+
+      if (reduce) {
+        const tl = gsap.timeline({
+          onComplete: () => {
+            document.body.style.overflow = prevOverflow;
+            finish();
+          }
+        });
+        tl.to(root, { opacity: 0, duration: 0.4, ease: "power2.out" });
+        cleanup = () => {
+          tl.kill();
           document.body.style.overflow = prevOverflow;
-          finish();
-        }
-      });
-      tl.to(root, { opacity: 0, duration: 0.4, ease: "power2.out" });
-      return () => {
-        tl.kill();
-        document.body.style.overflow = prevOverflow;
-      };
-    }
+        };
+        return;
+      }
 
     const mark = root.querySelector<HTMLElement>("[data-mark]");
     const ultimateLetters = root.querySelectorAll<HTMLElement>(
@@ -201,10 +209,16 @@ export function UltimateStudiosPreloader({ onComplete, onReady }: Props) {
     // Safety finish ~2.6s
     tl.set({}, {}, 2.6);
 
+      cleanup = () => {
+        tl.kill();
+        gsap.killTweensOf([root, mark, ultimateLetters, studiosLetters, sweep, haze, grain, slabs]);
+        document.body.style.overflow = prevOverflow;
+      };
+    });
+
     return () => {
-      tl.kill();
-      gsap.killTweensOf([root, mark, ultimateLetters, studiosLetters, sweep, haze, grain, slabs]);
-      document.body.style.overflow = prevOverflow;
+      cancelled = true;
+      cleanup();
     };
   }, [onComplete, onReady]);
 
