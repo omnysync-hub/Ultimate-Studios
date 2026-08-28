@@ -76,7 +76,7 @@ function YouTubeCard({ video }: { video: YouTubeVideo }) {
         <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
         <span className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition group-hover:opacity-100">
           <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 text-zinc-950 shadow-lg">
-            <svg viewBox="0 0 24 24" className="ml-0.5 h-5 w-5 fill-current" aria-hidden>
+            <svg viewBox="0 0 24 24" className="ml-0.5 h-5 w-5 fill-current" aria-hidden="true">
               <path d="M8 5v14l11-7z" />
             </svg>
           </span>

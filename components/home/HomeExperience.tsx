@@ -2,11 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-import { StudioCtaSection } from "@/components/cta/StudioCtaSection";
-import { DominationSection } from "@/components/domination/DominationSection";
-import { StudioFooter } from "@/components/footer/StudioFooter";
 import { HeroSection } from "@/components/hero/HeroSection";
-import { PortfolioSection } from "@/components/portfolio/PortfolioSection";
 import type { YouTubeVideo } from "@/lib/youtube";
 
 const SESSION_KEY = "us-architectural-preloader-v2";
@@ -17,6 +13,29 @@ const UltimateStudiosPreloader = dynamic(
       (m) => m.UltimateStudiosPreloader
     ),
   { ssr: false }
+);
+
+const StudioCtaSection = dynamic(
+  () =>
+    import("@/components/cta/StudioCtaSection").then((m) => m.StudioCtaSection)
+);
+
+const DominationSection = dynamic(
+  () =>
+    import("@/components/domination/DominationSection").then(
+      (m) => m.DominationSection
+    )
+);
+
+const PortfolioSection = dynamic(
+  () =>
+    import("@/components/portfolio/PortfolioSection").then(
+      (m) => m.PortfolioSection
+    )
+);
+
+const StudioFooter = dynamic(
+  () => import("@/components/footer/StudioFooter").then((m) => m.StudioFooter)
 );
 
 type Props = {

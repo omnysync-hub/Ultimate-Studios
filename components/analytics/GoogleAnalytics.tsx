@@ -4,7 +4,11 @@ import Script from "next/script";
 import { useEffect, useState } from "react";
 
 const CONSENT_KEY = "analyticsConsent";
-const GA_MEASUREMENT_ID = "G-XXXXXXXXXX";
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? "";
+
+function isValidGaId(id: string) {
+  return /^G-[A-Z0-9]+$/i.test(id);
+}
 
 function hasAnalyticsConsent() {
   try {
@@ -21,7 +25,7 @@ export function GoogleAnalytics() {
     setAllowed(hasAnalyticsConsent());
   }, []);
 
-  if (!allowed) return null;
+  if (!allowed || !isValidGaId(GA_MEASUREMENT_ID)) return null;
 
   return (
     <>

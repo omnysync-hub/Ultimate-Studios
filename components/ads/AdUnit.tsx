@@ -76,6 +76,7 @@ export function AdUnit({ slot, format = "auto", className, minHeight = 250 }: Pr
     <div
       ref={ref}
       className={className}
+      role="region"
       style={{
         width: "100%",
         minHeight,

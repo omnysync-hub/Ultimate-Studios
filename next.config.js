@@ -21,11 +21,38 @@ const nextConfig = {
     ]
   },
   async headers() {
-    // Minimal security hardening. Expand CSP when you add real third-party scripts.
+    const csp = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://pagead2.googlesyndication.com",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob: https://i.ytimg.com https://img.youtube.com",
+      "font-src 'self'",
+      "connect-src 'self' https://www.google-analytics.com https://www.youtube.com https://youtube.com",
+      "media-src 'self' https://storage.googleapis.com",
+      "frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "frame-ancestors 'none'",
+      "upgrade-insecure-requests"
+    ].join("; ");
+
     return [
       {
         source: "/(.*)",
         headers: [
+          {
+            key: "Content-Security-Policy",
+            value: csp
+          },
+          {
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin"
+          },
+          {
+            key: "Cross-Origin-Resource-Policy",
+            value: "same-site"
+          },
           {
             key: "X-Frame-Options",
             value: "DENY"

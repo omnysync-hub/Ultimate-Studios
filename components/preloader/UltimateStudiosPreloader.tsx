@@ -217,7 +217,6 @@ export function UltimateStudiosPreloader({ onComplete, onReady }: Props) {
     <div
       ref={rootRef}
       className={styles.root}
-      role="presentation"
       aria-hidden="true"
       data-ultimate-studios-preloader
     >

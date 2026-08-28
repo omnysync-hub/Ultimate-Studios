@@ -286,6 +286,7 @@
 
 .revealed .videoCinematic {
   animation: videoCinematic 1.15s cubic-bezier(0.16, 1, 0.3, 1) 0.95s forwards;
+  will-change: transform, opacity;
 }
 
 .revealed .videoDelay {

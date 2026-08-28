@@ -40,15 +40,22 @@ function useFitHeroType(
       studios.style.fontSize = `${best}px`;
     };
 
-    fit();
-    void document.fonts?.ready?.then(fit);
+    let fitRaf = 0;
+    const scheduleFit = () => {
+      cancelAnimationFrame(fitRaf);
+      fitRaf = requestAnimationFrame(fit);
+    };
 
-    const ro = new ResizeObserver(fit);
+    scheduleFit();
+    void document.fonts?.ready?.then(scheduleFit);
+
+    const ro = new ResizeObserver(scheduleFit);
     ro.observe(document.documentElement);
-    window.addEventListener("resize", fit);
+    window.addEventListener("resize", scheduleFit);
     return () => {
+      cancelAnimationFrame(fitRaf);
       ro.disconnect();
-      window.removeEventListener("resize", fit);
+      window.removeEventListener("resize", scheduleFit);
     };
   }, [ultimateRef, studiosRef]);
 }
@@ -64,7 +71,7 @@ export function HeroSection() {
       <main className={`${styles.heroPage} ${styles.heroVisible}`}>
         <h1 className={styles.srOnly}>Ultimate Studios</h1>
 
-        <section className={`${styles.hero} ${styles.revealed}`} aria-label="Hero">
+        <section className={`${styles.hero} ${styles.revealed}`}>
           <div className={`${styles.heroRow} ${styles.topRow}`}>
             <div className={`${styles.wordClip} ${styles.fromLineUp}`}>
               <p ref={ultimateRef} className={styles.heroWord}>
@@ -72,7 +79,7 @@ export function HeroSection() {
               </p>
             </div>
             <div className={`${styles.videoSlot} ${styles.videoCinematic}`}>
-              <div className={styles.videoPlaceholder} aria-label="Video placeholder one" />
+              <div className={styles.videoPlaceholder} aria-hidden="true" />
             </div>
           </div>
 
@@ -82,7 +89,7 @@ export function HeroSection() {
 
           <div className={`${styles.heroRow} ${styles.bottomRow}`}>
             <div className={`${styles.videoSlot} ${styles.videoCinematic} ${styles.videoDelay}`}>
-              <div className={styles.videoPlaceholder} aria-label="Video placeholder two" />
+              <div className={styles.videoPlaceholder} aria-hidden="true" />
             </div>
             <div className={`${styles.wordClip} ${styles.fromLineDown}`}>
               <p ref={studiosRef} className={styles.heroWord}>

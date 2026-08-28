@@ -43,10 +43,16 @@ export function StudioFooter() {
       wordSolid.style.fontSize = `${next}px`;
     };
 
-    const ro = new ResizeObserver(() => fitWordmark());
+    let fitRaf = 0;
+    const scheduleFitWordmark = () => {
+      cancelAnimationFrame(fitRaf);
+      fitRaf = requestAnimationFrame(fitWordmark);
+    };
+
+    const ro = new ResizeObserver(() => scheduleFitWordmark());
     if (wordmark) ro.observe(wordmark);
-    void document.fonts.ready.then(fitWordmark);
-    fitWordmark();
+    void document.fonts.ready.then(scheduleFitWordmark);
+    scheduleFitWordmark();
 
     if (reduce) {
       gsap.set(shell, { clearProps: "all" });
@@ -70,7 +76,7 @@ export function StudioFooter() {
           end: "bottom bottom",
           scrub: 0.55,
           invalidateOnRefresh: true,
-          onRefresh: fitWordmark
+          onRefresh: scheduleFitWordmark
         }
       });
 
@@ -80,7 +86,8 @@ export function StudioFooter() {
           yPercent: 0,
           borderRadius: "0px 0px 0px 0px",
           duration: 0.75,
-          ease: "none"
+          ease: "none",
+          force3D: true
         },
         0
       );
@@ -131,6 +138,7 @@ export function StudioFooter() {
     }, root);
 
     return () => {
+      cancelAnimationFrame(fitRaf);
       ro.disconnect();
       ctx.revert();
     };
@@ -197,6 +205,8 @@ export function StudioFooter() {
               <div
                 className={styles.wordmark}
                 data-wordmark
+                role="group"
+                aria-labelledby="footer-studio-name"
                 tabIndex={0}
                 onMouseEnter={playReel}
                 onMouseLeave={pauseReel}
@@ -252,12 +262,18 @@ export function StudioFooter() {
                         loop
                         playsInline
                         preload="metadata"
+                        aria-hidden="true"
+                        onError={(event) => {
+                          event.currentTarget.removeAttribute("src");
+                        }}
                       />
                     </div>
                   </foreignObject>
                 </svg>
 
-                <span className={styles.srOnly}>Ultimate Studios</span>
+                <span id="footer-studio-name" className={styles.srOnly}>
+                  Ultimate Studios
+                </span>
                 <span className={styles.mark} data-footer-anim aria-hidden="true">
                   <svg viewBox="0 0 40 40" className={styles.markSvg}>
                     <circle cx="20" cy="20" r="19" fill="#0a0a0a" />

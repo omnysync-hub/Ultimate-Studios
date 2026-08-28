@@ -12,13 +12,16 @@ const anton = Anton({
   subsets: ["latin"],
   weight: "400",
   display: "swap",
+  adjustFontFallback: true,
+  preload: true,
   variable: "--font-display"
 });
 
 const barlowCondensed = Barlow_Condensed({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700", "900"],
   display: "swap",
+  adjustFontFallback: true,
   variable: "--font-ui"
 });
 
@@ -38,8 +41,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={barlowCondensed.className}>
         <SiteNav />
         {children}
+        <GoogleAnalytics />
       </body>
-      <GoogleAnalytics />
     </html>
   );
 }

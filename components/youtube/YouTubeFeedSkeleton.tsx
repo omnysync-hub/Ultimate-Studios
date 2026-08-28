@@ -4,7 +4,9 @@ export function YouTubeFeedSkeleton({ className = "" }: Props) {
   return (
     <section
       className={`animate-pulse ${className}`}
+      role="status"
       aria-busy="true"
+      aria-live="polite"
       aria-label="Loading YouTube uploads"
     >
       <div className="mb-6 h-8 w-48 rounded bg-zinc-800" />

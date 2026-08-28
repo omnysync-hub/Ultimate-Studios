@@ -144,7 +144,7 @@ export function StudioCtaSection() {
       <h2 id="studio-cta-heading" className={styles.srOnly}>
         About Ultimate Studios
       </h2>
-      <p className={styles.copy} aria-label={FULL_COPY}>
+      <p className={styles.copy}>
         {letters.map((char, index) => (
           <LetterUnit
             key={`${char}-${index}`}
