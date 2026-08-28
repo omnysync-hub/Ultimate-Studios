@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { loadGsap } from "@/lib/gsap";
 import { useInViewOnce } from "@/lib/useInViewOnce";
 import type { Swiper as SwiperType } from "swiper";
@@ -8,6 +8,8 @@ import { EffectCoverflow } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import type { YouTubeVideo } from "@/lib/youtube";
 import { YouTubeThumbnail } from "@/components/youtube/YouTubeThumbnail";
+import "swiper/css";
+import "swiper/css/effect-coverflow";
 import styles from "./PortfolioSection.module.css";
 
 type Props = {
@@ -18,18 +20,8 @@ export function PortfolioSection({ videos }: Props) {
   const rootRef = useRef<HTMLElement | null>(null);
   const inView = useInViewOnce(rootRef);
   const swiperRef = useRef<SwiperType | null>(null);
-  const [swiperStylesReady, setSwiperStylesReady] = useState(false);
   const slides = videos.length > 0 ? videos : [];
   const lastSlide = Math.max(slides.length - 1, 1);
-
-  useEffect(() => {
-    if (!inView) return;
-
-    void Promise.all([
-      import("swiper/css"),
-      import("swiper/css/effect-coverflow")
-    ]).then(() => setSwiperStylesReady(true));
-  }, [inView]);
 
   useEffect(() => {
     if (!inView) return;
@@ -190,10 +182,13 @@ export function PortfolioSection({ videos }: Props) {
             </header>
 
             <div className={styles.carouselWrap}>
-              {slides.length > 0 && swiperStylesReady ? (
+              {slides.length > 0 ? (
                 <Swiper
                   onSwiper={(instance) => {
                     swiperRef.current = instance;
+                    requestAnimationFrame(() => {
+                      instance.update();
+                    });
                   }}
                   effect="coverflow"
                   grabCursor

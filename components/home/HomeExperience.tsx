@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useLayoutEffect, useState } from "react";
 import { DeferredSection } from "@/components/common/DeferredSection";
+import { StudioCtaSection } from "@/components/cta/StudioCtaSection";
 import { HeroSection } from "@/components/hero/HeroSection";
 import type { YouTubeVideo } from "@/lib/youtube";
 
@@ -14,26 +15,18 @@ const UltimateStudiosPreloader = dynamic(
   { ssr: false }
 );
 
-const StudioCtaSection = dynamic(
-  () =>
-    import("@/components/cta/StudioCtaSection").then((m) => m.StudioCtaSection),
-  { ssr: false }
-);
-
 const DominationSection = dynamic(
   () =>
     import("@/components/domination/DominationSection").then(
       (m) => m.DominationSection
-    ),
-  { ssr: false }
+    )
 );
 
 const PortfolioSection = dynamic(
   () =>
     import("@/components/portfolio/PortfolioSection").then(
       (m) => m.PortfolioSection
-    ),
-  { ssr: false }
+    )
 );
 
 const StudioFooter = dynamic(
@@ -66,15 +59,11 @@ export function HomeExperience({ videos }: Props) {
         />
       ) : null}
       <HeroSection />
-      <DeferredSection minHeight="42vh" rootMargin="60% 0px" idleTimeout={2500}>
-        <StudioCtaSection />
-      </DeferredSection>
+      <StudioCtaSection />
       <DeferredSection minHeight="140vh" rootMargin="80% 0px">
         <DominationSection />
       </DeferredSection>
-      <DeferredSection minHeight="100vh" rootMargin="60% 0px">
-        <PortfolioSection videos={videos} />
-      </DeferredSection>
+      <PortfolioSection videos={videos} />
       <DeferredSection minHeight="100vh" rootMargin="40% 0px">
         <StudioFooter />
       </DeferredSection>

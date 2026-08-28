@@ -4,7 +4,8 @@
   width: 100%;
   min-height: auto;
   padding: clamp(5rem, 12vw, 9rem) clamp(0.85rem, 2.4vw, 1.75rem) clamp(5rem, 11vw, 8rem);
-  overflow: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 .srOnly {
@@ -28,6 +29,12 @@
   letter-spacing: -0.028em;
   font-weight: 500;
   text-wrap: pretty;
+  overflow-wrap: break-word;
+}
+
+.word {
+  display: inline;
+  white-space: nowrap;
 }
 
 .letter {

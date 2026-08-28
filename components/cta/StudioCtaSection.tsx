@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useInViewOnce } from "@/lib/useInViewOnce";
 import styles from "./StudioCtaSection.module.css";
 
 const FULL_COPY =
@@ -20,7 +19,7 @@ const HOVER_COLORS = [
   "#74b9ff"
 ];
 
-const letters = FULL_COPY.split("");
+const words = FULL_COPY.split(" ");
 
 function LetterUnit({
   char,
@@ -70,7 +69,6 @@ function LetterUnit({
 
 export function StudioCtaSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
-  const inView = useInViewOnce(sectionRef, "50% 0px");
   const [revealedCount, setRevealedCount] = useState(0);
   const doneRef = useRef(false);
   const reduceMotion = useMemo(() => {
@@ -79,10 +77,8 @@ export function StudioCtaSection() {
   }, []);
 
   useEffect(() => {
-    if (!inView) return;
-
     if (reduceMotion) {
-      setRevealedCount(letters.length);
+      setRevealedCount(FULL_COPY.length);
       doneRef.current = true;
       return;
     }
@@ -94,7 +90,7 @@ export function StudioCtaSection() {
 
     const complete = () => {
       doneRef.current = true;
-      setRevealedCount(letters.length);
+      setRevealedCount(FULL_COPY.length);
     };
 
     const update = () => {
@@ -103,18 +99,16 @@ export function StudioCtaSection() {
       const rect = node.getBoundingClientRect();
       const viewH = window.innerHeight || 1;
 
-      // Scrolled past / leaving the section → finish the whole paragraph
       if (rect.top < viewH * 0.2 || rect.bottom < viewH * 0.65) {
         complete();
         return;
       }
 
-      // Reveal finishes while the copy is still on screen
       const start = viewH * 0.9;
       const end = viewH * 0.35;
       const raw = (start - rect.top) / Math.max(1, start - end);
       const progress = Math.min(1, Math.max(0, raw));
-      const next = Math.ceil(progress * letters.length);
+      const next = Math.ceil(progress * FULL_COPY.length);
 
       if (progress >= 0.98) {
         complete();
@@ -137,7 +131,9 @@ export function StudioCtaSection() {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
     };
-  }, [inView, reduceMotion]);
+  }, [reduceMotion]);
+
+  let charIndex = 0;
 
   return (
     <section
@@ -149,14 +145,36 @@ export function StudioCtaSection() {
         About Ultimate Studios
       </h2>
       <p className={styles.copy}>
-        {letters.map((char, index) => (
-          <LetterUnit
-            key={`${char}-${index}`}
-            char={char}
-            index={index}
-            shown={index < revealedCount}
-          />
-        ))}
+        {words.map((word, wordIdx) => {
+          const wordStart = charIndex;
+          const wordEls = word.split("").map((char) => {
+            const index = charIndex++;
+            return (
+              <LetterUnit
+                key={`${wordIdx}-${index}`}
+                char={char}
+                index={index}
+                shown={index < revealedCount}
+              />
+            );
+          });
+          if (wordIdx < words.length - 1) {
+            const spaceIndex = charIndex++;
+            wordEls.push(
+              <LetterUnit
+                key={`space-${spaceIndex}`}
+                char=" "
+                index={spaceIndex}
+                shown={spaceIndex < revealedCount}
+              />
+            );
+          }
+          return (
+            <span key={`word-${wordIdx}-${wordStart}`} className={styles.word}>
+              {wordEls}
+            </span>
+          );
+        })}
       </p>
     </section>
   );
