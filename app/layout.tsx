@@ -1,3 +1,4 @@
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import "./globals.css";
 import { Anton, Barlow_Condensed } from "next/font/google";
@@ -49,6 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SiteNav />
         {children}
         <GoogleAnalytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -6,8 +6,6 @@ import { DeferredSection } from "@/components/common/DeferredSection";
 import { HeroSection } from "@/components/hero/HeroSection";
 import type { YouTubeVideo } from "@/lib/youtube";
 
-const SESSION_KEY = "us-architectural-preloader-v2";
-
 const UltimateStudiosPreloader = dynamic(
   () =>
     import("@/components/preloader/UltimateStudiosPreloader").then(
@@ -51,11 +49,7 @@ export function HomeExperience({ videos }: Props) {
   const [preloaderNeeded, setPreloaderNeeded] = useState(false);
 
   useLayoutEffect(() => {
-    try {
-      setPreloaderNeeded(sessionStorage.getItem(SESSION_KEY) !== "1");
-    } catch {
-      setPreloaderNeeded(true);
-    }
+    setPreloaderNeeded(document.documentElement.dataset.preloader === "needed");
   }, []);
 
   return (

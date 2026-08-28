@@ -20,80 +20,6 @@
   flex-direction: column;
 }
 
-/* ——— Preloader ——— */
-.preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  background: #0a0a0a;
-  display: grid;
-  place-items: center;
-  gap: 2rem;
-  overflow: hidden;
-}
-
-.preloaderOpen {
-  animation: preloaderReveal 1s cubic-bezier(0.76, 0, 0.24, 1) forwards;
-}
-
-.preloaderOpen .stairs {
-  animation: stairsOpen 0.9s cubic-bezier(0.76, 0, 0.24, 1) forwards;
-}
-
-.preloaderOpen .preloaderTitle {
-  animation: titleExit 0.55s ease forwards;
-}
-
-.stairs {
-  display: flex;
-  align-items: flex-end;
-  gap: 0.55rem;
-  height: 110px;
-  transform-origin: center bottom;
-}
-
-.stair {
-  display: block;
-  width: 18px;
-  background: #f2f0e8;
-  animation: stairBounce 1s infinite ease-in-out;
-}
-
-.stair:nth-child(1) {
-  height: 25%;
-  animation-delay: 0s;
-}
-.stair:nth-child(2) {
-  height: 38%;
-  animation-delay: 0.08s;
-}
-.stair:nth-child(3) {
-  height: 50%;
-  animation-delay: 0.16s;
-}
-.stair:nth-child(4) {
-  height: 65%;
-  animation-delay: 0.24s;
-}
-.stair:nth-child(5) {
-  height: 80%;
-  animation-delay: 0.32s;
-}
-.stair:nth-child(6) {
-  height: 100%;
-  animation-delay: 0.4s;
-}
-
-.preloaderTitle {
-  margin: 0;
-  font-size: clamp(2rem, 8vw, 5.4rem);
-  letter-spacing: 0.16em;
-  font-weight: 900;
-  color: #f2f0e8;
-  text-transform: uppercase;
-  animation: breathe 1.2s infinite ease-in-out;
-}
-
 /* ——— Shell ——— */
 .heroPage {
   flex: 1;
@@ -116,57 +42,6 @@
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
-}
-
-.topNav {
-  height: var(--nav-h);
-  flex-shrink: 0;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 1rem;
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.navIn {
-  animation: navFade 0.65s ease 0.1s forwards;
-}
-
-.brand {
-  text-decoration: none;
-  color: inherit;
-}
-
-.brandMark {
-  display: inline-grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border: 1.5px solid #8a867c;
-  border-radius: 50%;
-  font-size: 1.55rem;
-  font-weight: 600;
-  line-height: 1;
-}
-
-.navList {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.navList a {
-  text-decoration: none;
-  color: #e8e4da;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: clamp(0.85rem, 1.15vw, 1.35rem);
-  font-weight: 500;
 }
 
 /* ——— Hero: two stacked halves meeting at the line ——— */
@@ -320,58 +195,6 @@
   animation: scan 3.5s linear 2.1s infinite;
 }
 
-@keyframes stairBounce {
-  0%,
-  100% {
-    transform: translateY(0);
-    opacity: 0.5;
-  }
-  50% {
-    transform: translateY(-10px);
-    opacity: 1;
-  }
-}
-
-@keyframes breathe {
-  0%,
-  100% {
-    opacity: 0.85;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-@keyframes stairsOpen {
-  to {
-    transform: scaleY(18) translateY(40%);
-    opacity: 0;
-  }
-}
-
-@keyframes titleExit {
-  to {
-    opacity: 0;
-    letter-spacing: 0.4em;
-    transform: scale(1.06);
-  }
-}
-
-@keyframes preloaderReveal {
-  to {
-    clip-path: inset(0 0 100% 0);
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
-@keyframes navFade {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes lineDraw {
   to {
     transform: scaleX(1);
@@ -469,12 +292,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stair,
-  .preloaderTitle,
-  .preloaderOpen,
-  .preloaderOpen .stairs,
-  .preloaderOpen .preloaderTitle,
-  .navIn,
   .revealed .heroDivider,
   .revealed .fromLineUp .heroWord,
   .revealed .fromLineDown .heroWord,
@@ -483,12 +300,7 @@
     animation: none !important;
   }
 
-  .preloader {
-    display: none;
-  }
-
   .heroPage,
-  .topNav,
   .fromLineUp .heroWord,
   .fromLineDown .heroWord,
   .videoSlot,

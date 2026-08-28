@@ -4,7 +4,9 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   experimental: {
-    optimizePackageImports: ["gsap", "swiper"]
+    optimizePackageImports: ["gsap", "swiper"],
+    optimizeCss: true,
+    cssChunking: "strict"
   },
   images: {
     formats: ["image/avif", "image/webp"],
@@ -30,7 +32,7 @@ const nextConfig = {
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://i.ytimg.com https://img.youtube.com",
       "font-src 'self'",
-      "connect-src 'self' https://www.google-analytics.com https://www.youtube.com https://youtube.com",
+      "connect-src 'self' https://www.google-analytics.com https://www.youtube.com https://youtube.com https://vitals.vercel-insights.com",
       "media-src 'self' https://storage.googleapis.com",
       "frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com",
       "object-src 'none'",

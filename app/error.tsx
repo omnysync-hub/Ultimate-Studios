@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import "./tailwind.css";
 
 export default function ErrorBoundary({
   error,

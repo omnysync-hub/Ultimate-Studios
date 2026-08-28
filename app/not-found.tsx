@@ -1,4 +1,5 @@
 import { buildMetadata } from "@/lib/seo";
+import "./tailwind.css";
 
 export async function generateMetadata() {
   return buildMetadata({

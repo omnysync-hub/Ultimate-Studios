@@ -1,11 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 html {
   margin: 0;
   background: #000;
-  /* Single document scroller — avoid body also becoming a scroll container */
   overflow-x: hidden;
   overflow-y: scroll;
 }
