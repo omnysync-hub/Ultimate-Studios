@@ -1,19 +1,10 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useLayoutEffect, useState } from "react";
 import { DeferredSection } from "@/components/common/DeferredSection";
 import { StudioCtaSection } from "@/components/cta/StudioCtaSection";
 import { HeroSection } from "@/components/hero/HeroSection";
 import type { YouTubeVideo } from "@/lib/youtube";
-
-const UltimateStudiosPreloader = dynamic(
-  () =>
-    import("@/components/preloader/UltimateStudiosPreloader").then(
-      (m) => m.UltimateStudiosPreloader
-    ),
-  { ssr: false }
-);
 
 const DominationSection = dynamic(
   () =>
@@ -39,25 +30,8 @@ type Props = {
 };
 
 export function HomeExperience({ videos }: Props) {
-  const [preloaderNeeded, setPreloaderNeeded] = useState(false);
-
-  useLayoutEffect(() => {
-    setPreloaderNeeded(document.documentElement.dataset.preloader === "needed");
-  }, []);
-
   return (
     <>
-      {preloaderNeeded ? (
-        <UltimateStudiosPreloader
-          onReady={() => {
-            document.documentElement.classList.add("us-boot-ready");
-          }}
-          onComplete={() => {
-            document.documentElement.classList.add("us-preloader-seen");
-            document.documentElement.classList.remove("us-boot-ready");
-          }}
-        />
-      ) : null}
       <HeroSection />
       <StudioCtaSection />
       <DeferredSection minHeight="140vh" rootMargin="80% 0px">

@@ -2,7 +2,7 @@ html {
   margin: 0;
   background: #000;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 body {
@@ -12,14 +12,4 @@ body {
   color: #f2f0e8;
   overflow-x: hidden;
   overflow-y: visible;
-}
-
-/* First-visit boot veil — removed once preloader slabs mount */
-html:not(.us-preloader-seen):not(.us-boot-ready)::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 9998;
-  background: #030303;
-  pointer-events: none;
 }

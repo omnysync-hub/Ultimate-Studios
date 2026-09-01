@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import styles from "./HeroSection.module.css";
 
 function useFitHeroType(
   ultimateRef: React.RefObject<HTMLElement | null>,
   studiosRef: React.RefObject<HTMLElement | null>
 ) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const ultimate = ultimateRef.current;
     const studios = studiosRef.current;
     if (!ultimate || !studios) return;
@@ -78,7 +78,7 @@ export function HeroSection() {
 
   return (
     <div className={styles.pageWrap}>
-      <main className={`${styles.heroPage} ${styles.heroVisible}`}>
+      <main className={styles.heroPage}>
         <h1 className={styles.srOnly}>Ultimate Studios</h1>
 
         <section className={`${styles.hero} ${styles.revealed}`}>
@@ -98,7 +98,7 @@ export function HeroSection() {
           </div>
 
           <div className={`${styles.heroRow} ${styles.bottomRow}`}>
-            <div className={`${styles.videoSlot} ${styles.videoCinematic} ${styles.videoDelay}`}>
+            <div className={`${styles.videoSlot} ${styles.videoCinematic}`}>
               <div className={styles.videoPlaceholder} aria-hidden="true" />
             </div>
             <div className={`${styles.wordClip} ${styles.fromLineDown}`}>

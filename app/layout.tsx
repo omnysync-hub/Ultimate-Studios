@@ -39,13 +39,6 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${anton.variable} ${barlowCondensed.variable}`}>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{var k="us-architectural-preloader-v2";if(sessionStorage.getItem(k)==="1")document.documentElement.classList.add("us-preloader-seen");else document.documentElement.dataset.preloader="needed"}catch(e){}`
-          }}
-        />
-      </head>
       <body className={barlowCondensed.className}>
         <SiteNav />
         {children}
