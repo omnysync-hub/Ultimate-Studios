@@ -1,0 +1,27 @@
+/* ==========================================================================
+   §3 Dynamic Per-Post Theming System
+   Contract for [data-post-theme] elements.
+   These variables are populated inline dynamically per post (from extracted or stored swatches).
+   ========================================================================== */
+
+[data-post-theme] {
+  /* Default fallback values if unassigned */
+  --accent: #F5A623;
+  --accent-light: #FFD98A;
+  --accent-glow: rgba(245, 166, 35, 0.45);
+  --accent-bg-from: #2A1B08;
+  --accent-bg-to: #0D0509;
+  --accent-text-on: #0D0509;
+}
+
+/* Reusable card neon glow utility using dynamic post accent */
+.glow-card-dynamic {
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 18px var(--accent-glow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glow-card-dynamic:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 24px var(--accent-glow);
+}
