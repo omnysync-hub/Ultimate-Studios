@@ -1,51 +1,63 @@
-import Link from "next/link";
+import { BlogNavbar } from "@/components/blog/home/BlogNavbar";
+import { BlogHero } from "@/components/blog/home/BlogHero";
+import { BlogCategories } from "@/components/blog/home/BlogCategories";
+import { BlogTrending } from "@/components/blog/home/BlogTrending";
 import { AdUnit } from "@/components/ads/AdUnit";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { buildMetadata } from "@/lib/seo";
 import { blogPosts } from "@/lib/blog";
 
 export async function generateMetadata() {
   return buildMetadata({
-    title: "Blog — Ultimate Studio",
+    title: "Blog — Ultimate Cineverse",
     description:
-      "Production tips, studio workflows, and equipment guidance from Ultimate Studio.",
+      "Explore deep dives into cinematography, cyberpunk aesthetics, worldbuilding scale, and anamorphic optics.",
     pathname: "/blog"
   });
 }
 
-export default function BlogIndexPage() {
+export default function BlogHomePage() {
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Blog",
+      name: "Ultimate Cineverse Blog",
+      description:
+        "Cinematography analyses, lighting breakdowns, sakuga anime aesthetics, and worldbuilding.",
+      url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com"}/blog`
+    }
+  ];
+
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-10">
-      <h1 className="text-3xl font-bold">Blog</h1>
-      <p className="mt-2 text-slate-200 leading-relaxed">
-        Studio workflow notes, quick checklists, and practical production guidance.
-      </p>
+    <div className="min-h-screen bg-base text-text-primary selection:bg-brand-red selection:text-white pb-20">
+      <JsonLd data={jsonLd} />
 
-      <ul className="mt-6 space-y-4">
-        {blogPosts.map((post, idx) => {
-          const shouldInsertAd = (idx + 1) % 6 === 0;
-          return (
-            <li key={post.slug} className="space-y-2">
-              <Link
-                href={`/blog/${post.slug}`}
-                className="block rounded border border-slate-800 bg-slate-950 p-4 hover:border-slate-600"
-              >
-                <h2 className="text-xl font-semibold">{post.title}</h2>
-                <p className="text-slate-300 mt-1">{post.description}</p>
-                <p className="text-slate-500 mt-2 text-sm">
-                  {new Date(post.datePublished).toLocaleDateString()} · {post.author}
-                </p>
-              </Link>
+      {/* §4.1 Navbar */}
+      <BlogNavbar />
 
-              {shouldInsertAd ? (
-                <div className="mt-4">
-                  <AdUnit slot="1234567890" minHeight={250} />
-                </div>
-              ) : null}
-            </li>
-          );
-        })}
-      </ul>
-    </main>
+      {/* Main Container: 64px desktop margin, 20px mobile margin (§2.4) */}
+      <main className="mx-auto w-full max-w-[1440px] px-5 sm:px-10 lg:px-16">
+        {/* §4.2 Hero Section */}
+        <BlogHero />
+
+        {/* §4.3 Categories Section */}
+        <BlogCategories />
+
+        {/* §4.4 Trending Blogs Section */}
+        <BlogTrending posts={blogPosts} />
+
+        {/* AdSense Unit (Scoped inside blog per .cursorrules & design.md) */}
+        <div className="mt-16 w-full flex justify-center">
+          <div className="w-full max-w-4xl rounded-card border border-border-subtle bg-surface p-4 text-center">
+            <span className="text-[11px] font-bold uppercase tracking-widest text-text-muted">
+              Advertisement
+            </span>
+            <div className="mt-2 flex justify-center">
+              <AdUnit slot="1234567890" minHeight={120} />
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }
-

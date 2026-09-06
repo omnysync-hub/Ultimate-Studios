@@ -1,9 +1,18 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { BlogNavbar } from "@/components/blog/home/BlogNavbar";
+import { BlogHeaderCard } from "@/components/blog/detail/BlogHeaderCard";
+import { BlogArticleCard } from "@/components/blog/detail/BlogArticleCard";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { AdUnit } from "@/components/ads/AdUnit";
 import { buildMetadata } from "@/lib/seo";
-import { getPostBySlug, getRelatedPosts } from "@/lib/blog";
+import { getPostBySlug, getRelatedPosts, blogPosts } from "@/lib/blog";
+import { getPostThemeStyle } from "@/lib/theme";
+
+export async function generateStaticParams() {
+  return blogPosts.map((post) => ({
+    slug: post.slug
+  }));
+}
 
 export async function generateMetadata({
   params
@@ -13,11 +22,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) return {};
+
   return buildMetadata({
-    title: `${post.title} — Ultimate Studio`,
+    title: `${post.title} — Ultimate Cineverse`,
     description: post.description,
     pathname: `/blog/${post.slug}`,
-    openGraphImageUrl: undefined
+    openGraphImageUrl: post.coverImage
   });
 }
 
@@ -30,8 +40,8 @@ export default async function BlogPostPage({
   const post = getPostBySlug(slug);
   if (!post) notFound();
 
-  const paragraphs = post.content.split(/\n\s*\n/).map((s) => s.trim()).filter(Boolean);
   const related = getRelatedPosts(post.slug, 3);
+  const themeStyle = getPostThemeStyle(post);
 
   const breadcrumb = {
     "@context": "https://schema.org",
@@ -48,67 +58,63 @@ export default async function BlogPostPage({
     "@type": "BlogPosting",
     headline: post.title,
     description: post.description,
+    image: post.coverImage,
     datePublished: post.datePublished,
     dateModified: post.dateModified,
     author: {
+      "@type": "Person",
+      name: post.author.name
+    },
+    publisher: {
       "@type": "Organization",
-      name: post.author
+      name: "Ultimate Cineverse",
+      logo: {
+        "@type": "ImageObject",
+        url: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com"}/logo.png`
+      }
     }
   };
 
-  // Reserve a single inline ad container so CLS stays flat.
-  const inlineAdAfter = Math.min(2, Math.max(0, paragraphs.length - 1));
-
   return (
-    <div className="mx-auto w-full max-w-5xl px-4 py-10">
+    <div
+      data-post-theme
+      style={themeStyle}
+      className="min-h-screen bg-base text-text-primary selection:bg-[var(--accent)] selection:text-[var(--accent-text-on)] pb-24"
+    >
       <JsonLd data={breadcrumb} />
       <JsonLd data={blogPosting} />
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px]">
-        <article className="max-w-none">
-          <h1 className="text-3xl font-bold">{post.title}</h1>
-          <p className="mt-2 text-slate-300">
-            {new Date(post.datePublished).toLocaleDateString()} · {post.author}
-          </p>
+      {/* Global Navbar */}
+      <BlogNavbar />
 
-          <div className="mt-6">
-            {paragraphs.map((p, idx) => {
-              const shouldInsertInlineAd = idx === inlineAdAfter;
-              return (
-                <div key={idx}>
-                  <p>{p}</p>
-                  {shouldInsertInlineAd ? (
-                    <div className="my-8">
-                      <AdUnit slot="1234567890" minHeight={300} />
-                    </div>
-                  ) : null}
-                </div>
-              );
-            })}
-          </div>
+      {/* Main Container: Centered max-width 1200px (§6.1) */}
+      <main className="mx-auto w-full max-w-[1200px] px-5 sm:px-10 pt-8">
+        {/* Navigation / Quick View Switcher Bar */}
+        <div className="mb-6 flex items-center justify-between">
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-text-secondary hover:text-text-primary transition-colors"
+          >
+            ← Back to All Blogs
+          </Link>
+          <Link
+            href={`/blog/${post.slug}/quick`}
+            style={{ color: "var(--accent)" }}
+            className="text-xs font-bold uppercase tracking-wider hover:underline"
+          >
+            Open in Quick-View ↗
+          </Link>
+        </div>
 
-          <section className="mt-10">
-            <h2 className="text-2xl font-semibold">Related posts</h2>
-            <ul className="mt-4 space-y-3">
-              {related.map((r) => (
-                <li key={r.slug}>
-                  <Link className="text-amber-300 hover:text-amber-200" href={`/blog/${r.slug}`}>
-                    {r.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </section>
-        </article>
+        {/* Two Stacked Blocks with 48px gap (§6.1) */}
+        <div className="flex flex-col gap-12">
+          {/* Block 1: Header Card */}
+          <BlogHeaderCard post={post} />
 
-        <aside className="sticky top-6 hidden lg:block">
-          <div className="rounded border border-slate-800 bg-slate-950 p-3">
-            <div className="text-sm font-semibold text-slate-200">Sponsored</div>
-            <AdUnit slot="1234567890" minHeight={250} className="mt-3" />
-          </div>
-        </aside>
-      </div>
+          {/* Block 2: Article Body Card */}
+          <BlogArticleCard post={post} relatedPosts={related} />
+        </div>
+      </main>
     </div>
   );
 }
-
