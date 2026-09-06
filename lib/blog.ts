@@ -1,119 +1,338 @@
+export type LeaderboardUser = {
+  rank: number;
+  name: string;
+  avatar: string;
+  points: number;
+  percentile: string;
+  isCurrentUser?: boolean;
+};
+
+export type ActivityComment = {
+  id: string;
+  name: string;
+  avatar: string;
+  time: string;
+  comment: string;
+};
+
+export type BlogPostStats = {
+  pages_read: number;
+  total_pages: number;
+  avg_time: string;
+  level: number;
+  reacts_to_level: number;
+  streak_days: number;
+  badges: string[];
+};
+
 export type BlogPost = {
   slug: string;
   title: string;
   description: string;
-  datePublished: string; // ISO
-  dateModified: string; // ISO
-  author: string;
+  datePublished: string;
+  dateModified: string;
+  author: {
+    name: string;
+    avatar: string;
+    role?: string;
+  };
+  category: "Movies" | "Anime" | "Series" | "Cinematography";
   tags: string[];
-  // Keep content long enough to avoid "thin content" rejections during AdSense review.
+  coverImage: string;
+  readTime: string;
+  views: string;
+  
+  /* §3 & §8 Stored Swatches */
+  theme_accent: string;
+  theme_accent_light: string;
+  theme_bg_from: string;
+
+  /* §5 Quick View Stats & Leaderboard */
+  stats: BlogPostStats;
+  leaderboard: {
+    friends: LeaderboardUser[];
+    bookclub: LeaderboardUser[];
+    global: LeaderboardUser[];
+  };
+  activity: ActivityComment[];
+
+  /* §6 Full Article Content */
   content: string;
 };
 
 export const blogPosts: BlogPost[] = [
   {
-    slug: "stage-ready-production-workflows",
-    title: "Stage-Ready Production Workflows",
+    slug: "secrets-of-cinematography-in-modern-fantasy",
+    title: "Secrets of Cinematic Lighting in Modern Dark Fantasy",
     description:
-      "A practical checklist for getting a shoot moving fast—before the first camera rolls.",
-    datePublished: "2026-06-12",
-    dateModified: "2026-06-12",
-    author: "Ultimate Studio Team",
-    tags: ["stages", "workflow", "production"],
-    content:
-      "A great shoot starts long before call time. Stage-ready workflows reduce friction so your team can focus on the creative work. In this guide we walk through prep tasks, equipment verification, and set readiness.\n\nFirst, confirm your shot list and lighting needs. Then verify power, cabling, and audio routing. Keep a simple run of show and assign roles so every transition is predictable.\n\nNext, stage your gear in the same way you intend to build the day. Label cases, pre-assemble what can be pre-assembled, and make sure each item is easy to hand off. The goal is to remove “where is that?” moments.\n\nWhen you arrive, do a fast readiness sweep. Check camera settings defaults, wipe lenses, test batteries, and confirm that storage targets are reachable. If you’re using external recorders, confirm sync and take a short test clip.\n\nA useful tip: prepare for the editing pipeline while you still have set-friendly conditions. Confirm naming conventions, audio file formats, and card labeling. Even if you plan to rename later, reduce the chance of mistakes by deciding early.\n\nFinally, plan for the real world: weather changes, last-minute talent updates, and the extra five minutes everything seems to need. With a reliable workflow, you’ll protect your schedule and keep production smooth from setup through wrap. "
+      "A masterclass in volumetric mist, amber key lighting, and practical candle arrays that defined Hogwarts and beyond.",
+    datePublished: "2026-08-24",
+    dateModified: "2026-08-25",
+    author: {
+      name: "Marcus Vance",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+      role: "Lead Director of Photography"
+    },
+    category: "Cinematography",
+    tags: ["lighting", "dark-fantasy", "volumetric", "optics"],
+    coverImage: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&auto=format&fit=crop&q=80",
+    readTime: "7 min read",
+    views: "24.8k",
+    theme_accent: "#F5A623",
+    theme_accent_light: "#FFD98A",
+    theme_bg_from: "#2A1B08",
+    stats: {
+      pages_read: 354,
+      total_pages: 420,
+      avg_time: "1:45",
+      level: 8,
+      reacts_to_level: 24,
+      streak_days: 14,
+      badges: ["Wand Master", "Lorekeeper", "Speed Reader", "Cinephile", "Night Owl", "Trendsetter"]
+    },
+    leaderboard: {
+      friends: [
+        { rank: 1, name: "Elena Rostova", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80", points: 2840, percentile: "Top 1%" },
+        { rank: 2, name: "Marcus Vance", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80", points: 2610, percentile: "Top 3%", isCurrentUser: true },
+        { rank: 3, name: "David Chen", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80", points: 2490, percentile: "Top 5%" },
+        { rank: 4, name: "Sarah Jenkins", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&auto=format&fit=crop&q=80", points: 2180, percentile: "Top 12%" }
+      ],
+      bookclub: [
+        { rank: 1, name: "Hogwarts Archival Guild", avatar: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=100&auto=format&fit=crop&q=80", points: 14200, percentile: "Top 1%" },
+        { rank: 2, name: "Anamorphic Society", avatar: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=100&auto=format&fit=crop&q=80", points: 12850, percentile: "Top 2%" },
+        { rank: 3, name: "Neon Cinephiles", avatar: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=100&auto=format&fit=crop&q=80", points: 11400, percentile: "Top 5%" }
+      ],
+      global: [
+        { rank: 1, name: "Aria Sterling", avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80", points: 34200, percentile: "Top 0.1%" },
+        { rank: 2, name: "Kenji Sato", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80", points: 31900, percentile: "Top 0.5%" },
+        { rank: 3, name: "Elena Rostova", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80", points: 29400, percentile: "Top 1%" }
+      ]
+    },
+    activity: [
+      {
+        id: "c1",
+        name: "Clara Oswald",
+        avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&auto=format&fit=crop&q=80",
+        time: "12m ago",
+        comment: "The breakdown of candle lumen output and practical diffusion in Chapter 3 completely changed how we lit our indie short film yesterday!"
+      },
+      {
+        id: "c2",
+        name: "Liam O'Connor",
+        avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&auto=format&fit=crop&q=80",
+        time: "45m ago",
+        comment: "Agreed on Cooke lenses having that subtle warmth. Nothing beats that organic rolloff on parchment and stone castle walls."
+      },
+      {
+        id: "c3",
+        name: "Maya Lin",
+        avatar: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&auto=format&fit=crop&q=80",
+        time: "2h ago",
+        comment: "Bookmarked for our studio crew prep session next Monday. Essential reading for every DP."
+      }
+    ],
+    content: `Great dark fantasy cinematography is never just about turning off lights—it is about sculpting the darkness. When you look at iconic scenes in magical halls, every beam of light has weight, texture, and a narrative origin.
+
+In this deep dive, we break down how volumetric haze, amber tungsten sources, and low-contrast optical coatings work in unison to build cinematic depth without muddying your dynamic range.
+
+"Lighting a dark fantasy world is an act of restraint. You must allow shadows to swallow what isn't essential so that the flame in the center commands the eye."
+
+First, let's explore practical candle arrays. Using real flicker circuits tied to dimmed tungsten bulbs inside lanterns gives you the micro-pulsing behavior that CGI passes simply cannot replicate on skin tones. Pairing this with a 1/4 Black Pro-Mist filter blossoms highlights gently into the surrounding shadows.
+
+When staging shots with multiple depth layers, always maintain separation between the character's silhouette and the background architecture. A sharp edge light placed three stops above key creates the distinct separation that prevents the subject from melting into dark castle stonework.
+
+Finally, managing smoke and atmosphere requires consistent air circulation. High-output glycol hazers run through a chiller produce a uniform low-lying suspension that catches directional light rays without creating distracting fog bursts.`
   },
   {
-    slug: "facility-features-that-speed-up-shoots",
-    title: "Facility Features That Speed Up Shoots",
+    slug: "cyberpunk-visual-languages-neon-shadows",
+    title: "Cyberpunk Aesthetics: Neon, Dystopia & Visual Rhythms",
     description:
-      "How the right stage layout and amenities cut setup time and improve on-set flow.",
-    datePublished: "2026-06-20",
-    dateModified: "2026-06-20",
-    author: "Ultimate Studio Team",
-    tags: ["facilities", "speed", "stages"],
-    content:
-      "When time is tight, the facility has to work with your production plan. The best stage layouts help teams move quickly between setups, keep gear organized, and reduce the number of repeated trips.\n\nLook for clear zones: a dedicated production area, a camera and lighting footprint, and space for crew traffic. When those zones are obvious, your team naturally moves faster and makes fewer routing mistakes.\n\nPay attention to power distribution. Ready-to-use outlets, clearly labeled circuits, and safe cable routing prevent the “we need power right now” scramble. The less time spent managing power, the more time you spend on creative decisions.\n\nAmenities matter too. Reliable ventilation helps keep heat down, especially during long lighting sessions. Sound control, such as appropriate room treatments, reduces unexpected echoes that can create additional audio clean-up later.\n\nAnother overlooked speed factor is furniture and work surface availability. When you have dedicated spaces for talent checks, wardrobe staging, and client reviews, you avoid repeated repositioning of gear and people.\n\nFor transitions between takes, consider how quickly the stage can be reset. A facility that supports fast resets—clear storage paths, walkable layout, and predictable access—turns a “whole room reset” into a controlled set of small actions.\n\nThis article explores how everyday facility details translate into real time saved—so you can focus on framing the shot, not fighting the environment."
+      "How high-contrast chromatic aberration, anamorphic flares, and rain-slicked pavement engineer futuristic immersion.",
+    datePublished: "2026-08-20",
+    dateModified: "2026-08-21",
+    author: {
+      name: "Taro Tanaka",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
+      role: "Visual Stylist & Colorist"
+    },
+    category: "Anime",
+    tags: ["cyberpunk", "neon", "anime", "grading"],
+    coverImage: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&auto=format&fit=crop&q=80",
+    readTime: "9 min read",
+    views: "31.2k",
+    theme_accent: "#E23FE0",
+    theme_accent_light: "#FFA8FE",
+    theme_bg_from: "#260624",
+    stats: {
+      pages_read: 280,
+      total_pages: 350,
+      avg_time: "2:10",
+      level: 9,
+      reacts_to_level: 18,
+      streak_days: 21,
+      badges: ["Neon Runner", "Cyber Sage", "Master Colorist", "Speed Reader"]
+    },
+    leaderboard: {
+      friends: [
+        { rank: 1, name: "Taro Tanaka", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80", points: 3100, percentile: "Top 1%", isCurrentUser: true },
+        { rank: 2, name: "Ren Takahashi", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80", points: 2890, percentile: "Top 3%" }
+      ],
+      bookclub: [
+        { rank: 1, name: "Neo-Tokyo Cinematics", avatar: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100&auto=format&fit=crop&q=80", points: 15400, percentile: "Top 1%" }
+      ],
+      global: [
+        { rank: 1, name: "Aria Sterling", avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80", points: 34200, percentile: "Top 0.1%" }
+      ]
+    },
+    activity: [
+      {
+        id: "c4",
+        name: "Devon Reed",
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+        time: "30m ago",
+        comment: "The magenta/cyan split tone palette is iconic for a reason. Great breakdown of LUT balancing!"
+      }
+    ],
+    content: `Cyberpunk is defined by the tension between high technology and low life. Visually, this is expressed through harsh neon saturation battling impenetrable urban shadows.
+
+Color palettes in cyberpunk cinema rely heavily on dual-complementary lighting. A piercing cyan backlight paired with saturated magenta fill gives characters an electric, alienated edge.
+
+"When city neon reflects off wet asphalt, every street corner becomes a natural diffusion filter."
+
+In animation and live-action grading alike, preserving skin tones while bathing the environment in vibrant saturated LEDs is the primary challenge. Subtractive color wheels and selective hue qualifiers ensure talent doesn't turn into a glowing monochrome statue.`
   },
   {
-    slug: "equipment-selection-for-real-world-productions",
-    title: "Equipment Selection for Real-World Productions",
+    slug: "epic-scale-worldbuilding-pre-production-guide",
+    title: "Epic Scale Worldbuilding: From Blueprint to Soundstage",
     description:
-      "Choosing cameras, lenses, and audio gear that match your production constraints.",
-    datePublished: "2026-07-02",
-    dateModified: "2026-07-02",
-    author: "Ultimate Studio Team",
-    tags: ["equipment", "audio", "camera"],
-    content:
-      "Picking equipment is more than matching a spec sheet—it’s about selecting tools that behave well on set. In this guide, we cover a straightforward approach to camera, lens, lighting, and audio selection.\n\nStart with your capture goals: resolution targets, movement, and how you’ll handle low-light conditions. If you need consistent results across different setups, choose tools that allow stable settings and quick repeatability.\n\nThen think about operator comfort and workflow. A camera that takes time to configure every time someone touches the menu creates hidden delays. Prefer equipment that supports predictable presets and simple monitoring.\n\nLenses should match your real shooting constraints. Consider how you’ll frame, how often you plan to change focal lengths, and whether your team has the time for frequent lens swaps. When you can keep your plan stable, you can keep your schedule stable.\n\nLighting equipment selection deserves the same practical mindset. Choose modifiers and diffusion that behave predictably and can be shaped without long adjustment cycles. When lighting changes are fast, your take cadence improves.\n\nFinally, we emphasize audio planning. Cleaner audio reduces edits and lets your team spend time on storytelling instead of repair. Confirm microphone placement strategy, record levels, and backup recording paths.\n\nThe best equipment choices reduce uncertainty. With the right combination, your production team can move confidently from setup to capture and back again without losing creative momentum."
+      "Deconstructing architectural scale, matte painting extensions, and practical set continuity for blockbuster series.",
+    datePublished: "2026-08-15",
+    dateModified: "2026-08-16",
+    author: {
+      name: "Victoria Sterling",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+      role: "Production Designer"
+    },
+    category: "Series",
+    tags: ["series", "worldbuilding", "production-design", "stages"],
+    coverImage: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&auto=format&fit=crop&q=80",
+    readTime: "11 min read",
+    views: "18.4k",
+    theme_accent: "#3B9BF5",
+    theme_accent_light: "#84C3FF",
+    theme_bg_from: "#081C2E",
+    stats: {
+      pages_read: 190,
+      total_pages: 250,
+      avg_time: "1:30",
+      level: 6,
+      reacts_to_level: 12,
+      streak_days: 7,
+      badges: ["Architect", "Set Veteran", "Scholar"]
+    },
+    leaderboard: {
+      friends: [
+        { rank: 1, name: "Victoria Sterling", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80", points: 2150, percentile: "Top 8%", isCurrentUser: true }
+      ],
+      bookclub: [
+        { rank: 1, name: "Guild of Production Designers", avatar: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=100&auto=format&fit=crop&q=80", points: 9800, percentile: "Top 3%" }
+      ],
+      global: [
+        { rank: 1, name: "Kenji Sato", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80", points: 31900, percentile: "Top 0.5%" }
+      ]
+    },
+    activity: [
+      {
+        id: "c5",
+        name: "Samuel Brody",
+        avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
+        time: "1h ago",
+        comment: "Fascinating analysis of virtual volume LED walls vs traditional blue screens!"
+      }
+    ],
+    content: `Building vast fictional civilizations requires establishing visual continuity that starts in sketches and carries all the way through practical stage construction.
+
+When planning sets that will be extended digitally, the physical build must provide the tactile interaction points—door handles, railings, stairs—while leaving clean tracking sightlines for visual effects teams.
+
+"A world feels authentic when wear and tear reflect centuries of history, not just a coat of faux-aging spray."
+
+Lighting integration between the physical stage floor and virtual LED volume backgrounds is the linchpin of modern episodic worldbuilding.`
   },
   {
-    slug: "planning-a-studio-session-from-call-time",
-    title: "Planning a Studio Session From Call Time",
+    slug: "anamorphic-optics-mastery-aspect-ratios",
+    title: "Anamorphic Optics Mastery: Flares, Oval Bokeh & Field Curvature",
     description:
-      "A time-aware plan to coordinate crew, setup, and content capture without chaos.",
-    datePublished: "2026-07-15",
-    dateModified: "2026-07-15",
-    author: "Ultimate Studio Team",
-    tags: ["workflow", "production", "scheduling"],
-    content:
-      "A studio session becomes stressful when the plan is fuzzy. A time-aware plan keeps your crew in sync and protects creative momentum.\n\nBuild your schedule around call time milestones. Pre-light where possible, verify connectivity, and confirm file naming before recording. Assign responsibilities so every crew member knows what “done” looks like.\n\nA strong plan includes buffer time for real transitions. For example, after a talent adjustment or lens change, include a short verification step. That way, the team doesn’t skip checks to “save time,” only to lose more time later.\n\nBefore recording begins, do a quick workflow rehearsal. That means test audio routing, check monitor output, and confirm that your recording targets are healthy. If your capture pipeline is stable early, you can keep it stable all day.\n\nDuring production, track what changes between takes. If your lighting stays the same, you can increase cadence. If something must change, make it a controlled process: one person owns the change, and everyone else knows when it happens.\n\nAlso plan client review time. In studios, reviews often determine how quickly you get to approval. Build in a review cadence that doesn’t interrupt the crew’s focus.\n\nWhen you plan for transitions—setup to rehearsal to take—you reduce downtime. This guide shows a practical way to keep your day moving smoothly, so your final footage benefits from calm, deliberate production."
-  },
-  {
-    slug: "lighting-design-basics-for-quick-setups",
-    title: "Lighting Design Basics for Quick Setups",
-    description:
-      "Simple lighting strategies that look great and still respect your production schedule.",
-    datePublished: "2026-08-01",
-    dateModified: "2026-08-01",
-    author: "Ultimate Studio Team",
-    tags: ["lighting", "stages", "workflow"],
-    content:
-      "Good lighting doesn’t need to be complicated. In this guide, we share quick-start lighting approaches that work across a variety of productions.\n\nBegin by choosing a consistent direction and shaping your light with modifiers appropriate to the space. When direction is consistent, your face and background behave predictably, which makes multiple takes easier.\n\nKeep your adjustments modular so you can return to a baseline between setups. For example, decide where your key light sits relative to talent and keep that geometry stable, then swap only the modifier or intensity as needed.\n\nUse test frames early. A short test at the start of the day helps your team calibrate camera settings, exposure targets, and white balance strategies. That prevents the cascading “we changed settings but forgot to re-check audio/monitors” issue.\n\nPay attention to the background. Even if the primary goal is the subject, the background lights set the mood and also affect the overall exposure and contrast. A simple background strategy can prevent unwanted hotspots and banding.\n\nIf you need speed, standardize your lighting kit. A kit that matches your most common looks reduces setup time. When every modifier is labeled and stored in a consistent location, the crew can assemble lighting faster.\n\nFinally, test at the start of the day. A few deliberate checks improve the entire session and help your team move from setup to capture with confidence. With a repeatable lighting plan, your production day feels lighter—and the results feel more consistent."
-  },
-  {
-    slug: "studio-gear-setup-checklist-and-mistakes-to-avoid",
-    title: "Studio Gear Setup Checklist (and Mistakes to Avoid)",
-    description:
-      "A practical checklist to set up faster and avoid the common studio mistakes that ruin schedules.",
-    datePublished: "2026-08-10",
-    dateModified: "2026-08-10",
-    author: "Ultimate Studio Team",
-    tags: ["workflow", "stages", "equipment"],
-    content:
-      "A studio shoot can move quickly when the team follows a simple gear setup checklist. The biggest schedule risk usually isn’t the camera or lights—it’s the small missing piece you only notice once recording should have started.\n\nStart with a “power and connectivity” pass. Confirm outlet access, check extension cords, and verify that every device that needs power has it. Then verify connectivity: storage devices, HDMI/SDI links, audio routing, and network targets.\n\nNext, do a “camera and monitoring” check. Confirm lens is seated, confirm focus mode and exposure settings are consistent with your plan, and confirm the correct monitoring feed is on the right screen. Monitoring errors are quiet time killers because they can hide mistakes until the moment you review footage.\n\nThen run a short “audio reality check.” Make sure the right microphones are active, levels are sane, and that you have a backup recording path if possible. Many studio production headaches come from late discovery of poor audio levels.\n\nBefore you ask talent to settle into pose, do a quick rehearsal. In practice, that means a minute of test recording and a quick review of the first frames. If anything is off—composition, exposure, audio—you fix it during rehearsal, not after you’re already behind.\n\nMistakes to avoid: skipping labels on cables, moving gear without noting positions, and forgetting to re-check battery and storage. If you label and standardize your kit placement, your transitions become calm and predictable.\n\nWrap up your setup by confirming file naming conventions and folder structure for the day. When the team knows how you’ll organize the footage, handoffs to editing become easier. With this checklist, you can protect your schedule and keep production smooth from setup through wrap."
-  },
-  {
-    slug: "studio-equipment-care-and-daily-maintenance",
-    title: "Studio Equipment Care and Daily Maintenance",
-    description:
-      "Simple daily maintenance routines that keep gear reliable and reduce downtime on set.",
-    datePublished: "2026-08-18",
-    dateModified: "2026-08-18",
-    author: "Ultimate Studio Team",
-    tags: ["equipment", "workflow", "maintenance"],
-    content:
-      "Reliable production depends on reliable gear. Equipment care isn’t a complex task—it’s a set of daily habits that prevent avoidable failures. In this guide we share practical routines studios use to keep cameras, lights, and audio gear stable.\n\nStart with cleaning and inspection. Wipe lenses with appropriate microfiber materials, check cable condition, and confirm that connectors are free of dust. Even a small amount of dust can affect video quality and create intermittent issues that take time to diagnose.\n\nNext, verify power and battery health. Charge routines should be consistent and scheduled. Keep spare batteries labeled and stored in a predictable place. If your team knows where power lives, you reduce interruptions.\n\nFor lighting, confirm mounts, clamps, and modifiers are secure. Inspect stands for wear, check sandbag setups, and verify that your diffusion frames are clean and undamaged. When you standardize your lighting pack layout, setup becomes faster and errors drop.\n\nAudio deserves special attention. Confirm microphone caps, check windscreens, and test recorder levels early. If you use adapters or cables, verify them as a group during your first audio check. This is the fastest way to eliminate “works in rehearsal but not in the take” problems.\n\nThen capture a short maintenance log. A simple note about what was cleaned, replaced, or found can help you spot patterns across weeks. Over time, logs reduce guesswork and help you decide when gear needs service.\n\nThe point isn’t perfection; it’s consistency. With daily care and a light maintenance routine, your production day stays calm, your equipment stays dependable, and your team keeps moving."
+      "Why vintage glass and 2.39:1 widescreen framing remain the ultimate cinematic storyteller's choice.",
+    datePublished: "2026-08-08",
+    dateModified: "2026-08-09",
+    author: {
+      name: "Julian Cross",
+      avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&auto=format&fit=crop&q=80",
+      role: "Optics Engineer & Filmmaker"
+    },
+    category: "Movies",
+    tags: ["anamorphic", "optics", "lenses", "cinematography"],
+    coverImage: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=800&auto=format&fit=crop&q=80",
+    readTime: "8 min read",
+    views: "42.1k",
+    theme_accent: "#2BD9C4",
+    theme_accent_light: "#82F2E4",
+    theme_bg_from: "#052622",
+    stats: {
+      pages_read: 410,
+      total_pages: 450,
+      avg_time: "2:05",
+      level: 11,
+      reacts_to_level: 30,
+      streak_days: 35,
+      badges: ["Optics Guru", "Bokeh Master", "Anamorphic Elite", "Lorekeeper"]
+    },
+    leaderboard: {
+      friends: [
+        { rank: 1, name: "Julian Cross", avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&auto=format&fit=crop&q=80", points: 3450, percentile: "Top 1%", isCurrentUser: true }
+      ],
+      bookclub: [
+        { rank: 1, name: "Anamorphic Society", avatar: "https://images.unsplash.com/photo-1485846234645-a62644f84728?w=100&auto=format&fit=crop&q=80", points: 12850, percentile: "Top 2%" }
+      ],
+      global: [
+        { rank: 1, name: "Julian Cross", avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&auto=format&fit=crop&q=80", points: 34500, percentile: "Top 0.1%" }
+      ]
+    },
+    activity: [
+      {
+        id: "c6",
+        name: "Evelyn Reed",
+        avatar: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&auto=format&fit=crop&q=80",
+        time: "5h ago",
+        comment: "Those horizontal blue streak flares are hypnotic. Excellent optics comparison."
+      }
+    ],
+    content: `Anamorphic lenses squeeze a wider field of view onto a traditional sensor, resulting in unique characteristics that immediately evoke classic Hollywood cinema.
+
+From signature oval bokeh in out-of-focus highlights to organic horizontal streak flares and barrel distortion near the edges, anamorphic optics add a distinct human imperfection to pristine digital sensors.
+
+"The imperfect lens often tells the most authentic human story."
+
+When pairing modern sensors with vintage front-anamorphic lenses, careful attention must be paid to sensor resolution and squeeze ratios to avoid jagged artifacts in post-de-squeeze workflows.`
   }
 ];
 
-export function getPostBySlug(slug: string) {
+export function getPostBySlug(slug: string): BlogPost | null {
   return blogPosts.find((p) => p.slug === slug) ?? null;
 }
 
-export function getRelatedPosts(slug: string, limit = 3) {
+export function getRelatedPosts(slug: string, limit = 3): BlogPost[] {
   const current = getPostBySlug(slug);
   if (!current) return blogPosts.slice(0, limit);
 
   const scored = blogPosts
     .filter((p) => p.slug !== slug)
     .map((p) => {
-      const score = p.tags.reduce((acc, t) => acc + (current.tags.includes(t) ? 1 : 0), 0);
+      const score = p.tags.reduce((acc, t) => acc + (current.tags.includes(t) ? 1 : 0), 0) +
+        (p.category === current.category ? 2 : 0);
       return { post: p, score };
     })
     .sort((a, b) => b.score - a.score || b.post.datePublished.localeCompare(a.post.datePublished));
 
-  const selected = scored.map((s) => s.post);
-  return selected.slice(0, limit);
+  return scored.map((s) => s.post).slice(0, limit);
 }
-
