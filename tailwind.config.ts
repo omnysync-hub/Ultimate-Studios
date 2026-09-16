@@ -9,6 +9,17 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ["ui-sans-serif", "system-ui", "Arial", "Helvetica", "sans-serif"]
+      },
+      colors: {
+        uc: {
+          bg: "var(--uc-bg)",
+          elevated: "var(--uc-bg-elevated)",
+          fg: "var(--uc-fg)",
+          muted: "var(--uc-fg-muted)",
+          faint: "var(--uc-fg-faint)",
+          red: "var(--uc-red)",
+          border: "var(--uc-border)"
+        }
       }
     }
   },
@@ -16,4 +27,3 @@ const config: Config = {
 };
 
 export default config;
-

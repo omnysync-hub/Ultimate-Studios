@@ -1,37 +1,16 @@
-export const studioContact = {
-  phone: "+1 (000) 000-0000",
-  email: "hello@ultimatestudios.com",
-  addressLines: ["Studio District", "Los Angeles, CA 90028", "United States"]
-};
+import { getSite } from "@/lib/cms/store";
 
-export const studioSocials = [
-  {
-    id: "youtube",
-    label: "YouTube",
-    href: "https://youtube.com"
-  },
-  {
-    id: "instagram",
-    label: "Instagram",
-    href: "https://instagram.com"
-  },
-  {
-    id: "tiktok",
-    label: "TikTok",
-    href: "https://tiktok.com"
-  },
-  {
-    id: "x",
-    label: "X",
-    href: "https://x.com"
-  },
-  {
-    id: "linkedin",
-    label: "LinkedIn",
-    href: "https://linkedin.com"
-  }
-] as const;
+export async function getStudioContact() {
+  const site = await getSite();
+  return site.contact;
+}
 
-/** Swap for a local reel at /videos/studio-reel.mp4 when ready */
-export const footerReelSrc =
-  "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4";
+export async function getStudioSocials() {
+  const site = await getSite();
+  return site.socials;
+}
+
+export async function getFooterReelSrc() {
+  const site = await getSite();
+  return site.footerReelSrc;
+}

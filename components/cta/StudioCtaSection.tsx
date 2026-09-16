@@ -142,7 +142,7 @@ export function StudioCtaSection() {
       aria-labelledby="studio-cta-heading"
     >
       <h2 id="studio-cta-heading" className={styles.srOnly}>
-        About Ultimate Studios
+        About Ultimate Cineverse
       </h2>
       <p className={styles.copy}>
         {words.map((word, wordIdx) => {

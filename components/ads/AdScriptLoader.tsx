@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { CONSENT_CHANGED_EVENT, hasAdsConsent } from "@/lib/consent";
 
 declare global {
   interface Window {
@@ -8,22 +9,14 @@ declare global {
   }
 }
 
-const CONSENT_KEY = "adsConsent";
-
-function hasAdsConsent() {
-  if (typeof document === "undefined") return false;
-  try {
-    return localStorage.getItem(CONSENT_KEY) === "true";
-  } catch {
-    return false;
-  }
-}
-
 export function AdScriptLoader() {
   const [shouldLoad, setShouldLoad] = useState(false);
 
   useEffect(() => {
-    setShouldLoad(hasAdsConsent());
+    const sync = () => setShouldLoad(hasAdsConsent());
+    sync();
+    window.addEventListener(CONSENT_CHANGED_EVENT, sync);
+    return () => window.removeEventListener(CONSENT_CHANGED_EVENT, sync);
   }, []);
 
   useEffect(() => {
@@ -35,13 +28,13 @@ export function AdScriptLoader() {
     const script = document.createElement("script");
     script.id = "adsbygoogle-script";
     script.async = true;
-    script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX";
+    script.crossOrigin = "anonymous";
+    script.src =
+      "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX";
     document.head.appendChild(script);
 
-    // Ensure adsbygoogle array exists before first ad.
     window.adsbygoogle = window.adsbygoogle || [];
   }, [shouldLoad]);
 
   return null;
 }
-

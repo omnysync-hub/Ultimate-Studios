@@ -1,0 +1,31 @@
+{
+  "brandName": "Ultimate Cineverse",
+  "tagline": "Films, worlds, and audiences. Creative production from concept to cut.",
+  "seo": {
+    "defaultTitle": "Ultimate Cineverse",
+    "titleTemplate": "%s | Ultimate Cineverse",
+    "defaultDescription": "Ultimate Cineverse — films, worlds, and audiences. Creative production from concept to cut.",
+    "ogImagePath": "/logo.png"
+  },
+  "contact": {
+    "phone": "",
+    "email": "hello@ultimatecineverse.com",
+    "addressLines": []
+  },
+  "socials": [
+    {
+      "id": "youtube",
+      "label": "YouTube",
+      "href": "https://www.youtube.com/channel/UCc3qOMA8TN5b3PPRlGAFA0Q"
+    }
+  ],
+  "footerReelSrc": "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+  "about": {
+    "title": "About Ultimate Cineverse",
+    "paragraphs": [
+      "Ultimate Cineverse is built for creators who want a smooth, professional production experience. From dedicated stages and flexible setups to reliable production support, we help teams focus on great work.",
+      "We keep it simple: clean spaces, thoughtful equipment choices, and a production-ready flow that scales from small projects to larger shoots."
+    ]
+  },
+  "youtubeChannelId": "UCc3qOMA8TN5b3PPRlGAFA0Q"
+}

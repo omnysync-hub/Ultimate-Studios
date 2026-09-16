@@ -1,7 +1,7 @@
 .section {
   position: relative;
-  background: #000;
-  color: #f2f0e8;
+  background: var(--uc-bg);
+  color: var(--uc-fg);
   overflow: hidden;
   padding: clamp(4.5rem, 11vw, 8.5rem) clamp(1rem, 3vw, 2.5rem) clamp(4rem, 10vw, 7rem);
 }
@@ -81,7 +81,7 @@
 }
 
 .rowTextOnRed {
-  color: #f2f0e8;
+  color: var(--uc-fg);
 }
 
 .rowTextOnWhite {

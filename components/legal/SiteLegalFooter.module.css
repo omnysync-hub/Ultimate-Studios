@@ -1,0 +1,74 @@
+.bar {
+  border-top: 1px solid var(--uc-border);
+  background: var(--uc-bg-elevated);
+  color: var(--uc-fg-muted);
+  transition:
+    background-color 240ms ease,
+    color 240ms ease,
+    border-color 240ms ease;
+}
+
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  width: min(1480px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 0.85rem 0 1.1rem;
+}
+
+.brandLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  text-decoration: none;
+  color: inherit;
+  min-height: 44px;
+}
+
+.brandLogo {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.brand {
+  margin: 0;
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--uc-fg-faint);
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+  align-items: center;
+}
+
+.nav a,
+.button {
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 0.82rem;
+  color: var(--uc-fg-muted);
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav a:hover,
+.button:hover {
+  color: var(--uc-red);
+}

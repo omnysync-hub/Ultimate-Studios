@@ -1,45 +1,51 @@
 import { HomeExperience } from "@/components/home/HomeExperience";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildMetadata } from "@/lib/seo";
+import { getSite, getSiteUrl } from "@/lib/cms/store";
 import { getChannelVideos } from "@/lib/youtube";
 
 export async function generateMetadata() {
+  const site = await getSite();
   return buildMetadata({
-    title: "Ultimate Studio — Stages, Facilities & Equipment",
-    description:
-      "Explore Ultimate Studio: stages, facilities, and equipment for production. Fast setup, professional space, and a seamless studio experience.",
+    title: `${site.brandName} — Stages, Facilities & Equipment`,
+    description: site.seo.defaultDescription,
     pathname: "/"
   });
 }
 
 export default async function HomePage() {
-  const videos = await getChannelVideos(12).catch(() => []);
+  const site = await getSite();
+  const siteUrl = getSiteUrl();
+  const videos = await getChannelVideos(12, site.youtubeChannelId).catch(() => []);
 
   const jsonLd = [
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      name: "Ultimate Studio",
-      url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com",
-      logo: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com"}/logo.png`
+      name: site.brandName,
+      url: siteUrl,
+      email: site.contact.email,
+      telephone: site.contact.phone,
+      logo: `${siteUrl}/logo.png`
     },
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      name: "Ultimate Studio",
-      url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com",
-      potentialAction: {
-        "@type": "SearchAction",
-        target: `${process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com"}/blog?query={search_term_string}`,
-        "query-input": "required name=search_term_string"
-      }
+      name: site.brandName,
+      url: siteUrl,
+      description: site.seo.defaultDescription
     }
   ];
 
   return (
     <>
       <JsonLd data={jsonLd} />
-      <HomeExperience videos={videos} />
+      <HomeExperience
+        videos={videos}
+        contact={site.contact}
+        socials={site.socials}
+        footerReelSrc={site.footerReelSrc}
+      />
     </>
   );
 }

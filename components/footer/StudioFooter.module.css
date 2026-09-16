@@ -1,16 +1,16 @@
 .root {
   position: relative;
   z-index: 20;
-  /* One viewport of scroll = rise in, then page ends. No dead black runway. */
+  /* One viewport — ScrollTrigger pin adds the scrub runway; page ends when pin ends. */
   height: 100vh;
+  min-height: 100vh;
   margin-top: -1px;
   pointer-events: none;
   background: #e10600;
+  overscroll-behavior: none;
 }
 
-.sticky {
-  position: sticky;
-  top: 0;
+.viewport {
   height: 100%;
   overflow: hidden;
   pointer-events: none;
@@ -20,8 +20,8 @@
 .shell {
   position: absolute;
   inset: 0;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   background: #e10600;
   color: #0a0a0a;
   overflow: hidden;
@@ -31,30 +31,23 @@
   box-shadow: 0 -24px 60px rgba(0, 0, 0, 0.35);
 }
 
-.inner {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1.35fr) auto;
-  gap: clamp(0.65rem, 1.8vh, 1.35rem);
-  height: 100%;
-  min-height: 0;
-  width: min(1480px, calc(100% - 2rem));
-  margin: 0 auto;
-  padding: clamp(1.1rem, 3vh, 2.2rem) 0 clamp(0.75rem, 1.8vh, 1.2rem);
-  box-sizing: border-box;
-}
-
-.topRow {
+.top {
   display: grid;
   grid-template-columns: 1.1fr 1.1fr 1fr;
-  gap: clamp(1rem, 2.5vw, 2.5rem);
+  gap: clamp(1.25rem, 3vw, 3rem);
   align-items: start;
-  min-height: 0;
+  width: min(1480px, calc(100% - 2.5rem));
+  margin: 0 auto;
+  padding: clamp(1.1rem, 2.6vh, 1.75rem) 0 clamp(0.35rem, 1vh, 0.65rem);
+  position: relative;
+  z-index: 3;
+  flex-shrink: 0;
 }
 
 .colLabel {
-  margin: 0 0 0.55rem;
+  margin: 0 0 0.45rem;
   font-family: var(--font-ui), Arial, sans-serif;
-  font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+  font-size: clamp(0.85rem, 1.2vw, 1.05rem);
   font-weight: 700;
   letter-spacing: -0.01em;
 }
@@ -63,7 +56,7 @@
   display: block;
   margin: 0;
   font-family: var(--font-ui), Arial, sans-serif;
-  font-size: clamp(0.88rem, 1.25vw, 1.05rem);
+  font-size: clamp(0.82rem, 1.15vw, 1rem);
   line-height: 1.35;
   color: #0a0a0a;
   text-decoration: none;
@@ -87,7 +80,7 @@ a.line:hover {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 0.5rem;
+  gap: 0.45rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -118,132 +111,74 @@ a.line:hover {
   transform: translateY(-3px);
 }
 
-.brandRow {
-  display: flex;
-  align-items: flex-end;
-  min-height: 0;
-  overflow: visible;
-  width: 100%;
-}
-
-.wordmark {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  gap: clamp(0.35rem, 1vw, 0.85rem);
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  cursor: pointer;
-  outline: none;
-  box-sizing: border-box;
-}
-
-.wordClip {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  padding-right: 0.12em;
-}
-
-.wordSolid {
+/* Wordmark fills every pixel between contact row and legal strip */
+.logoBleed {
   position: relative;
   z-index: 1;
+  width: 100%;
+  min-height: 0;
+  height: 100%;
   display: flex;
-  flex-wrap: nowrap;
-  align-items: baseline;
-  width: max-content;
-  max-width: none;
-  padding-bottom: 0.06em;
-  font-family: var(--font-display), "Arial Narrow", Impact, sans-serif;
-  /* JS fitWordmark sets the real size — fallback only */
-  font-size: clamp(2.5rem, 9vw, 8rem);
-  line-height: 0.82;
-  letter-spacing: -0.045em;
-  font-weight: 400;
-  font-style: italic;
-  text-transform: uppercase;
-  color: #0a0a0a;
-  transform-origin: left bottom;
-  transition: opacity 380ms ease;
-}
-
-.letter,
-.wordSpace {
-  display: inline-block;
-  will-change: transform, opacity;
-}
-
-.wordSpace {
-  width: 0.28em;
-}
-
-.wordSvg {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  z-index: 2;
-  width: calc(100% - clamp(2.4rem, 4.5vw, 3.6rem));
-  height: 100%;
-  transform: translateY(-50%);
-  opacity: 0;
-  pointer-events: none;
-  overflow: visible;
-  transition: opacity 420ms ease;
-}
-
-.maskText {
-  font-family: var(--font-display), "Arial Black", "Arial Narrow", Impact, sans-serif;
-  font-size: 132px;
-  font-weight: 400;
-  font-style: italic;
-  letter-spacing: -5px;
-}
-
-.foreignVideo {
-  width: 100%;
-  height: 100%;
+  align-items: stretch;
   margin: 0;
-  overflow: hidden;
+  padding: 0 clamp(0.75rem, 2vw, 1.75rem);
 }
 
-.wordVideo {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-}
-
-.wordmark:hover .wordSolid,
-.wordmark:focus-visible .wordSolid {
-  opacity: 0;
-}
-
-.wordmark:hover .wordSvg,
-.wordmark:focus-visible .wordSvg {
-  opacity: 1;
-}
-
-.mark {
+.logoWrapper {
   position: relative;
-  z-index: 3;
-  flex: 0 0 auto;
-  width: clamp(2.4rem, 5vw, 4rem);
-  height: clamp(2.4rem, 5vw, 4rem);
-  margin-bottom: 0.45em;
-  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.markSvg {
   width: 100%;
   height: 100%;
-  display: block;
+  min-height: 0;
+  color: #0a0a0a;
 }
 
-.wordmark:hover .mark,
-.wordmark:focus-visible .mark {
-  transform: rotate(90deg) scale(1.06);
+.logoFill {
+  opacity: 0;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+.logoFill .logoInstance {
+  width: 100%;
+  height: 100%;
+}
+
+.logoStretch {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.logoInstance {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  will-change: height;
+}
+
+.logoStretch > .logoInstance {
+  height: 0;
+  margin-top: auto;
+}
+
+.logoSvg {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.logoText {
+  fill: #0a0a0a;
+  font-family: var(--font-display), "Arial Narrow", Impact, sans-serif;
+  font-size: 320px;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
 }
 
 .srOnly {
@@ -258,24 +193,63 @@ a.line:hover {
   border: 0;
 }
 
-.bottomRow {
+.bottom {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 1.25rem;
-  padding-top: 0.65rem;
-  border-top: 1px solid rgba(10, 10, 10, 0.28);
-  min-height: 0;
+  gap: 1.75rem;
+  width: min(1480px, calc(100% - 2.5rem));
+  margin: 0 auto;
+  padding: clamp(0.65rem, 1.6vh, 1.1rem) 0 clamp(0.85rem, 2vh, 1.35rem);
+  border-top: 1px solid rgba(10, 10, 10, 0.22);
+  position: relative;
+  z-index: 3;
+  flex-shrink: 0;
 }
 
 .legal,
 .credit {
   margin: 0;
   font-family: var(--font-ui), Arial, sans-serif;
-  font-size: clamp(0.62rem, 1vw, 0.72rem);
-  line-height: 1.4;
-  color: rgba(10, 10, 10, 0.78);
-  max-width: 46rem;
+  font-size: clamp(0.7rem, 1.05vw, 0.82rem);
+  line-height: 1.5;
+  color: rgba(10, 10, 10, 0.72);
+  max-width: 36rem;
+}
+
+.legalBlock {
+  display: grid;
+  gap: 0.65rem;
+  max-width: 36rem;
+}
+
+.legalNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.15rem;
+  align-items: center;
+}
+
+.legalNav a,
+.legalButton {
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: clamp(0.7rem, 1.05vw, 0.82rem);
+  font-weight: 600;
+  color: #0a0a0a;
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.legalNav a:hover,
+.legalButton:hover {
+  opacity: 0.7;
 }
 
 .credit {
@@ -284,7 +258,7 @@ a.line:hover {
 }
 
 @media (max-width: 900px) {
-  .topRow {
+  .top {
     grid-template-columns: 1fr 1fr;
   }
 
@@ -298,11 +272,19 @@ a.line:hover {
     justify-content: flex-start;
   }
 
-  .wordSolid {
-    font-size: clamp(2.4rem, 11vw, 5rem);
+  .logoFill .logoInstance {
+    height: 100%;
   }
 
-  .bottomRow {
+  .logoText {
+    font-size: 260px;
+  }
+
+  .logoBleed {
+    padding: 0 clamp(0.65rem, 3vw, 1.25rem);
+  }
+
+  .bottom {
     flex-direction: column;
     align-items: flex-start;
   }
@@ -313,12 +295,16 @@ a.line:hover {
 }
 
 @media (max-width: 560px) {
-  .topRow {
+  .top {
     grid-template-columns: 1fr;
   }
 
-  .wordSolid {
-    font-size: clamp(2.4rem, 13vw, 3.8rem);
+  .logoText {
+    font-size: 200px;
+  }
+
+  .logoBleed {
+    padding: 0 0.75rem;
   }
 }
 
@@ -329,10 +315,10 @@ a.line:hover {
     pointer-events: auto;
   }
 
-  .sticky {
+  .viewport {
     position: relative;
     height: auto;
-    overflow: visible;
+    overflow: hidden;
     pointer-events: auto;
   }
 
@@ -340,5 +326,9 @@ a.line:hover {
     position: relative;
     transform: none !important;
     border-radius: 0 !important;
+  }
+
+  .logoStretch > .logoInstance {
+    height: 100% !important;
   }
 }

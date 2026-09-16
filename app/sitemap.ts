@@ -1,23 +1,25 @@
 import type { MetadataRoute } from "next";
-import { blogPosts } from "@/lib/blog";
+import { getBlogPosts } from "@/lib/blog-data";
+import { getSiteUrl } from "@/lib/cms/store";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const siteUrl = getSiteUrl();
+  const posts = await getBlogPosts(false);
 
-export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     { url: `${siteUrl}/`, lastModified: new Date().toISOString() },
     { url: `${siteUrl}/about`, lastModified: new Date().toISOString() },
     { url: `${siteUrl}/contact`, lastModified: new Date().toISOString() },
     { url: `${siteUrl}/privacy`, lastModified: new Date().toISOString() },
+    { url: `${siteUrl}/cookies`, lastModified: new Date().toISOString() },
     { url: `${siteUrl}/terms`, lastModified: new Date().toISOString() },
     { url: `${siteUrl}/blog`, lastModified: new Date().toISOString() }
   ];
 
-  const blogRoutes = blogPosts.map((post) => ({
+  const blogRoutes = posts.map((post) => ({
     url: `${siteUrl}/blog/${post.slug}`,
     lastModified: post.dateModified
   }));
 
   return [...staticRoutes, ...blogRoutes];
 }
-

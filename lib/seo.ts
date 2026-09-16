@@ -1,4 +1,5 @@
-import type { Metadata, ResolvingMetadata } from "next";
+import type { Metadata } from "next";
+import { getSite, getSiteUrl } from "@/lib/cms/store";
 
 type SeoArgs = {
   title: string;
@@ -6,15 +7,29 @@ type SeoArgs = {
   pathname?: string;
   canonicalQuery?: string;
   openGraphImageUrl?: string;
+  type?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
+  noIndex?: boolean;
 };
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+export function getSiteUrlSync() {
+  return getSiteUrl();
+}
 
-export function buildMetadata(args: SeoArgs, parent?: ResolvingMetadata): Metadata {
+export async function buildMetadata(args: SeoArgs): Promise<Metadata> {
+  const site = await getSite().catch(() => null);
+  const siteUrl = getSiteUrl();
   const base = new URL(siteUrl);
-  const canonical = args.pathname ? new URL(args.pathname + (args.canonicalQuery ?? ""), base) : base;
+  const canonical = args.pathname
+    ? new URL(args.pathname + (args.canonicalQuery ?? ""), base)
+    : base;
 
-  return {
+  const ogImage =
+    args.openGraphImageUrl ||
+    (site?.seo.ogImagePath ? new URL(site.seo.ogImagePath, base).toString() : undefined);
+
+  const metadata: Metadata = {
     title: args.title,
     description: args.description,
     alternates: {
@@ -24,20 +39,27 @@ export function buildMetadata(args: SeoArgs, parent?: ResolvingMetadata): Metada
       title: args.title,
       description: args.description,
       url: canonical.toString(),
-      type: "website",
-      images: args.openGraphImageUrl
-        ? [
-            {
-              url: args.openGraphImageUrl
-            }
-          ]
-        : undefined
+      siteName: site?.brandName ?? "Ultimate Cineverse",
+      type: args.type ?? "website",
+      locale: "en_US",
+      images: ogImage ? [{ url: ogImage, width: 1200, height: 630, alt: args.title }] : undefined,
+      ...(args.type === "article"
+        ? {
+            publishedTime: args.publishedTime,
+            modifiedTime: args.modifiedTime
+          }
+        : {})
     },
     twitter: {
       card: "summary_large_image",
       title: args.title,
-      description: args.description
-    }
+      description: args.description,
+      images: ogImage ? [ogImage] : undefined
+    },
+    robots: args.noIndex
+      ? { index: false, follow: false }
+      : { index: true, follow: true }
   };
-}
 
+  return metadata;
+}

@@ -1,6 +1,6 @@
 .section {
-  background: #000;
-  color: #f2f0e8;
+  background: var(--uc-bg);
+  color: var(--uc-fg);
   width: 100%;
   min-height: auto;
   padding: clamp(5rem, 12vw, 9rem) clamp(0.85rem, 2.4vw, 1.75rem) clamp(5rem, 11vw, 8rem);

@@ -3,31 +3,45 @@
 import { useLayoutEffect, useRef } from "react";
 import styles from "./HeroSection.module.css";
 
+/** Size both hero words to share one size; video slot flexes into leftover width. */
 function useFitHeroType(
   ultimateRef: React.RefObject<HTMLElement | null>,
-  studiosRef: React.RefObject<HTMLElement | null>
+  cineverseRef: React.RefObject<HTMLElement | null>
 ) {
   useLayoutEffect(() => {
     const ultimate = ultimateRef.current;
-    const studios = studiosRef.current;
-    if (!ultimate || !studios) return;
+    const cineverse = cineverseRef.current;
+    if (!ultimate || !cineverse) return;
 
     const fit = () => {
-      const row = ultimate.parentElement?.parentElement;
+      const row = ultimate.closest(`.${styles.heroRow}`) as HTMLElement | null;
       if (!row) return;
 
-      const maxW = row.clientWidth * 0.58;
-      const maxH = Math.min(window.innerHeight * 0.4, row.parentElement?.clientHeight ?? 9999);
+      const gap = parseFloat(getComputedStyle(row).gap) || 0;
+      // Keep at least ~30% of the row for the video so it always looks solid.
+      const minVideo = row.clientWidth * 0.3;
+      const maxW = Math.max(40, row.clientWidth - minVideo - gap);
+      const maxH = Math.min(
+        window.innerHeight * 0.42,
+        (row.parentElement?.clientHeight ?? window.innerHeight) * 0.46
+      );
       if (maxW < 8 || maxH < 8) return;
 
-      let lo = 24;
+      let lo = 18;
       let hi = Math.floor(maxH);
       let best = lo;
 
       while (lo <= hi) {
         const mid = Math.floor((lo + hi) / 2);
         ultimate.style.fontSize = `${mid}px`;
-        const fits = ultimate.scrollWidth <= maxW + 1 && ultimate.scrollHeight <= maxH + 2;
+        cineverse.style.fontSize = `${mid}px`;
+
+        const fits =
+          ultimate.scrollWidth <= maxW + 1 &&
+          cineverse.scrollWidth <= maxW + 1 &&
+          ultimate.scrollHeight <= maxH + 4 &&
+          cineverse.scrollHeight <= maxH + 4;
+
         if (fits) {
           best = mid;
           lo = mid + 1;
@@ -37,7 +51,7 @@ function useFitHeroType(
       }
 
       ultimate.style.fontSize = `${best}px`;
-      studios.style.fontSize = `${best}px`;
+      cineverse.style.fontSize = `${best}px`;
     };
 
     let fitRaf = 0;
@@ -67,19 +81,19 @@ function useFitHeroType(
       ro.disconnect();
       window.removeEventListener("resize", scheduleFit);
     };
-  }, [ultimateRef, studiosRef]);
+  }, [ultimateRef, cineverseRef]);
 }
 
 export function HeroSection() {
   const ultimateRef = useRef<HTMLParagraphElement>(null);
-  const studiosRef = useRef<HTMLParagraphElement>(null);
+  const cineverseRef = useRef<HTMLParagraphElement>(null);
 
-  useFitHeroType(ultimateRef, studiosRef);
+  useFitHeroType(ultimateRef, cineverseRef);
 
   return (
     <div className={styles.pageWrap}>
       <main className={styles.heroPage}>
-        <h1 className={styles.srOnly}>Ultimate Studios</h1>
+        <h1 className={styles.srOnly}>Ultimate Cineverse</h1>
 
         <section className={`${styles.hero} ${styles.revealed}`}>
           <div className={`${styles.heroRow} ${styles.topRow}`}>
@@ -102,8 +116,8 @@ export function HeroSection() {
               <div className={styles.videoPlaceholder} aria-hidden="true" />
             </div>
             <div className={`${styles.wordClip} ${styles.fromLineDown}`}>
-              <p ref={studiosRef} className={styles.heroWord}>
-                STUDIOS
+              <p ref={cineverseRef} className={styles.heroWord}>
+                CINEVERSE
               </p>
             </div>
           </div>

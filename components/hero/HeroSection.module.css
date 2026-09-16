@@ -13,8 +13,8 @@
   max-height: calc(100dvh - 3rem);
   margin: 0;
   padding: var(--pad-y) var(--pad-x);
-  background: #000;
-  color: #f2f0e8;
+  background: var(--uc-bg);
+  color: var(--uc-fg);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -67,14 +67,14 @@
   padding-top: 0.28rem;
 }
 
-/* Word sizes to the type; video fills leftover space at the same height */
+/* Word hugs its glyphs; video flexes to fill the remaining row width */
 .wordClip {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   width: max-content;
-  max-width: 58%;
+  max-width: 70%;
   min-width: 0;
   height: auto;
-  overflow: hidden;
+  overflow: visible;
   display: flex;
 }
 
@@ -90,19 +90,18 @@
 
 .heroWord {
   margin: 0;
-  padding: 0;
-  color: #f2f0e8;
+  padding: 0.06em 0.04em;
+  color: var(--uc-fg);
   font-family: var(--font-display), "Arial Narrow", Impact, sans-serif;
   font-weight: 400;
+  font-style: normal;
   text-transform: uppercase;
   letter-spacing: -0.025em;
-  line-height: 0.8;
+  line-height: 0.92;
   white-space: nowrap;
   user-select: none;
-  /* JS fit sets the real size; keep a safe fallback to avoid overflow flash */
-  font-size: clamp(2rem, 10vw, 6rem);
+  font-size: clamp(1.75rem, 8vw, 5rem);
   opacity: 0;
-  max-width: 100%;
 }
 
 .fromLineUp .heroWord {
@@ -142,7 +141,7 @@
 }
 
 .videoSlot {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-width: 0;
   width: auto;
   max-width: none;
@@ -245,13 +244,15 @@
     width: 100%;
     max-width: none;
     height: auto;
-    min-height: 18vw;
+    min-height: 14vw;
+    overflow: visible;
   }
 
   .videoSlot {
     flex: none;
     width: 100%;
-    height: clamp(150px, 40vw, 240px);
+    max-width: none;
+    height: clamp(120px, 32vw, 200px);
   }
 
   .fromLineDown {

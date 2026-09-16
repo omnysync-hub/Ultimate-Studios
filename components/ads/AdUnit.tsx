@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { CONSENT_CHANGED_EVENT, hasAdsConsent } from "@/lib/consent";
 
 declare global {
   interface Window {
@@ -15,15 +16,6 @@ type Props = {
   minHeight?: number;
 };
 
-function hasAdsConsent() {
-  if (typeof document === "undefined") return false;
-  try {
-    return localStorage.getItem("adsConsent") === "true";
-  } catch {
-    return false;
-  }
-}
-
 export function AdUnit({ slot, format = "auto", className, minHeight = 250 }: Props) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [inView, setInView] = useState(false);
@@ -31,19 +23,19 @@ export function AdUnit({ slot, format = "auto", className, minHeight = 250 }: Pr
   const [allowed, setAllowed] = useState(false);
 
   useEffect(() => {
-    setAllowed(hasAdsConsent());
+    const sync = () => setAllowed(hasAdsConsent());
+    sync();
+    window.addEventListener(CONSENT_CHANGED_EVENT, sync);
+    return () => window.removeEventListener(CONSENT_CHANGED_EVENT, sync);
   }, []);
 
   useEffect(() => {
-    if (!ref.current) return;
-    if (!allowed) return;
-    if (didInit) return;
+    if (!ref.current || !allowed || didInit) return;
 
     const el = ref.current;
     const io = new IntersectionObserver(
       (entries) => {
-        const anyVisible = entries.some((e) => e.isIntersecting);
-        if (anyVisible) {
+        if (entries.some((e) => e.isIntersecting)) {
           setInView(true);
           io.disconnect();
         }
@@ -56,19 +48,15 @@ export function AdUnit({ slot, format = "auto", className, minHeight = 250 }: Pr
   }, [allowed, didInit]);
 
   useEffect(() => {
-    if (!allowed) return;
-    if (!inView) return;
-    if (didInit) return;
-    if (!ref.current) return;
+    if (!allowed || !inView || didInit || !ref.current) return;
 
     try {
-      // AdSense will fill the container for "display ads".
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const adsbygoogle = (window as any).adsbygoogle || ((window as any).adsbygoogle = []);
       adsbygoogle.push({});
       setDidInit(true);
     } catch {
-      // Keep silent in scaffold.
+      // Keep silent if AdSense is not ready.
     }
   }, [allowed, inView, didInit]);
 
@@ -97,4 +85,3 @@ export function AdUnit({ slot, format = "auto", className, minHeight = 250 }: Pr
     </div>
   );
 }
-

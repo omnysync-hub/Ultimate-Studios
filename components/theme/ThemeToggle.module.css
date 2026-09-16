@@ -1,0 +1,51 @@
+.toggle {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--uc-border);
+  background: var(--uc-glass);
+  color: var(--uc-fg);
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    border-color 200ms ease,
+    background 200ms ease,
+    color 200ms ease;
+}
+
+.toggle:hover,
+.toggle:focus-visible {
+  border-color: var(--uc-red);
+  color: var(--uc-red);
+  background: var(--uc-accent-glow);
+}
+
+.toggle:focus-visible {
+  outline: 2px solid var(--uc-red);
+  outline-offset: 2px;
+}
+
+.icon {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.label {
+  display: none;
+}
+
+@media (min-width: 720px) {
+  .label {
+    display: inline;
+  }
+}

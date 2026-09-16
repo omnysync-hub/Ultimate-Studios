@@ -1,43 +1,40 @@
 import { JsonLd } from "@/components/seo/JsonLd";
 import { buildMetadata } from "@/lib/seo";
+import { getSite, getSiteUrl } from "@/lib/cms/store";
 
 export async function generateMetadata() {
+  const site = await getSite();
   return buildMetadata({
-    title: "About Ultimate Studio",
-    description:
-      "Learn about Ultimate Studio—our spaces, process, and commitment to high-quality production from stages to final delivery.",
+    title: site.about.title,
+    description: site.about.paragraphs[0] ?? site.seo.defaultDescription,
     pathname: "/about"
   });
 }
 
-export default function AboutPage() {
-  const breadcrumb = [
-    { "@type": "ListItem", position: 1, name: "Home", item: "/" },
-    { "@type": "ListItem", position: 2, name: "About", item: "/about" }
-  ];
+export default async function AboutPage() {
+  const site = await getSite();
+  const siteUrl = getSiteUrl();
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    itemListElement: breadcrumb
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: `${siteUrl}/` },
+      { "@type": "ListItem", position: 2, name: "About", item: `${siteUrl}/about` }
+    ]
   };
 
   return (
     <>
       <JsonLd data={jsonLd} />
-      <main className="mx-auto w-full max-w-3xl px-4 py-12">
-        <h1 className="text-3xl font-bold">About Ultimate Studio</h1>
-        <p className="mt-4 text-slate-200 leading-relaxed">
-          Ultimate Studio is built for creators who want a smooth, professional production
-          experience. From dedicated stages and flexible setups to reliable production
-          support, we help teams focus on great work.
-        </p>
-        <p className="mt-4 text-slate-200 leading-relaxed">
-          We keep it simple: clean spaces, thoughtful equipment choices, and a production-ready
-          flow that scales from small projects to larger shoots.
-        </p>
+      <main className="uc-page mx-auto w-full max-w-3xl px-4 py-12">
+        <h1 className="text-3xl font-bold text-uc-fg">{site.about.title}</h1>
+        {site.about.paragraphs.map((p) => (
+          <p key={p.slice(0, 24)} className="mt-4 text-uc-muted leading-relaxed">
+            {p}
+          </p>
+        ))}
       </main>
     </>
   );
 }
-

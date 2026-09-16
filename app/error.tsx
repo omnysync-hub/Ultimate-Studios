@@ -14,25 +14,19 @@ export default function ErrorBoundary({
   const router = useRouter();
 
   useEffect(() => {
-    // Ensure the error state doesn't trap the user in SPA navigation.
-    // If you have logging, hook it here.
     void router;
-  }, [router]);
+    void error;
+  }, [router, error]);
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-12">
-      <h1 className="text-3xl font-bold">Something went wrong</h1>
-      <p className="mt-4 text-slate-200 leading-relaxed">
-        This is a placeholder error page.
+    <main className="uc-page mx-auto w-full max-w-3xl px-4 py-12">
+      <h1 className="text-3xl font-bold text-uc-fg">Something went wrong</h1>
+      <p className="mt-4 text-uc-muted leading-relaxed">
+        We hit an unexpected error. Try again, or head back to the homepage.
       </p>
-      <button
-        type="button"
-        className="mt-6 rounded bg-amber-400 px-4 py-2 font-semibold text-black"
-        onClick={() => reset()}
-      >
+      <button type="button" className="uc-btn mt-6" onClick={() => reset()}>
         Try again
       </button>
     </main>
   );
 }
-

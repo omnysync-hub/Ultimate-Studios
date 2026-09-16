@@ -1,68 +1,59 @@
 import { JsonLd } from "@/components/seo/JsonLd";
+import { ContactForm } from "@/components/contact/ContactForm";
 import { buildMetadata } from "@/lib/seo";
+import { getSite, getSiteUrl } from "@/lib/cms/store";
 
 export async function generateMetadata() {
+  const site = await getSite();
   return buildMetadata({
-    title: "Contact Ultimate Studio",
-    description: "Get in touch with Ultimate Studio. Ask about stages, facilities, equipment, availability, and bookings.",
+    title: `Contact ${site.brandName}`,
+    description: `Get in touch with ${site.brandName}. Ask about stages, facilities, equipment, availability, and bookings.`,
     pathname: "/contact"
   });
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const site = await getSite();
+  const siteUrl = getSiteUrl();
+  const { phone, email, addressLines } = site.contact;
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "/" },
-      { "@type": "ListItem", position: 2, name: "Contact", item: "/contact" }
+      { "@type": "ListItem", position: 1, name: "Home", item: `${siteUrl}/` },
+      { "@type": "ListItem", position: 2, name: "Contact", item: `${siteUrl}/contact` }
     ]
   };
 
   return (
     <>
       <JsonLd data={jsonLd} />
-      <main className="mx-auto w-full max-w-3xl px-4 py-12">
-        <h1 className="text-3xl font-bold">Contact Ultimate Studio</h1>
-        <p className="mt-4 text-slate-200 leading-relaxed">
-          This is a placeholder contact form. Replace it with your real booking and
-          inquiry flow.
+      <main className="uc-page mx-auto w-full max-w-3xl px-4 py-12 pb-24">
+        <h1 className="text-3xl font-bold text-uc-fg">Contact {site.brandName}</h1>
+        <p className="mt-4 text-uc-muted leading-relaxed">
+          Tell us about your project. Prefer email?{" "}
+          <a className="uc-link" href={`mailto:${email}`}>
+            {email}
+          </a>
+          {phone ? (
+            <>
+              {" "}
+              or call{" "}
+              <a className="uc-link" href={`tel:${phone.replace(/\s/g, "")}`}>
+                {phone}
+              </a>
+            </>
+          ) : null}
+          .
         </p>
 
-        <form className="mt-6 space-y-4">
-          <label className="block">
-            <span className="text-sm text-slate-300">Name</span>
-            <input
-              className="mt-1 w-full rounded border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100"
-              name="name"
-              autoComplete="name"
-            />
-          </label>
-          <label className="block">
-            <span className="text-sm text-slate-300">Email</span>
-            <input
-              className="mt-1 w-full rounded border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100"
-              name="email"
-              autoComplete="email"
-              inputMode="email"
-            />
-          </label>
-          <label className="block">
-            <span className="text-sm text-slate-300">Message</span>
-            <textarea
-              className="mt-1 min-h-[140px] w-full resize-y rounded border border-slate-700 bg-slate-900 px-3 py-2 text-slate-100"
-              name="message"
-            />
-          </label>
-          <button
-            type="button"
-            className="rounded bg-amber-400 px-4 py-2 font-semibold text-black"
-          >
-            Send (placeholder)
-          </button>
-        </form>
+        {addressLines.length > 0 ? (
+          <p className="mt-3 text-uc-faint text-sm leading-relaxed">{addressLines.join(" · ")}</p>
+        ) : null}
+
+        <ContactForm email={email} />
       </main>
     </>
   );
 }
-

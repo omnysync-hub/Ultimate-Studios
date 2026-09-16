@@ -1,15 +1,126 @@
+/* Ultimate Cineverse brand tokens
+   Light: dark red + black
+   Dark:  dark red + white */
+
+:root {
+  --uc-red: #e10600;
+  --uc-red-bright: #ff2a1a;
+  --uc-red-dim: rgba(225, 6, 0, 0.14);
+  --uc-on-red: #0a0a0a;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+  --uc-bg: #f6f4f0;
+  --uc-bg-elevated: #ffffff;
+  --uc-bg-subtle: #ece8e2;
+  --uc-fg: #0a0a0a;
+  --uc-fg-muted: rgba(10, 10, 10, 0.62);
+  --uc-fg-faint: rgba(10, 10, 10, 0.38);
+  --uc-border: rgba(10, 10, 10, 0.12);
+  --uc-border-strong: rgba(10, 10, 10, 0.22);
+  --uc-nav-bg: rgba(255, 255, 255, 0.94);
+  --uc-glass: rgba(255, 255, 255, 0.72);
+  --uc-glass-strong: rgba(255, 255, 255, 0.92);
+  --uc-panel: rgba(255, 255, 255, 0.88);
+  --uc-shadow: rgba(0, 0, 0, 0.1);
+  --uc-accent-glow: rgba(225, 6, 0, 0.1);
+  --uc-link: var(--uc-red);
+  --uc-btn-fg: #ffffff;
+}
+
+html[data-theme="dark"],
+html:not([data-theme]) {
+  color-scheme: dark;
+  --uc-bg: #000000;
+  --uc-bg-elevated: #0a0a0a;
+  --uc-bg-subtle: #121212;
+  --uc-fg: #ffffff;
+  --uc-fg-muted: rgba(255, 255, 255, 0.62);
+  --uc-fg-faint: rgba(255, 255, 255, 0.35);
+  --uc-border: rgba(255, 255, 255, 0.1);
+  --uc-border-strong: rgba(255, 255, 255, 0.18);
+  --uc-nav-bg: #000000;
+  --uc-glass: rgba(255, 255, 255, 0.06);
+  --uc-glass-strong: rgba(255, 255, 255, 0.12);
+  --uc-panel: rgba(14, 14, 16, 0.82);
+  --uc-shadow: rgba(0, 0, 0, 0.5);
+  --uc-accent-glow: rgba(225, 6, 0, 0.22);
+  --uc-link: #ffffff;
+  --uc-btn-fg: #ffffff;
+}
+
 html {
   margin: 0;
-  background: #000;
+  background: var(--uc-bg);
   overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior-y: none;
 }
 
 body {
   margin: 0;
   min-height: 100%;
-  background: #000;
-  color: #f2f0e8;
+  background: var(--uc-bg);
+  color: var(--uc-fg);
   overflow-x: hidden;
   overflow-y: visible;
+  transition:
+    background-color 240ms ease,
+    color 240ms ease;
+}
+
+/* Shared utility classes for Tailwind routes */
+.uc-page {
+  background: var(--uc-bg);
+  color: var(--uc-fg);
+}
+
+.uc-muted {
+  color: var(--uc-fg-muted);
+}
+
+.uc-input {
+  width: 100%;
+  border-radius: 0.375rem;
+  border: 1px solid var(--uc-border-strong);
+  background: var(--uc-bg-elevated);
+  color: var(--uc-fg);
+  padding: 0.5rem 0.75rem;
+}
+
+.uc-input:focus-visible {
+  outline: 2px solid var(--uc-red);
+  outline-offset: 1px;
+}
+
+.uc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border-radius: 0.375rem;
+  background: var(--uc-red);
+  color: var(--uc-btn-fg);
+  padding: 0.5rem 1rem;
+  font-weight: 700;
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.uc-btn:hover,
+.uc-btn:focus-visible {
+  background: var(--uc-red-bright);
+}
+
+.uc-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.uc-link {
+  color: var(--uc-red);
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
 }

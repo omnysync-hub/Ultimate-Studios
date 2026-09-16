@@ -25,11 +25,21 @@ const StudioFooter = dynamic(
   { ssr: false }
 );
 
-type Props = {
-  videos: YouTubeVideo[];
+type StudioProps = {
+  contact: {
+    phone: string;
+    email: string;
+    addressLines: string[];
+  };
+  socials: Array<{ id: string; label: string; href: string }>;
+  footerReelSrc: string;
 };
 
-export function HomeExperience({ videos }: Props) {
+type Props = {
+  videos: YouTubeVideo[];
+} & StudioProps;
+
+export function HomeExperience({ videos, contact, socials, footerReelSrc }: Props) {
   return (
     <>
       <HeroSection />
@@ -38,8 +48,8 @@ export function HomeExperience({ videos }: Props) {
         <DominationSection />
       </DeferredSection>
       <PortfolioSection videos={videos} />
-      <DeferredSection minHeight="100vh" rootMargin="40% 0px">
-        <StudioFooter />
+      <DeferredSection minHeight="210vh" rootMargin="40% 0px">
+        <StudioFooter contact={contact} socials={socials} footerReelSrc={footerReelSrc} />
       </DeferredSection>
     </>
   );
