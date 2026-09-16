@@ -8,9 +8,9 @@ import { CookieConsent } from "@/components/consent/CookieConsent";
 import { SiteLegalFooter } from "@/components/legal/SiteLegalFooter";
 import { SiteNav } from "@/components/nav/SiteNav";
 import { ThemeScript } from "@/components/theme/ThemeScript";
-import { getSite } from "@/lib/cms/store";
+import { getSite, getSiteUrl } from "@/lib/cms/store";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+const siteUrl = getSiteUrl();
 
 /* Anton = ultra-condensed display (matches inspiration letterforms).
    Barlow Condensed = nav / UI. */
