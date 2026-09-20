@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useId, useRef, useState } from "react";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import {
   THEME_CHANGED_EVENT,
@@ -22,8 +22,10 @@ const links = [
 export function SiteNav() {
   const pathname = usePathname();
   const router = useRouter();
+  const menuId = useId();
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [theme, setTheme] = useState<Theme>("dark");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -34,6 +36,25 @@ export function SiteNav() {
     window.addEventListener(THEME_CHANGED_EVENT, sync);
     return () => window.removeEventListener(THEME_CHANGED_EVENT, sync);
   }, []);
+
+  useEffect(() => {
+    setMenuOpen(false);
+    setSearchOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [menuOpen]);
 
   useEffect(() => {
     if (!searchOpen) return;
@@ -63,11 +84,12 @@ export function SiteNav() {
   const onSearch = (e: FormEvent) => {
     e.preventDefault();
     const q = query.trim();
-    if (!searchOpen && window.matchMedia("(max-width: 768px)").matches) {
+    if (!searchOpen && window.matchMedia("(max-width: 900px)").matches) {
       setSearchOpen(true);
       return;
     }
     setSearchOpen(false);
+    setMenuOpen(false);
     router.push(q ? `/blog?q=${encodeURIComponent(q)}` : "/blog");
   };
 
@@ -78,13 +100,15 @@ export function SiteNav() {
       <Link className={styles.brand} href="/" aria-label="Ultimate Cineverse Home">
         <Image
           src={logoSrc}
-          alt="Ultimate Cineverse"
+          alt=""
           width={40}
           height={40}
           className={styles.brandLogo}
           priority
         />
+        <span className={styles.brandName}>Ultimate Cineverse</span>
       </Link>
+
       <nav className={styles.navWrap} aria-label="Main navigation">
         <ul className={styles.navList}>
           {links.map((link) => (
@@ -130,7 +154,71 @@ export function SiteNav() {
           </button>
         </form>
         <ThemeToggle />
+
+        <button
+          type="button"
+          className={`${styles.burger} ${menuOpen ? styles.burgerOpen : ""}`}
+          aria-expanded={menuOpen}
+          aria-controls={menuId}
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          <span className={styles.burgerLines} aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </span>
+        </button>
       </nav>
+
+      <div
+        id={menuId}
+        className={`${styles.drawer} ${menuOpen ? styles.drawerOpen : ""}`}
+        aria-hidden={!menuOpen}
+      >
+        <ul className={styles.drawerList}>
+          {links.map((link, i) => (
+            <li
+              key={link.href}
+              style={{ ["--i" as string]: i }}
+              className={styles.drawerItem}
+            >
+              <Link
+                href={link.href}
+                className={styles.drawerLink}
+                onClick={() => setMenuOpen(false)}
+                tabIndex={menuOpen ? 0 : -1}
+              >
+                {link.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <form className={styles.drawerSearch} role="search" onSubmit={onSearch}>
+          <input
+            className={styles.drawerSearchInput}
+            type="search"
+            name="q"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search news…"
+            autoComplete="off"
+            tabIndex={menuOpen ? 0 : -1}
+          />
+          <button type="submit" className={styles.drawerSearchBtn} tabIndex={menuOpen ? 0 : -1}>
+            Search
+          </button>
+        </form>
+      </div>
+
+      {menuOpen ? (
+        <button
+          type="button"
+          className={styles.scrim}
+          aria-label="Close menu"
+          onClick={() => setMenuOpen(false)}
+        />
+      ) : null}
     </header>
   );
 }

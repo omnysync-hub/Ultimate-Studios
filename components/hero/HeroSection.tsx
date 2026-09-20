@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef, useState } from "react";
 import styles from "./HeroSection.module.css";
 
-/** Size both hero words to share one size; video slot flexes into leftover width. */
+/** Size hero words to fill available width; on mobile each word fills the row. */
 function useFitHeroType(
   ultimateRef: React.RefObject<HTMLElement | null>,
   cineverseRef: React.RefObject<HTMLElement | null>
@@ -17,36 +17,14 @@ function useFitHeroType(
 
     let readyFired = false;
 
-    const fit = () => {
-      const row = ultimate.closest(`.${styles.heroRow}`) as HTMLElement | null;
-      if (!row) return;
-
-      const gap = parseFloat(getComputedStyle(row).gap) || 0;
-      const stacked = getComputedStyle(row).flexDirection === "column";
-      // Keep ~30% for video on desktop row; on stacked mobile use full width.
-      const minVideo = stacked ? 0 : row.clientWidth * 0.3;
-      const maxW = Math.max(40, row.clientWidth - minVideo - gap);
-      const maxH = Math.min(
-        window.innerHeight * 0.42,
-        (row.parentElement?.clientHeight ?? window.innerHeight) * 0.46
-      );
-      if (maxW < 8 || maxH < 8) return;
-
+    const fitOne = (el: HTMLElement, maxW: number, maxH: number) => {
       let lo = 18;
       let hi = Math.floor(maxH);
       let best = lo;
-
       while (lo <= hi) {
         const mid = Math.floor((lo + hi) / 2);
-        ultimate.style.fontSize = `${mid}px`;
-        cineverse.style.fontSize = `${mid}px`;
-
-        const fits =
-          ultimate.scrollWidth <= maxW + 1 &&
-          cineverse.scrollWidth <= maxW + 1 &&
-          ultimate.scrollHeight <= maxH + 4 &&
-          cineverse.scrollHeight <= maxH + 4;
-
+        el.style.fontSize = `${mid}px`;
+        const fits = el.scrollWidth <= maxW + 1 && el.scrollHeight <= maxH + 4;
         if (fits) {
           best = mid;
           lo = mid + 1;
@@ -54,9 +32,53 @@ function useFitHeroType(
           hi = mid - 1;
         }
       }
+      el.style.fontSize = `${best}px`;
+    };
 
-      ultimate.style.fontSize = `${best}px`;
-      cineverse.style.fontSize = `${best}px`;
+    const fit = () => {
+      const row = ultimate.closest(`.${styles.heroRow}`) as HTMLElement | null;
+      if (!row) return;
+
+      const gap = parseFloat(getComputedStyle(row).gap) || 0;
+      const stacked = getComputedStyle(row).flexDirection === "column";
+      const rowW = row.clientWidth;
+      if (rowW < 8) return;
+
+      if (stacked) {
+        const maxW = Math.max(40, rowW);
+        const maxH = Math.min(window.innerHeight * 0.22, 180);
+        fitOne(ultimate, maxW, maxH);
+        fitOne(cineverse, maxW, maxH);
+      } else {
+        const minVideo = rowW * 0.3;
+        const maxW = Math.max(40, rowW - minVideo - gap);
+        const maxH = Math.min(
+          window.innerHeight * 0.42,
+          (row.parentElement?.clientHeight ?? window.innerHeight) * 0.46
+        );
+        if (maxH < 8) return;
+        let lo = 18;
+        let hi = Math.floor(maxH);
+        let best = lo;
+        while (lo <= hi) {
+          const mid = Math.floor((lo + hi) / 2);
+          ultimate.style.fontSize = `${mid}px`;
+          cineverse.style.fontSize = `${mid}px`;
+          const fits =
+            ultimate.scrollWidth <= maxW + 1 &&
+            cineverse.scrollWidth <= maxW + 1 &&
+            ultimate.scrollHeight <= maxH + 4 &&
+            cineverse.scrollHeight <= maxH + 4;
+          if (fits) {
+            best = mid;
+            lo = mid + 1;
+          } else {
+            hi = mid - 1;
+          }
+        }
+        ultimate.style.fontSize = `${best}px`;
+        cineverse.style.fontSize = `${best}px`;
+      }
 
       if (!readyFired) {
         readyFired = true;
@@ -64,7 +86,6 @@ function useFitHeroType(
       }
     };
 
-    // Sync first fit before paint — avoids the tiny left/right FOUC flash.
     fit();
 
     let fitRaf = 0;

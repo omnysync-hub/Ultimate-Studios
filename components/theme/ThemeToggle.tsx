@@ -36,7 +36,26 @@ export function ThemeToggle() {
       aria-pressed={!isDark}
     >
       <span className={styles.icon} aria-hidden="true">
-        {isDark ? "☀" : "☾"}
+        {isDark ? (
+          <svg viewBox="0 0 24 24" className={styles.svg} fill="none">
+            <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.75" />
+            <path
+              d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.05 5.05l1.55 1.55M17.4 17.4l1.55 1.55M18.95 5.05l-1.55 1.55M6.6 17.4l-1.55 1.55"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+            />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" className={styles.svg} fill="none">
+            <path
+              d="M20.2 13.4A8.2 8.2 0 0 1 10.6 3.8 7.4 7.4 0 1 0 20.2 13.4Z"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinejoin="round"
+            />
+          </svg>
+        )}
       </span>
       <span className={styles.label}>{isDark ? "Light" : "Dark"}</span>
     </button>

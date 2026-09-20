@@ -76,13 +76,31 @@
 }
 
 @media (max-width: 900px) {
-  .copy {
-    font-size: clamp(1.35rem, 6.2vw, 2.6rem);
-    line-height: 1.22;
+  .section {
+    width: 100%;
+    max-width: 100%;
+    padding: clamp(2.75rem, 10vw, 4.5rem) 1rem clamp(3rem, 11vw, 5rem);
+    overflow-x: clip;
+    box-sizing: border-box;
   }
 
+  .copy {
+    font-size: clamp(1.2rem, 5.4vw, 1.85rem);
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+  }
+
+  .word {
+    white-space: normal;
+  }
+
+  /* Don't shove letters off-screen — that caused the mobile right gutter */
   .letter {
-    transform: translate3d(70vw, 0, 0);
+    transform: translate3d(0, 12px, 0);
+  }
+
+  .letterIn {
+    transform: translate3d(0, 0, 0);
   }
 }
 

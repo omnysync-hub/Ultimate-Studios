@@ -254,6 +254,10 @@ export function PortfolioSection({ posts }: Props) {
             <p className={styles.hint} aria-hidden="true">
               Scroll to move through the stories
             </p>
+            <p className={styles.hintMobile} aria-hidden="true">
+              <span className={styles.hintArrows}>← →</span>
+              Swipe to browse
+            </p>
           </div>
 
           <aside

@@ -195,6 +195,12 @@
 }
 
 @media (max-width: 900px) {
+  .root,
+  .shell {
+    width: 100%;
+    max-width: 100%;
+  }
+
   .logoWrapper {
     width: min(980px, 92%);
     height: min(48vh, 400px);
@@ -203,6 +209,8 @@
   .bottom {
     flex-direction: column;
     align-items: flex-start;
+    width: calc(100% - 1.5rem);
+    gap: 1rem;
   }
 
   .end {

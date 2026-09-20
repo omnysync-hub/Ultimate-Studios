@@ -32,6 +32,8 @@ const barlowCondensed = Barlow_Condensed({
 });
 
 export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#e10600" },
     { media: "(prefers-color-scheme: dark)", color: "#e10600" }

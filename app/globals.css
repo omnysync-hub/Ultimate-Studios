@@ -68,6 +68,8 @@ html {
 body {
   margin: 0;
   min-height: 100%;
+  width: 100%;
+  max-width: 100%;
   background: var(--uc-bg);
   color: var(--uc-fg);
   /* Must stay visible on both axes — overflow-x:hidden forces overflow-y:auto (= 2nd scrollbar) */
@@ -75,6 +77,14 @@ body {
   transition:
     background-color 240ms ease,
     color 240ms ease;
+}
+
+@media (max-width: 900px) {
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: clip;
+  }
 }
 
 /* Shared utility classes for Tailwind routes */
