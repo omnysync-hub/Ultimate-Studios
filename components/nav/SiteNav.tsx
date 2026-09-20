@@ -2,12 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import {
+  THEME_CHANGED_EVENT,
+  getActiveTheme,
+  type Theme
+} from "@/lib/theme";
 import styles from "./SiteNav.module.css";
 
 const links = [
-  { href: "/#work", label: "Work" },
+  { href: "/#work", label: "Latest" },
   { href: "/about", label: "About" },
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" }
@@ -15,13 +21,63 @@ const links = [
 
 export function SiteNav() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [query, setQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [theme, setTheme] = useState<Theme>("dark");
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
+
+  useEffect(() => {
+    const sync = () => setTheme(getActiveTheme());
+    sync();
+    window.addEventListener(THEME_CHANGED_EVENT, sync);
+    return () => window.removeEventListener(THEME_CHANGED_EVENT, sync);
+  }, []);
+
+  useEffect(() => {
+    if (!searchOpen) return;
+    inputRef.current?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSearchOpen(false);
+    };
+    const onPointer = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as Node | null;
+      if (formRef.current && target && !formRef.current.contains(target)) {
+        setSearchOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("mousedown", onPointer);
+    window.addEventListener("touchstart", onPointer);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("mousedown", onPointer);
+      window.removeEventListener("touchstart", onPointer);
+    };
+  }, [searchOpen]);
+
   if (pathname?.startsWith("/studio")) return null;
+
+  const onSearch = (e: FormEvent) => {
+    e.preventDefault();
+    const q = query.trim();
+    if (!searchOpen && window.matchMedia("(max-width: 768px)").matches) {
+      setSearchOpen(true);
+      return;
+    }
+    setSearchOpen(false);
+    router.push(q ? `/blog?q=${encodeURIComponent(q)}` : "/blog");
+  };
+
+  const logoSrc = theme === "light" ? "/logo-light.png" : "/logo.png";
 
   return (
     <header className={styles.topNav}>
       <Link className={styles.brand} href="/" aria-label="Ultimate Cineverse Home">
         <Image
-          src="/logo.png"
+          src={logoSrc}
           alt="Ultimate Cineverse"
           width={40}
           height={40}
@@ -40,6 +96,39 @@ export function SiteNav() {
             </li>
           ))}
         </ul>
+        <form
+          ref={formRef}
+          className={`${styles.searchForm} ${searchOpen ? styles.searchFormOpen : ""}`}
+          role="search"
+          onSubmit={onSearch}
+        >
+          <label className={styles.srOnly} htmlFor="site-nav-search">
+            Search entertainment news
+          </label>
+          <input
+            ref={inputRef}
+            id="site-nav-search"
+            className={styles.searchInput}
+            type="search"
+            name="q"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search news…"
+            autoComplete="off"
+          />
+          <button type="submit" className={styles.searchSubmit} aria-label="Search">
+            <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.searchIcon}>
+              <circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" strokeWidth="2" />
+              <path
+                d="M16.5 16.5 L21 21"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </form>
         <ThemeToggle />
       </nav>
     </header>

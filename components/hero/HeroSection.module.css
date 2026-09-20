@@ -100,8 +100,10 @@
   line-height: 0.92;
   white-space: nowrap;
   user-select: none;
-  font-size: clamp(1.75rem, 8vw, 5rem);
+  /* Closer to fitted size so SSR/pre-fit isn't tiny at the edges */
+  font-size: min(11vw, 38vh, 5.5rem);
   opacity: 0;
+  visibility: hidden;
 }
 
 .fromLineUp .heroWord {
@@ -111,6 +113,10 @@
 .fromLineDown .heroWord {
   transform: translateY(-105%);
   text-align: right;
+}
+
+.revealed .heroWord {
+  visibility: visible;
 }
 
 .revealed .fromLineUp .heroWord {
@@ -280,6 +286,7 @@
   .videoSlot,
   .heroDivider {
     opacity: 1;
+    visibility: visible;
     transform: none;
     clip-path: none;
   }

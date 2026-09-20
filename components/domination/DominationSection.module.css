@@ -78,10 +78,11 @@
   text-transform: uppercase;
   font-weight: 400;
   will-change: transform, opacity;
+  overflow-wrap: anywhere;
 }
 
 .rowTextOnRed {
-  color: var(--uc-fg);
+  color: #f2f0e8;
 }
 
 .rowTextOnWhite {
@@ -102,11 +103,11 @@
   font-size: clamp(1.05rem, 1.7vw, 1.35rem);
   line-height: 1.45;
   letter-spacing: -0.015em;
-  color: rgba(242, 240, 232, 0.78);
+  color: var(--uc-fg-muted);
 }
 
 .introSupport {
-  color: rgba(242, 240, 232, 0.62);
+  color: var(--uc-fg-faint);
 }
 
 /* ——— Bento ——— */
@@ -580,7 +581,7 @@
   max-width: 1400px;
   margin: clamp(3.5rem, 8vw, 5.5rem) auto 0;
   height: 1px;
-  background: rgba(242, 240, 232, 0.28);
+  background: var(--uc-border-strong);
   transform-origin: left center;
 }
 
@@ -636,5 +637,22 @@
 
   .rowFill {
     transform: scaleX(1) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .titleRow {
+    min-height: clamp(2.8rem, 18vw, 4.5rem);
+  }
+
+  .rowText {
+    font-size: clamp(2.35rem, 11.5vw, 3.6rem);
+    padding-inline: 0.65rem;
+  }
+
+  .platformRow,
+  .subBars,
+  .viewBars {
+    opacity: 0.35;
   }
 }

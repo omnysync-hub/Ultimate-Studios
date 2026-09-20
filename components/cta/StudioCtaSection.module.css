@@ -39,7 +39,7 @@
 
 .letter {
   display: inline-block;
-  color: rgba(242, 240, 232, 0.9);
+  color: var(--uc-fg);
   filter: blur(12px);
   opacity: 0;
   /* Far right → settle into the paragraph (right → left) */

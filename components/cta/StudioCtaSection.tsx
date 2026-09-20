@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./StudioCtaSection.module.css";
 
 const FULL_COPY =
-  "We are a creative studio built at the intersection of technology, cinema and imagination, crafting intelligent visual experiences that turn ambitious ideas into films, worlds.";
+  "We cover entertainment like a newsroom with a cinema eye — headlines, culture drops, and the stories shaping film, music, and digital media right now.";
 
 const HOVER_COLORS = [
   "#ff6b6b",
@@ -142,7 +142,7 @@ export function StudioCtaSection() {
       aria-labelledby="studio-cta-heading"
     >
       <h2 id="studio-cta-heading" className={styles.srOnly}>
-        About Ultimate Cineverse
+        About the newsroom
       </h2>
       <p className={styles.copy}>
         {words.map((word, wordIdx) => {

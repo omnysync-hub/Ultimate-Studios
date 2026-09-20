@@ -23,6 +23,14 @@ export function applyTheme(theme: Theme) {
   document.documentElement.style.colorScheme = theme;
 }
 
+export function getActiveTheme(): Theme {
+  if (typeof document !== "undefined") {
+    const fromDom = document.documentElement.getAttribute("data-theme");
+    if (isTheme(fromDom)) return fromDom;
+  }
+  return getStoredTheme() ?? "dark";
+}
+
 export function setTheme(theme: Theme) {
   applyTheme(theme);
   try {
@@ -30,12 +38,13 @@ export function setTheme(theme: Theme) {
   } catch {
     // Private mode — still apply for session
   }
-  window.dispatchEvent(new CustomEvent(THEME_CHANGED_EVENT, { detail: theme }));
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent(THEME_CHANGED_EVENT, { detail: theme }));
+  }
 }
 
 export function toggleTheme(): Theme {
-  const current = getStoredTheme() ?? "dark";
-  const next: Theme = current === "dark" ? "light" : "dark";
+  const next: Theme = getActiveTheme() === "dark" ? "light" : "dark";
   setTheme(next);
   return next;
 }

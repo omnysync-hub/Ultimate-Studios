@@ -1,13 +1,13 @@
 import { HomeExperience } from "@/components/home/HomeExperience";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { buildMetadata } from "@/lib/seo";
+import { getPostsNewestFirst } from "@/lib/blog-data";
 import { getSite, getSiteUrl } from "@/lib/cms/store";
-import { getChannelVideos } from "@/lib/youtube";
+import { buildMetadata } from "@/lib/seo";
 
 export async function generateMetadata() {
   const site = await getSite();
   return buildMetadata({
-    title: `${site.brandName} — Stages, Facilities & Equipment`,
+    title: `${site.brandName} — Entertainment News`,
     description: site.seo.defaultDescription,
     pathname: "/"
   });
@@ -16,7 +16,7 @@ export async function generateMetadata() {
 export default async function HomePage() {
   const site = await getSite();
   const siteUrl = getSiteUrl();
-  const videos = await getChannelVideos(12, site.youtubeChannelId).catch(() => []);
+  const posts = (await getPostsNewestFirst()).slice(0, 12);
 
   const jsonLd = [
     {
@@ -33,7 +33,12 @@ export default async function HomePage() {
       "@type": "WebSite",
       name: site.brandName,
       url: siteUrl,
-      description: site.seo.defaultDescription
+      description: site.seo.defaultDescription,
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${siteUrl}/blog?q={search_term_string}`,
+        "query-input": "required name=search_term_string"
+      }
     }
   ];
 
@@ -41,7 +46,7 @@ export default async function HomePage() {
     <>
       <JsonLd data={jsonLd} />
       <HomeExperience
-        videos={videos}
+        posts={posts}
         contact={site.contact}
         socials={site.socials}
         footerReelSrc={site.footerReelSrc}

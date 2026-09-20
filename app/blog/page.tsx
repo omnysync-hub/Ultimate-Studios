@@ -4,14 +4,19 @@ import { getPostsNewestFirst } from "@/lib/blog-data";
 
 export async function generateMetadata() {
   return buildMetadata({
-    title: "Blogs — Ultimate Cineverse",
+    title: "Entertainment News & Blogs",
     description:
-      "Production blogs from Ultimate Cineverse — workflows, stage craft, and gear guidance for crews who ship on schedule.",
+      "Latest entertainment news, trending culture stories, and deep reads across film, TV, music, and digital media.",
     pathname: "/blog"
   });
 }
 
-export default async function BlogIndexPage() {
+type Props = {
+  searchParams: Promise<{ q?: string }>;
+};
+
+export default async function BlogIndexPage({ searchParams }: Props) {
+  const { q } = await searchParams;
   const posts = await getPostsNewestFirst();
-  return <BlogIndex posts={posts} />;
+  return <BlogIndex posts={posts} initialQuery={q?.trim() ?? ""} />;
 }

@@ -27,6 +27,7 @@
   height: 100%;
   padding: clamp(1.5rem, 4vh, 3rem) 0 clamp(2rem, 5vh, 3.5rem);
   transform-origin: center center;
+  color: #f2f0e8;
   background:
     radial-gradient(90% 60% at 50% 0%, rgba(225, 6, 0, 0.12), transparent 55%),
     #050505;
@@ -107,6 +108,12 @@
   transition: transform 500ms ease;
 }
 
+.thumbFallback {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(145deg, #3a1515 0%, #120808 55%, #050505 100%);
+}
+
 .card:hover .thumbImg {
   transform: scale(1.06);
 }
@@ -117,18 +124,24 @@
   display: grid;
   place-items: center;
   background: rgba(0, 0, 0, 0.28);
-  opacity: 0;
+  opacity: 0.85;
   transition: opacity 280ms ease;
 }
 
-.card:hover .play {
-  opacity: 1;
+@media (hover: hover) {
+  .play {
+    opacity: 0;
+  }
+
+  .card:hover .play {
+    opacity: 1;
+  }
 }
 
 .play svg {
   width: 48px;
   height: 48px;
-  fill: var(--uc-fg);
+  fill: #ffffff;
   filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.45));
 }
 
@@ -161,7 +174,7 @@
   font-size: clamp(0.95rem, 1.6vw, 1.1rem);
   line-height: 1.25;
   letter-spacing: -0.01em;
-  color: var(--uc-fg);
+  color: #f2f0e8;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -193,7 +206,7 @@
   place-items: center;
   background:
     linear-gradient(120deg, #e10600 0%, #9a0400 42%, #120808 100%);
-  color: var(--uc-fg);
+  color: #f2f0e8;
   will-change: transform;
   overflow: hidden;
 }
@@ -266,7 +279,7 @@
   min-height: 48px;
   padding: 0.85rem 1.5rem;
   border: 1px solid rgba(242, 240, 232, 0.85);
-  color: var(--uc-fg);
+  color: #f2f0e8;
   text-decoration: none;
   font-family: var(--font-ui), Arial, sans-serif;
   font-size: 0.85rem;
@@ -296,6 +309,10 @@
 }
 
 @media (max-width: 720px) {
+  .pin {
+    min-height: min(640px, 100dvh);
+  }
+
   .slide {
     width: min(88vw, 360px);
     height: auto;
@@ -303,6 +320,17 @@
 
   .workTitle {
     font-size: clamp(3.4rem, 16vw, 5.5rem);
+  }
+}
+
+@media (max-height: 700px) {
+  .pin {
+    min-height: 100dvh;
+  }
+
+  .stage {
+    gap: 0.85rem;
+    padding: 1rem 0 1.25rem;
   }
 }
 

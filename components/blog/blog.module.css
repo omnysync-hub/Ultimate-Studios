@@ -147,13 +147,13 @@
 }
 
 .capsuleLinkAccent {
-  color: var(--uc-fg);
+  color: #ffffff;
   background: var(--uc-red);
 }
 
 .capsuleLinkAccent:hover,
 .capsuleLinkAccent:focus-visible {
-  color: #fff;
+  color: #ffffff;
   background: var(--uc-red-bright);
 }
 
@@ -176,6 +176,29 @@
   font-size: 1.15rem;
   font-weight: 700;
   letter-spacing: 0;
+}
+
+.searchNote {
+  margin: 0 0 1rem;
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 0.9rem;
+  color: var(--blog-muted);
+}
+
+.clearSearch {
+  border: 0;
+  background: none;
+  color: var(--uc-red);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  padding: 0;
+}
+
+.clearSearch:hover,
+.clearSearch:focus-visible {
+  color: var(--uc-fg);
 }
 
 /* —— Featured —— */
@@ -509,7 +532,7 @@ html[data-theme="light"] .featureCardAlt .featureScrim {
   font-family: var(--font-display), Impact, sans-serif;
   font-size: 1.4rem;
   letter-spacing: 0.04em;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--uc-fg-faint);
 }
 
 .posterTitle {
@@ -905,11 +928,16 @@ html[data-theme="light"] .featureCardAlt .featureScrim {
     width: 100%;
     max-width: 100%;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .topMeta {
     justify-self: start;
     text-align: left;
+  }
+
+  .coverHero {
+    aspect-ratio: 16 / 9;
   }
 }
 

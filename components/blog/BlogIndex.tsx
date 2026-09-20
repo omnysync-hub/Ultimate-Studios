@@ -112,15 +112,27 @@ function PosterCard({ post }: { post: BlogPost }) {
   );
 }
 
-export function BlogIndex({ posts }: { posts: BlogPost[] }) {
+export function BlogIndex({
+  posts,
+  initialQuery = ""
+}: {
+  posts: BlogPost[];
+  initialQuery?: string;
+}) {
   const tags = useMemo(() => uniqueTags(posts), [posts]);
   const [filter, setFilter] = useState(FILTER_ALL);
+  const [query, setQuery] = useState(initialQuery);
 
   const filtered = useMemo(() => {
-    if (filter === FILTER_ALL) return posts;
-    const needle = filter.toLowerCase();
-    return posts.filter((p) => p.tags.some((t) => t.toLowerCase() === needle));
-  }, [posts, filter]);
+    const tagNeedle = filter === FILTER_ALL ? "" : filter.toLowerCase();
+    const q = query.trim().toLowerCase();
+    return posts.filter((p) => {
+      if (tagNeedle && !p.tags.some((t) => t.toLowerCase() === tagNeedle)) return false;
+      if (!q) return true;
+      const hay = `${p.title} ${p.description} ${p.tags.join(" ")}`.toLowerCase();
+      return hay.includes(q);
+    });
+  }, [posts, filter, query]);
 
   const featured = filtered.slice(0, 2);
   const gridPosts = filtered.length > 2 ? filtered.slice(2) : filtered;
@@ -142,7 +154,7 @@ export function BlogIndex({ posts }: { posts: BlogPost[] }) {
                 priority
               />
               <div>
-                <p className={styles.brandKicker}>Ultimate Cineverse</p>
+                <p className={styles.brandKicker}>Entertainment news</p>
                 <h1 className={styles.pageTitle}>Blogs</h1>
               </div>
             </div>
@@ -180,10 +192,25 @@ export function BlogIndex({ posts }: { posts: BlogPost[] }) {
           </p>
         </header>
 
+        {query ? (
+          <p className={styles.searchNote} role="status">
+            Showing results for <strong>“{query}”</strong>
+            {" · "}
+            <button type="button" className={styles.clearSearch} onClick={() => setQuery("")}>
+              Clear
+            </button>
+          </p>
+        ) : null}
+
         {posts.length === 0 ? (
           <div className={styles.empty}>
             <h2>No blogs yet</h2>
             <p>Publish a Blog Post in Sanity Studio (Draft off) to fill this section.</p>
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className={styles.empty}>
+            <h2>No matches</h2>
+            <p>Try another search or clear the filter.</p>
           </div>
         ) : (
           <>

@@ -72,3 +72,18 @@
 .button:hover {
   color: var(--uc-red);
 }
+
+@media (max-width: 768px) {
+  .inner {
+    width: min(1480px, calc(100% - 1.25rem));
+    gap: 0.65rem;
+  }
+
+  .nav {
+    gap: 0.5rem 0.85rem;
+  }
+
+  .nav a[href^="mailto:"] {
+    display: none;
+  }
+}

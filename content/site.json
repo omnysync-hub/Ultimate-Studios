@@ -1,10 +1,10 @@
 {
   "brandName": "Ultimate Cineverse",
-  "tagline": "Films, worlds, and audiences. Creative production from concept to cut.",
+  "tagline": "Entertainment news, culture coverage, and the stories shaping film, music, and digital media.",
   "seo": {
     "defaultTitle": "Ultimate Cineverse",
     "titleTemplate": "%s | Ultimate Cineverse",
-    "defaultDescription": "Ultimate Cineverse — films, worlds, and audiences. Creative production from concept to cut.",
+    "defaultDescription": "Entertainment news and culture coverage — trending stories across film, TV, music, and digital media.",
     "ogImagePath": "/logo.png"
   },
   "contact": {
@@ -21,10 +21,10 @@
   ],
   "footerReelSrc": "https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
   "about": {
-    "title": "About Ultimate Cineverse",
+    "title": "About this newsroom",
     "paragraphs": [
-      "Ultimate Cineverse is built for creators who want a smooth, professional production experience. From dedicated stages and flexible setups to reliable production support, we help teams focus on great work.",
-      "We keep it simple: clean spaces, thoughtful equipment choices, and a production-ready flow that scales from small projects to larger shoots."
+      "This site is built for entertainment news — the headlines, trends, and culture stories moving film, TV, music, and digital media. Think of it as a fast, visual news desk for people who live in the feed.",
+      "We publish latest reads, trending roundups, and deeper features so you can stay current without the noise. Studio production work lives on a separate track; here the focus is coverage, context, and what’s catching fire right now."
     ]
   },
   "youtubeChannelId": "UCc3qOMA8TN5b3PPRlGAFA0Q"

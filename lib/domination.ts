@@ -38,7 +38,7 @@ export const dominationStats: StatMetric[] = [
   },
   {
     id: "videos",
-    target: 1689,
+    target: 1600,
     suffix: "+",
     decimals: 0,
     label: "VIDEOS PUBLISHED ON YOUTUBE",

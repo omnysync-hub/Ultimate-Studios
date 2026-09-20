@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import {
   THEME_CHANGED_EVENT,
   applyTheme,
-  getStoredTheme,
+  getActiveTheme,
   toggleTheme,
   type Theme
 } from "@/lib/theme";
@@ -14,9 +14,12 @@ export function ThemeToggle() {
   const [theme, setThemeState] = useState<Theme>("dark");
 
   useEffect(() => {
-    const sync = () => setThemeState(getStoredTheme() ?? "dark");
+    const sync = () => {
+      const next = getActiveTheme();
+      applyTheme(next);
+      setThemeState(next);
+    };
     sync();
-    applyTheme(getStoredTheme() ?? "dark");
     window.addEventListener(THEME_CHANGED_EVENT, sync);
     return () => window.removeEventListener(THEME_CHANGED_EVENT, sync);
   }, []);
@@ -29,7 +32,8 @@ export function ThemeToggle() {
       className={styles.toggle}
       onClick={() => setThemeState(toggleTheme())}
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-      title={isDark ? "Light mode" : "Dark mode"}
+      title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+      aria-pressed={!isDark}
     >
       <span className={styles.icon} aria-hidden="true">
         {isDark ? "☀" : "☾"}
