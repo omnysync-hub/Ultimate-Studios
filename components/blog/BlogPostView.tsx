@@ -144,7 +144,7 @@ export function BlogPostView({ post, related, siteUrl, brandName }: Props) {
 
             <section className={styles.related} aria-labelledby="related-heading">
               <h2 id="related-heading" className={styles.relatedTitle}>
-                Continues on set
+                More stories
               </h2>
               <ul className={styles.relatedList}>
                 {related.map((item, i) => (

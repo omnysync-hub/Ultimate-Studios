@@ -783,20 +783,38 @@ html[data-theme="light"] .featureCardAlt .featureScrim {
   border: 1px solid var(--blog-faint);
 }
 
+/* Footer-matched burgundy band — same family as StudioFooter #7a2e2e */
 .related {
+  --related-base: #7a2e2e;
+  --related-deep: #4a1a1a;
+  --related-mid: #8f3a3a;
+  --related-ink: #0a0a0a;
+  --related-ink-soft: rgba(10, 10, 10, 0.62);
+  --related-panel: rgba(10, 10, 10, 0.14);
+  --related-panel-hover: rgba(10, 10, 10, 0.26);
+  --related-line: rgba(10, 10, 10, 0.22);
+
   margin-top: clamp(2.5rem, 5vw, 3.5rem);
-  padding-top: clamp(1.75rem, 4vw, 2.25rem);
-  border-top: 1px solid var(--blog-line);
+  margin-inline: calc(-1 * clamp(0.65rem, 2vw, 1rem));
+  padding: clamp(1.75rem, 4vw, 2.5rem) clamp(1rem, 3vw, 1.35rem);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--related-line);
+  background:
+    radial-gradient(90% 70% at 0% 0%, #a33f3f 0%, transparent 55%),
+    radial-gradient(70% 55% at 100% 100%, #3a1414 0%, transparent 50%),
+    linear-gradient(135deg, var(--related-mid) 0%, var(--related-base) 42%, var(--related-deep) 100%);
+  color: var(--related-ink);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .relatedTitle {
   margin: 0 0 1.25rem;
   font-family: var(--font-ui), Arial, sans-serif;
   font-size: 0.72rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--blog-muted);
+  color: var(--related-ink-soft);
 }
 
 .relatedList {
@@ -814,29 +832,35 @@ html[data-theme="light"] .featureCardAlt .featureScrim {
   align-items: center;
   padding: 0.95rem 1.1rem;
   border-radius: var(--radius-lg);
-  background: var(--blog-glass);
-  border: 1px solid var(--blog-faint);
+  background: var(--related-panel);
+  border: 1.5px solid var(--related-line);
   text-decoration: none;
-  color: inherit;
-  transition: background 200ms ease, border-color 200ms ease;
+  color: var(--related-ink);
+  transition:
+    background 200ms ease,
+    border-color 200ms ease,
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .relatedLink:hover,
 .relatedLink:focus-visible {
-  background: var(--blog-glass-strong);
-  border-color: var(--uc-red-dim);
+  background: var(--related-panel-hover);
+  border-color: var(--related-ink);
+  transform: translateY(-2px);
 }
 
 .relatedLink:hover .relatedName,
 .relatedLink:focus-visible .relatedName {
-  color: var(--uc-fg);
+  color: var(--related-ink);
 }
 
 .relatedIndex {
   font-family: var(--font-ui), Arial, sans-serif;
   font-size: 0.7rem;
+  font-weight: 700;
   letter-spacing: 0.16em;
-  color: var(--blog-red);
+  color: var(--related-ink);
+  opacity: 0.72;
 }
 
 .relatedName {
@@ -845,6 +869,7 @@ html[data-theme="light"] .featureCardAlt .featureScrim {
   line-height: 1.05;
   letter-spacing: -0.01em;
   text-transform: uppercase;
+  color: var(--related-ink);
   transition: color 200ms ease;
 }
 
