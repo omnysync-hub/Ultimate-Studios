@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FormEvent, useEffect, useId, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import {
@@ -20,6 +20,9 @@ const links = [
   { href: "/contact", label: "Contact" }
 ] as const;
 
+/** Match curtain exit (700ms + reverse stagger ~160ms). */
+const MENU_EXIT_MS = 860;
+
 export function SiteNav() {
   const pathname = usePathname();
   const router = useRouter();
@@ -27,14 +30,44 @@ export function SiteNav() {
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [theme, setTheme] = useState<Theme>("dark");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
   const menuSearchRef = useRef<HTMLInputElement | null>(null);
+  const exitTimer = useRef<number | null>(null);
+  const scrollLockY = useRef(0);
+
+  const clearExitTimer = () => {
+    if (exitTimer.current != null) {
+      window.clearTimeout(exitTimer.current);
+      exitTimer.current = null;
+    }
+  };
+
+  const openMenu = useCallback(() => {
+    clearExitTimer();
+    setMenuVisible(true);
+    // Double rAF so the enter class applies after the element is painted.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => setMenuOpen(true));
+    });
+  }, []);
+
+  const closeMenu = useCallback((after?: () => void) => {
+    clearExitTimer();
+    setMenuOpen(false);
+    exitTimer.current = window.setTimeout(() => {
+      setMenuVisible(false);
+      exitTimer.current = null;
+      after?.();
+    }, MENU_EXIT_MS);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
+    return () => clearExitTimer();
   }, []);
 
   useEffect(() => {
@@ -45,23 +78,61 @@ export function SiteNav() {
   }, []);
 
   useEffect(() => {
+    clearExitTimer();
     setMenuOpen(false);
+    setMenuVisible(false);
     setSearchOpen(false);
   }, [pathname]);
 
+  // Hard lock page scroll while the overlay is up (incl. iOS).
   useEffect(() => {
-    if (!menuOpen) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    if (!menuVisible) return;
+
+    const html = document.documentElement;
+    const body = document.body;
+    scrollLockY.current = window.scrollY;
+
+    const prev = {
+      htmlOverflow: html.style.overflow,
+      bodyOverflow: body.style.overflow,
+      bodyPosition: body.style.position,
+      bodyTop: body.style.top,
+      bodyWidth: body.style.width,
+      bodyLeft: body.style.left,
+      bodyRight: body.style.right
+    };
+
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    body.style.position = "fixed";
+    body.style.top = `-${scrollLockY.current}px`;
+    body.style.left = "0";
+    body.style.right = "0";
+    body.style.width = "100%";
+
+    const blockTouch = (e: TouchEvent) => {
+      e.preventDefault();
+    };
+    document.addEventListener("touchmove", blockTouch, { passive: false });
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMenuOpen(false);
+      if (e.key === "Escape") closeMenu();
     };
     window.addEventListener("keydown", onKey);
+
     return () => {
-      document.body.style.overflow = prev;
+      html.style.overflow = prev.htmlOverflow;
+      body.style.overflow = prev.bodyOverflow;
+      body.style.position = prev.bodyPosition;
+      body.style.top = prev.bodyTop;
+      body.style.left = prev.bodyLeft;
+      body.style.right = prev.bodyRight;
+      body.style.width = prev.bodyWidth;
+      document.removeEventListener("touchmove", blockTouch);
       window.removeEventListener("keydown", onKey);
+      window.scrollTo(0, scrollLockY.current);
     };
-  }, [menuOpen]);
+  }, [menuVisible, closeMenu]);
 
   useEffect(() => {
     if (!searchOpen) return;
@@ -88,26 +159,32 @@ export function SiteNav() {
 
   if (pathname?.startsWith("/studio")) return null;
 
+  const go = (href: string) => {
+    closeMenu(() => {
+      router.push(href);
+    });
+  };
+
   const onSearch = (e: FormEvent) => {
     e.preventDefault();
     const q = query.trim();
-    if (!searchOpen && !menuOpen && window.matchMedia("(max-width: 900px)").matches) {
+    if (!searchOpen && !menuVisible && window.matchMedia("(max-width: 900px)").matches) {
       setSearchOpen(true);
       return;
     }
     setSearchOpen(false);
-    setMenuOpen(false);
-    router.push(q ? `/blog?q=${encodeURIComponent(q)}` : "/blog");
+    go(q ? `/blog?q=${encodeURIComponent(q)}` : "/blog");
   };
 
   const logoSrc = theme === "light" ? "/logo-light.png" : "/logo.png";
 
   const menu =
     mounted &&
+    menuVisible &&
     createPortal(
       <div
         id={menuId}
-        className={`${styles.menu} ${menuOpen ? styles.menuOpen : ""}`}
+        className={`${styles.menu} ${styles.menuVisible} ${menuOpen ? styles.menuOpen : styles.menuClosing}`}
         aria-hidden={!menuOpen}
         role="dialog"
         aria-modal={menuOpen}
@@ -132,10 +209,13 @@ export function SiteNav() {
                 className={styles.menuItem}
                 style={{ ["--i" as string]: i }}
               >
-                <Link
+                <a
                   href={link.href}
                   className={styles.menuLink}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    go(link.href);
+                  }}
                   tabIndex={menuOpen ? 0 : -1}
                 >
                   <span className={styles.menuIndex}>0{i + 1}</span>
@@ -145,7 +225,7 @@ export function SiteNav() {
                   <span className={styles.menuArrow} aria-hidden="true">
                     →
                   </span>
-                </Link>
+                </a>
               </li>
             ))}
           </ul>
@@ -177,7 +257,9 @@ export function SiteNav() {
 
   return (
     <>
-      <header className={`${styles.topNav} ${menuOpen ? styles.topNavMenuOpen : ""}`}>
+      <header
+        className={`${styles.topNav} ${menuVisible ? styles.topNavMenuOpen : ""}`}
+      >
         <Link className={styles.brand} href="/" aria-label="Ultimate Cineverse Home">
           <Image
             src={logoSrc}
@@ -242,7 +324,10 @@ export function SiteNav() {
             aria-expanded={menuOpen}
             aria-controls={menuId}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
-            onClick={() => setMenuOpen((v) => !v)}
+            onClick={() => {
+              if (menuOpen || menuVisible) closeMenu();
+              else openMenu();
+            }}
           >
             <span className={styles.burgerLines} aria-hidden="true">
               <span />
