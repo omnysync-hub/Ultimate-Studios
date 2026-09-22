@@ -91,7 +91,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <SiteLegalFooter email={site.contact.email} />
         <CookieConsent />
         <GoogleAnalytics />
-        <SpeedInsights />
+        {process.env.VERCEL ? <SpeedInsights /> : null}
       </body>
     </html>
   );

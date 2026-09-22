@@ -1,5 +1,4 @@
-import { promises as fs } from "fs";
-import path from "path";
+import siteJson from "@/content/site.json";
 
 export type SocialLink = {
   id: string;
@@ -30,11 +29,9 @@ export type SiteContent = {
   youtubeChannelId: string;
 };
 
-const sitePath = path.join(process.cwd(), "content", "site.json");
-
+/** Bundled at build time — no runtime fs (Workers have no disk). */
 export async function getSite(): Promise<SiteContent> {
-  const raw = await fs.readFile(sitePath, "utf8");
-  return JSON.parse(raw) as SiteContent;
+  return siteJson as SiteContent;
 }
 
 /** Canonical origin. Empty env vars must not reach `new URL("")` (Vercel often sets blank). */
@@ -49,5 +46,5 @@ export function getSiteUrl() {
     return host.startsWith("http") ? host : `https://${host}`;
   }
 
-  return "https://example.com";
+  return "https://ultimatecineverse.com";
 }
