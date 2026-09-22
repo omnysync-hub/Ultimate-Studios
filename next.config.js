@@ -3,7 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
-    experimental: {
+  transpilePackages: ["next-sanity", "sanity", "@sanity/vision", "styled-components"],
+  experimental: {
     optimizePackageImports: ["gsap", "swiper", "next-sanity"],
     optimizeCss: true,
     cssChunking: "strict"
@@ -31,6 +32,12 @@ const nextConfig = {
     ]
   },
   async headers() {
+    const security = [
+      { key: "X-Content-Type-Options", value: "nosniff" },
+      { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+      { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" }
+    ];
+
     const siteCsp = [
       "default-src 'self'",
       "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://www.googlesyndication.com",
@@ -47,13 +54,34 @@ const nextConfig = {
       "upgrade-insecure-requests"
     ].join("; ");
 
-    const security = [
-      { key: "X-Content-Type-Options", value: "nosniff" },
-      { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-      { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" }
-    ];
+    // Studio needs Sanity CDN + Google OAuth popups (COOP allow-popups).
+    const studioCsp = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://core.sanity-cdn.com https://*.sanity.io",
+      "style-src 'self' 'unsafe-inline' https://core.sanity-cdn.com",
+      "img-src 'self' data: blob: https://cdn.sanity.io https://*.sanity.io https://*.googleusercontent.com",
+      "font-src 'self' data: https://core.sanity-cdn.com",
+      "connect-src 'self' https://*.api.sanity.io https://*.sanity.io https://core.sanity-cdn.com https://cdn.sanity.io",
+      "media-src 'self' blob:",
+      "frame-src 'self' https://*.sanity.io https://accounts.google.com https://www.google.com",
+      "worker-src 'self' blob:",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self' https://*.sanity.io",
+      "frame-ancestors 'none'",
+      "upgrade-insecure-requests"
+    ].join("; ");
 
     return [
+      {
+        source: "/studio/:path*",
+        headers: [
+          { key: "Content-Security-Policy", value: studioCsp },
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
+          { key: "Cross-Origin-Resource-Policy", value: "cross-origin" },
+          ...security
+        ]
+      },
       {
         source: "/(.*)",
         headers: [

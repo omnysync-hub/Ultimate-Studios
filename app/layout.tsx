@@ -2,11 +2,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Anton, Barlow_Condensed } from "next/font/google";
-import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { ConsentDefaults } from "@/components/consent/ConsentDefaults";
-import { CookieConsent } from "@/components/consent/CookieConsent";
-import { SiteLegalFooter } from "@/components/legal/SiteLegalFooter";
-import { SiteNav } from "@/components/nav/SiteNav";
+import { SiteChrome } from "@/components/shell/SiteChrome";
 import { ThemeScript } from "@/components/theme/ThemeScript";
 import { getSite, getSiteUrl } from "@/lib/cms/store";
 
@@ -86,12 +83,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <ConsentDefaults />
       </head>
       <body className={barlowCondensed.className}>
-        <SiteNav />
-        {children}
-        <SiteLegalFooter email={site.contact.email} />
-        <CookieConsent />
-        <GoogleAnalytics />
-        {process.env.VERCEL ? <SpeedInsights /> : null}
+        <SiteChrome
+          email={site.contact.email}
+          speedInsights={process.env.VERCEL ? <SpeedInsights /> : null}
+        >
+          {children}
+        </SiteChrome>
       </body>
     </html>
   );
