@@ -208,9 +208,12 @@
   z-index: 5;
   display: grid;
   place-items: center;
+  /* Same family as StudioFooter #7a2e2e — muted burgundy mix, not brand neon red */
   background:
-    linear-gradient(120deg, #e10600 0%, #9a0400 42%, #120808 100%);
-  color: #f2f0e8;
+    radial-gradient(85% 70% at 8% 0%, #8f3a3a 0%, transparent 55%),
+    radial-gradient(70% 55% at 100% 100%, #4a1a1a 0%, transparent 52%),
+    linear-gradient(135deg, #8a3535 0%, #7a2e2e 45%, #5c2222 100%);
+  color: #0a0a0a;
   will-change: transform;
   overflow: hidden;
 }
@@ -225,7 +228,7 @@
   background: linear-gradient(
     105deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.14) 48%,
+    rgba(10, 10, 10, 0.08) 48%,
     transparent 100%
   );
   will-change: transform, opacity;
@@ -244,7 +247,7 @@
   font-size: 0.75rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: rgba(242, 240, 232, 0.7);
+  color: rgba(10, 10, 10, 0.55);
 }
 
 .workTitle {
@@ -272,7 +275,7 @@
   font-family: var(--font-ui), Arial, sans-serif;
   font-size: clamp(1.05rem, 2vw, 1.25rem);
   line-height: 1.45;
-  color: rgba(242, 240, 232, 0.82);
+  color: rgba(10, 10, 10, 0.72);
 }
 
 .workCta {
@@ -282,8 +285,8 @@
   gap: 0.65rem;
   min-height: 48px;
   padding: 0.85rem 1.5rem;
-  border: 1px solid rgba(242, 240, 232, 0.85);
-  color: #f2f0e8;
+  border: 1.5px solid #0a0a0a;
+  color: #0a0a0a;
   text-decoration: none;
   font-family: var(--font-ui), Arial, sans-serif;
   font-size: 0.85rem;
@@ -302,9 +305,9 @@
 }
 
 .workCta:hover {
-  background: #f2f0e8;
-  color: #120808;
-  border-color: #f2f0e8;
+  background: #0a0a0a;
+  color: #7a2e2e;
+  border-color: #0a0a0a;
   transform: translateY(-2px);
 }
 
