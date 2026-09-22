@@ -1,33 +1,33 @@
 .toggle {
   appearance: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  min-width: 44px;
-  min-height: 44px;
-  padding: 0 0.55rem;
-  border: 0;
-  border-radius: 0;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 999px;
   background: transparent;
-  color: var(--uc-fg);
-  font-family: var(--font-ui), Arial, sans-serif;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  color: var(--uc-fg-muted);
   cursor: pointer;
-  transition: color 200ms ease, opacity 200ms ease;
+  transition:
+    color 200ms ease,
+    background 200ms ease,
+    border-color 200ms ease,
+    transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .toggle:hover,
 .toggle:focus-visible {
-  color: var(--uc-red);
+  color: var(--uc-fg);
+  background: var(--uc-glass);
+  border-color: var(--uc-border);
+  transform: translateY(-1px);
 }
 
 .toggle:focus-visible {
   outline: 2px solid var(--uc-red);
-  outline-offset: 3px;
+  outline-offset: 2px;
 }
 
 .icon {
@@ -37,30 +37,17 @@
 }
 
 .svg {
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
-.label {
-  display: none;
-}
-
-@media (min-width: 901px) {
+@media (prefers-reduced-motion: reduce) {
   .toggle {
-    gap: 0.4rem;
-    padding: 0 0.65rem;
-    border: 1px solid var(--uc-border);
-    border-radius: 999px;
-    background: var(--uc-glass);
+    transition: none;
   }
 
   .toggle:hover,
   .toggle:focus-visible {
-    border-color: var(--uc-red);
-    background: var(--uc-accent-glow);
-  }
-
-  .label {
-    display: inline;
+    transform: none;
   }
 }
