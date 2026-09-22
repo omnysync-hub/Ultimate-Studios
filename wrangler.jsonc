@@ -5,7 +5,8 @@
   "compatibility_date": "2026-09-21",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "vars": {
-    "NEXT_PUBLIC_SITE_URL": "https://ultimatecineverse.com"
+    "NEXT_PUBLIC_SITE_URL": "https://ultimatecineverse.com",
+    "NEXT_PUBLIC_GA_MEASUREMENT_ID": "G-R4WYQVR4LF"
   },
   "assets": {
     "directory": ".open-next/assets",
