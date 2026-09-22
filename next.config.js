@@ -69,3 +69,11 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
+
+// Cloudflare Workers local bindings when @opennextjs/cloudflare is present.
+try {
+  const { initOpenNextCloudflareForDev } = require("@opennextjs/cloudflare");
+  initOpenNextCloudflareForDev();
+} catch {
+  // Local Vercel/Next-only installs without the Cloudflare adapter.
+}

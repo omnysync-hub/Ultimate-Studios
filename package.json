@@ -7,8 +7,11 @@
     "build": "next build",
     "start": "next start -p 3000",
     "lint": "next lint",
-    "migrate:sanity": "npx --yes tsx scripts/migrate-posts-to-sanity.ts"
-  },
+    "migrate:sanity": "npx --yes tsx scripts/migrate-posts-to-sanity.ts",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+  }, 
   "dependencies": {
     "@sanity/image-url": "^1.2.0",
     "@vercel/speed-insights": "^2.0.0",
