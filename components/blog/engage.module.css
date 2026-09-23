@@ -17,22 +17,22 @@
   transition: width 80ms linear;
 }
 
+/* —— Share —— */
 .shareBar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.65rem 1rem;
-  margin: 1.25rem 0 0;
-  padding: 0.85rem 0;
-  border-top: 1px solid var(--uc-border);
-  border-bottom: 1px solid var(--uc-border);
+  gap: 0.75rem 1rem;
+  margin: 1.35rem 0 0;
+  padding: 1rem 0 0.15rem;
+  border-top: 1px solid color-mix(in srgb, var(--uc-border) 80%, transparent);
 }
 
 .shareLabel {
   font-family: var(--font-ui), Arial, sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--uc-fg-muted);
 }
@@ -40,94 +40,259 @@
 .shareActions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: 0.5rem;
 }
 
-.shareBtn {
+.shareChip {
   appearance: none;
-  border: 1px solid var(--uc-border);
-  background: var(--uc-glass);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 42px;
+  padding: 0.4rem 0.85rem 0.4rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--uc-border) 90%, var(--uc-red));
+  background: color-mix(in srgb, var(--uc-panel) 88%, transparent);
   color: var(--uc-fg);
   font-family: var(--font-ui), Arial, sans-serif;
   font-size: 0.78rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  padding: 0.45rem 0.75rem;
-  min-height: 44px;
+  letter-spacing: 0.03em;
   text-decoration: none;
   cursor: pointer;
-  transition: border-color 0.15s ease, color 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-.shareBtn:hover,
-.shareBtn:focus-visible {
-  border-color: var(--uc-red);
-  color: var(--uc-red);
+.shareChip:hover,
+.shareChip:focus-visible {
   outline: none;
+  border-color: var(--uc-red);
+  color: #fff;
+  background: color-mix(in srgb, var(--uc-red) 88%, #1a0505);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--uc-red) 28%, transparent);
+  transform: translateY(-1px);
 }
 
+.shareChipDone {
+  border-color: color-mix(in srgb, #2e7d4f 70%, var(--uc-border));
+  color: #8fd9a8;
+}
+
+.shareIcon {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 480px) {
+  .shareChipText {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .shareChip {
+    padding: 0.55rem;
+    min-width: 42px;
+    justify-content: center;
+  }
+}
+
+/* —— Reactions —— */
 .engageHeading {
-  margin: 0 0 0.85rem;
+  margin: 0;
   font-family: var(--font-display), "Arial Narrow", Impact, sans-serif;
-  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-size: clamp(1.55rem, 3.4vw, 2.05rem);
   font-weight: 400;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   text-transform: uppercase;
+  line-height: 1.05;
 }
 
 .reactSection,
 .comments {
-  margin-top: clamp(2rem, 4vw, 2.75rem);
-  padding-top: 1.5rem;
+  margin-top: clamp(2.25rem, 4.5vw, 3rem);
+  padding-top: 1.75rem;
   border-top: 1px solid var(--uc-border);
 }
 
+.reactHeader {
+  margin-bottom: 1.15rem;
+}
+
+.reactEyebrow {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--uc-red);
+}
+
+.reactSub {
+  margin: 0.4rem 0 0;
+  font-size: 0.92rem;
+  color: var(--uc-fg-muted);
+}
+
 .reactRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.55rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  max-width: 28rem;
 }
 
 .reactBtn {
   appearance: none;
-  display: inline-flex;
+  position: relative;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.55rem;
-  min-height: 44px;
-  padding: 0.5rem 0.9rem;
-  border: 1px solid var(--uc-border);
-  background: var(--uc-panel);
+  gap: 0.45rem;
+  min-height: 6.5rem;
+  padding: 0.95rem 0.65rem 0.85rem;
+  border-radius: 1.15rem;
+  border: 1px solid color-mix(in srgb, var(--uc-border) 85%, transparent);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--uc-panel) 92%, #fff) 0%, var(--uc-panel) 100%);
   color: var(--uc-fg);
   font-family: var(--font-ui), Arial, sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
   cursor: pointer;
-  transition: border-color 0.15s ease, background 0.15s ease;
+  overflow: hidden;
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.reactBtn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(80% 70% at 50% 0%, color-mix(in srgb, var(--uc-red) 22%, transparent), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
 }
 
 .reactBtn:hover:not(:disabled),
 .reactBtn:focus-visible:not(:disabled) {
-  border-color: var(--uc-red);
   outline: none;
+  border-color: color-mix(in srgb, var(--uc-red) 55%, var(--uc-border));
+  transform: translateY(-3px);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
 }
 
-.reactBtn:disabled {
-  opacity: 0.7;
+.reactBtn:hover:not(:disabled)::before,
+.reactBtn:focus-visible:not(:disabled)::before {
+  opacity: 1;
+}
+
+.reactBtn:disabled:not(.reactBtnActive) {
+  opacity: 0.55;
   cursor: default;
 }
 
 .reactBtnActive {
   border-color: var(--uc-red);
-  background: color-mix(in srgb, var(--uc-red) 16%, transparent);
+  background: color-mix(in srgb, var(--uc-red) 14%, var(--uc-panel));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--uc-red) 35%, transparent),
+    0 12px 30px color-mix(in srgb, var(--uc-red) 22%, transparent);
+}
+
+.reactBtnActive::before {
+  opacity: 1;
+}
+
+.reactBtnPop .reactEmoji {
+  animation: reactPop 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.35);
+}
+
+.reactEmoji {
+  position: relative;
+  z-index: 1;
+  font-size: 1.85rem;
+  line-height: 1;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+  transition: transform 0.15s ease;
+}
+
+.reactMeta {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
 }
 
 .reactLabel {
+  font-size: 0.82rem;
+  font-weight: 700;
   letter-spacing: 0.04em;
 }
 
 .reactCount {
+  font-size: 0.78rem;
   font-variant-numeric: tabular-nums;
   color: var(--uc-fg-muted);
+}
+
+.reactBtnActive .reactCount {
+  color: color-mix(in srgb, var(--uc-fg) 80%, var(--uc-red));
+  font-weight: 700;
+}
+
+.reactHint {
+  margin: 0.85rem 0 0;
+  font-size: 0.82rem;
+  color: var(--uc-fg-muted);
+}
+
+@keyframes reactPop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(1.45) rotate(-8deg);
+  }
+  65% {
+    transform: scale(0.92) rotate(4deg);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 520px) {
+  .reactRow {
+    max-width: none;
+    gap: 0.5rem;
+  }
+
+  .reactBtn {
+    min-height: 5.75rem;
+    padding: 0.75rem 0.4rem;
+    border-radius: 1rem;
+  }
+
+  .reactEmoji {
+    font-size: 1.55rem;
+  }
+
+  .reactLabel {
+    font-size: 0.72rem;
+  }
 }
 
 .engageNote {
@@ -160,6 +325,7 @@
   padding: 1rem 1.1rem;
   background: var(--uc-glass);
   border: 1px solid var(--uc-border);
+  border-radius: 0.85rem;
 }
 
 .commentMeta {
@@ -207,6 +373,7 @@
   font-weight: 400;
   letter-spacing: 0;
   padding: 0.65rem 0.75rem;
+  border-radius: 0.55rem;
 }
 
 .field textarea {
@@ -228,6 +395,7 @@
   min-height: 44px;
   padding: 0.55rem 1.15rem;
   border: none;
+  border-radius: 999px;
   background: var(--uc-red);
   color: #fff;
   font-family: var(--font-ui), Arial, sans-serif;
@@ -253,6 +421,7 @@
   background: var(--uc-panel);
   border: 1px solid var(--uc-border);
   border-left: 3px solid var(--uc-red);
+  border-radius: 0.75rem;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
   animation: chapterIn 0.35s ease;
 }
@@ -289,5 +458,23 @@
     right: 1rem;
     bottom: 1rem;
     max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shareChip,
+  .reactBtn,
+  .reactEmoji {
+    transition: none;
+  }
+
+  .reactBtnPop .reactEmoji,
+  .chapterToast {
+    animation: none;
+  }
+
+  .shareChip:hover,
+  .reactBtn:hover:not(:disabled) {
+    transform: none;
   }
 }
