@@ -775,6 +775,169 @@ html[data-theme="light"] .featureCardAlt .featureScrim {
   color: var(--blog-red);
 }
 
+.proseH2 {
+  margin: 1.5rem 0 0.5rem;
+  font-family: var(--font-display), "Arial Narrow", Impact, sans-serif;
+  font-size: clamp(1.45rem, 3vw, 1.85rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 1.15;
+}
+
+.proseH3 {
+  margin: 1.25rem 0 0.4rem;
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.proseQuote {
+  margin: 0.5rem 0;
+  padding: 0.75rem 0 0.75rem 1rem;
+  border-left: 3px solid var(--blog-red);
+  color: var(--blog-muted);
+  font-style: italic;
+}
+
+.proseList {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.4rem;
+  font-size: clamp(1.05rem, 1.7vw, 1.15rem);
+  line-height: 1.65;
+}
+
+.proseFigure {
+  margin: 0.75rem 0;
+}
+
+.proseFigureFrame {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--blog-panel);
+}
+
+.proseFigureImg {
+  object-fit: cover;
+}
+
+.proseFigcaption {
+  margin: 0.45rem 0 0;
+  font-size: 0.85rem;
+  color: var(--blog-muted);
+}
+
+.takeaway {
+  margin: 0.75rem 0 0;
+  padding: 0.85rem 1rem;
+  border-left: 3px solid var(--blog-red);
+  background: var(--blog-glass);
+  font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.updatedNote,
+.experienceNote {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: var(--blog-muted);
+  line-height: 1.45;
+}
+
+.keyPoints {
+  margin: 1.5rem 0;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--blog-faint);
+  background: var(--blog-glass);
+  border-radius: var(--radius-lg);
+  max-width: 40rem;
+}
+
+.keyPointsTitle,
+.engageSectionTitle {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--blog-muted);
+}
+
+.keyPoints ul,
+.howToList,
+.faqList,
+.sourcesList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.keyPoints li {
+  padding-left: 1rem;
+  position: relative;
+  line-height: 1.45;
+}
+
+.keyPoints li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.4rem;
+  height: 0.4rem;
+  background: var(--blog-red);
+}
+
+.howTo,
+.faq,
+.sources {
+  margin-top: 2rem;
+  max-width: 40rem;
+}
+
+.howToList {
+  list-style: decimal;
+  padding-left: 1.25rem;
+  gap: 1rem;
+}
+
+.howToList p {
+  margin: 0.25rem 0 0;
+  color: var(--blog-muted);
+  line-height: 1.5;
+}
+
+.faqItem {
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--blog-faint);
+}
+
+.faqItem dt {
+  font-weight: 700;
+  margin: 0 0 0.35rem;
+}
+
+.faqItem dd {
+  margin: 0;
+  color: var(--blog-muted);
+  line-height: 1.55;
+}
+
+.sourcesList a {
+  color: var(--uc-fg);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 .inlineAd {
   margin: 0.5rem 0;
   padding: 1.25rem;

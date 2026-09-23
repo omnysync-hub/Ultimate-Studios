@@ -1,0 +1,293 @@
+/* Reader engagement — blog posts only */
+
+.progressTrack {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 80;
+  height: 3px;
+  background: transparent;
+  pointer-events: none;
+}
+
+.progressBar {
+  height: 100%;
+  background: var(--uc-red, #e10600);
+  transition: width 80ms linear;
+}
+
+.shareBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 1rem;
+  margin: 1.25rem 0 0;
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--uc-border);
+  border-bottom: 1px solid var(--uc-border);
+}
+
+.shareLabel {
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--uc-fg-muted);
+}
+
+.shareActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.shareBtn {
+  appearance: none;
+  border: 1px solid var(--uc-border);
+  background: var(--uc-glass);
+  color: var(--uc-fg);
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.45rem 0.75rem;
+  min-height: 44px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.shareBtn:hover,
+.shareBtn:focus-visible {
+  border-color: var(--uc-red);
+  color: var(--uc-red);
+  outline: none;
+}
+
+.engageHeading {
+  margin: 0 0 0.85rem;
+  font-family: var(--font-display), "Arial Narrow", Impact, sans-serif;
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.reactSection,
+.comments {
+  margin-top: clamp(2rem, 4vw, 2.75rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--uc-border);
+}
+
+.reactRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.reactBtn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 44px;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--uc-border);
+  background: var(--uc-panel);
+  color: var(--uc-fg);
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.reactBtn:hover:not(:disabled),
+.reactBtn:focus-visible:not(:disabled) {
+  border-color: var(--uc-red);
+  outline: none;
+}
+
+.reactBtn:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.reactBtnActive {
+  border-color: var(--uc-red);
+  background: color-mix(in srgb, var(--uc-red) 16%, transparent);
+}
+
+.reactLabel {
+  letter-spacing: 0.04em;
+}
+
+.reactCount {
+  font-variant-numeric: tabular-nums;
+  color: var(--uc-fg-muted);
+}
+
+.engageNote {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: var(--uc-fg-muted);
+}
+
+.engageSuccess {
+  margin: 0.75rem 0 0;
+  color: #2e7d4f;
+  font-size: 0.9rem;
+}
+
+.engageError {
+  margin: 0.75rem 0 0;
+  color: var(--uc-red);
+  font-size: 0.9rem;
+}
+
+.commentList {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.commentItem {
+  padding: 1rem 1.1rem;
+  background: var(--uc-glass);
+  border: 1px solid var(--uc-border);
+}
+
+.commentMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin: 0 0 0.45rem;
+  font-size: 0.8rem;
+  color: var(--uc-fg-muted);
+}
+
+.commentMeta strong {
+  color: var(--uc-fg);
+}
+
+.commentBody {
+  margin: 0;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.commentForm {
+  display: grid;
+  gap: 0.85rem;
+  max-width: 36rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--uc-fg-muted);
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  border: 1px solid var(--uc-border);
+  background: var(--uc-panel);
+  color: var(--uc-fg);
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  padding: 0.65rem 0.75rem;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 6rem;
+}
+
+.hp {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.submitBtn {
+  appearance: none;
+  justify-self: start;
+  min-height: 44px;
+  padding: 0.55rem 1.15rem;
+  border: none;
+  background: var(--uc-red);
+  color: #fff;
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.chapterToast {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 70;
+  max-width: min(20rem, calc(100vw - 2rem));
+  padding: 1rem 1.15rem;
+  background: var(--uc-panel);
+  border: 1px solid var(--uc-border);
+  border-left: 3px solid var(--uc-red);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+  animation: chapterIn 0.35s ease;
+}
+
+.chapterTitle {
+  margin: 0;
+  font-family: var(--font-display), "Arial Narrow", Impact, sans-serif;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.chapterSub {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  color: var(--uc-fg-muted);
+  line-height: 1.4;
+}
+
+@keyframes chapterIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .chapterToast {
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    max-width: none;
+  }
+}

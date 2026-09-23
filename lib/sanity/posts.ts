@@ -1,59 +1,127 @@
-import type { BlogPost } from "@/lib/blog";
+import type { PortableTextBlock } from "@portabletext/types";
+import type { BlogComment, BlogPost } from "@/lib/blog";
+import { portableTextToPlain } from "@/lib/blog";
 import { isSanityConfigured, sanityClient } from "./client";
 import { urlForImage } from "./image";
+
+type SanityImage = {
+  alt?: string;
+  asset?: { _ref?: string };
+};
 
 type SanityPost = {
   _id: string;
   title: string;
   slug: string;
+  seoTitle?: string;
   description: string;
+  excerpt?: string;
   author?: string;
+  authorRole?: string;
+  authorName?: string;
+  authorRefRole?: string;
   tags?: string[];
   datePublished: string;
   dateModified?: string;
-  content: string;
+  content?: string;
+  body?: PortableTextBlock[];
   draft?: boolean;
-  mainImage?: {
-    alt?: string;
-    asset?: { _ref?: string };
-  };
+  noIndex?: boolean;
+  focusKeyword?: string;
+  keyTakeaway?: string;
+  keyPoints?: string[];
+  faqs?: { question: string; answer: string }[];
+  howToSteps?: { title: string; text: string }[];
+  sources?: { title: string; url: string }[];
+  primaryEntity?: string;
+  geoFocus?: string;
+  updatedNote?: string;
+  experienceNote?: string;
+  mainImage?: SanityImage;
+  ogImage?: SanityImage;
+  reactionUseful?: number;
+  reactionLove?: number;
+  reactionFire?: number;
 };
 
 const postFields = `
   _id,
   title,
   "slug": slug.current,
+  seoTitle,
   description,
+  excerpt,
   author,
+  authorRole,
+  "authorName": authorRef->name,
+  "authorRefRole": authorRef->role,
   tags,
   datePublished,
   dateModified,
   content,
+  body,
   draft,
-  mainImage
+  noIndex,
+  focusKeyword,
+  keyTakeaway,
+  keyPoints,
+  faqs,
+  howToSteps,
+  sources,
+  primaryEntity,
+  geoFocus,
+  updatedNote,
+  experienceNote,
+  mainImage,
+  ogImage,
+  reactionUseful,
+  reactionLove,
+  reactionFire
 `;
 
-function mapPost(doc: SanityPost): BlogPost {
-  let og: string | undefined;
-  if (doc.mainImage?.asset?._ref) {
-    try {
-      og = urlForImage(doc.mainImage)?.width(1200).height(630).url();
-    } catch {
-      og = undefined;
-    }
+function imageUrl(img?: SanityImage, w = 1200, h = 630) {
+  if (!img?.asset?._ref) return undefined;
+  try {
+    return urlForImage(img)?.width(w).height(h).url() || undefined;
+  } catch {
+    return undefined;
   }
+}
+
+function mapPost(doc: SanityPost): BlogPost {
+  const plain = doc.body?.length ? portableTextToPlain(doc.body) : doc.content || "";
+  const og = imageUrl(doc.ogImage) || imageUrl(doc.mainImage);
 
   return {
+    _id: doc._id,
     slug: doc.slug,
     title: doc.title,
-    description: doc.description,
+    seoTitle: doc.seoTitle,
+    description: doc.description || doc.excerpt || "",
     datePublished: doc.datePublished,
     dateModified: doc.dateModified || doc.datePublished,
-    author: doc.author || "Ultimate Cineverse Team",
+    author: doc.authorName || doc.author || "Ultimate Cineverse Team",
+    authorRole: doc.authorRole || doc.authorRefRole,
     tags: doc.tags || [],
-    content: doc.content,
+    content: plain,
+    body: doc.body,
     draft: Boolean(doc.draft),
-    ogImage: og
+    noIndex: Boolean(doc.noIndex),
+    ogImage: og,
+    coverAlt: doc.mainImage?.alt,
+    focusKeyword: doc.focusKeyword,
+    keyTakeaway: doc.keyTakeaway,
+    keyPoints: doc.keyPoints,
+    faqs: doc.faqs,
+    howToSteps: doc.howToSteps,
+    sources: doc.sources,
+    primaryEntity: doc.primaryEntity,
+    geoFocus: doc.geoFocus,
+    updatedNote: doc.updatedNote,
+    experienceNote: doc.experienceNote,
+    reactionUseful: doc.reactionUseful || 0,
+    reactionLove: doc.reactionLove || 0,
+    reactionFire: doc.reactionFire || 0
   };
 }
 
@@ -97,5 +165,21 @@ export async function fetchSanityPostBySlug(
   } catch (err) {
     console.error("[sanity] fetchSanityPostBySlug failed", err);
     return null;
+  }
+}
+
+export async function fetchApprovedComments(postId: string): Promise<BlogComment[]> {
+  if (!isSanityConfigured() || !postId) return [];
+  try {
+    return await sanityClient.fetch<BlogComment[]>(
+      `*[_type == "comment" && post._ref == $postId && approved == true] | order(createdAt asc) {
+        _id, name, body, createdAt
+      }`,
+      { postId },
+      { next: { revalidate: 30, tags: ["blog-comments", `comments:${postId}`] } }
+    );
+  } catch (err) {
+    console.error("[sanity] fetchApprovedComments failed", err);
+    return [];
   }
 }
