@@ -1,17 +1,13 @@
 import { NextResponse } from "next/server";
+import { REACTION_META, isReactionType } from "@/lib/blog/reactions";
 import { getSanityWriteClient, sanityClient } from "@/lib/sanity/client";
 import { clientIp, rateLimit } from "@/lib/blog/rateLimit";
 
-const TYPES = new Set(["useful", "love", "fire"]);
-const FIELD: Record<string, string> = {
-  useful: "reactionUseful",
-  love: "reactionLove",
-  fire: "reactionFire"
-};
+const FIELD = Object.fromEntries(REACTION_META.map((r) => [r.type, r.field]));
 
 export async function POST(req: Request) {
   const ip = clientIp(req);
-  const limited = rateLimit(`react:${ip}`, 20, 60_000);
+  const limited = rateLimit(`react:${ip}`, 30, 60_000);
   if (!limited.ok) {
     return NextResponse.json({ error: "Too many reactions. Try again shortly." }, { status: 429 });
   }
@@ -23,14 +19,13 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  // honeypot
   if (body.website) {
     return NextResponse.json({ ok: true });
   }
 
   const slug = (body.slug || "").trim();
   const type = (body.type || "").trim();
-  if (!slug || !TYPES.has(type)) {
+  if (!slug || !isReactionType(type)) {
     return NextResponse.json({ error: "Invalid reaction." }, { status: 400 });
   }
 

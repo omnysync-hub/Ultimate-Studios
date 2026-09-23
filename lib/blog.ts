@@ -44,6 +44,9 @@ export type BlogPost = {
   reactionUseful?: number;
   reactionLove?: number;
   reactionFire?: number;
+  reactionWow?: number;
+  reactionLaugh?: number;
+  reactionClap?: number;
 };
 
 /** @deprecated Prefer async getters from `@/lib/blog-data`. */

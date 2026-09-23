@@ -1,28 +1,28 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  REACTION_META,
+  emptyReactionCounts,
+  sumReactions,
+  type ReactionCounts,
+  type ReactionType
+} from "@/lib/blog/reactions";
 import styles from "./engage.module.css";
-
-type ReactionType = "useful" | "love" | "fire";
 
 type Props = {
   slug: string;
-  useful: number;
-  love: number;
-  fire: number;
+  counts: Partial<ReactionCounts>;
 };
 
-const REACTIONS: {
-  type: ReactionType;
-  emoji: string;
-  label: string;
-  hint: string;
-  tone: string;
-}[] = [
-  { type: "useful", emoji: "👍", label: "Useful", hint: "Solid insights", tone: styles.toneUseful },
-  { type: "love", emoji: "❤️", label: "Love", hint: "You loved this", tone: styles.toneLove },
-  { type: "fire", emoji: "🔥", label: "Fire", hint: "This hits different", tone: styles.toneFire }
-];
+const TONE: Record<ReactionType, string> = {
+  useful: styles.tone_useful,
+  love: styles.tone_love,
+  fire: styles.tone_fire,
+  wow: styles.tone_wow,
+  laugh: styles.tone_laugh,
+  clap: styles.tone_clap
+};
 
 function storageKey(slug: string) {
   return `uc-react:${slug}`;
@@ -33,20 +33,26 @@ function formatCount(n: number) {
   return `${(n / 1000).toFixed(n >= 10000 ? 0 : 1).replace(/\.0$/, "")}k`;
 }
 
-export function ReactionBar({ slug, useful, love, fire }: Props) {
-  const [counts, setCounts] = useState({ useful, love, fire });
+export function ReactionBar({ slug, counts: initial }: Props) {
+  const [counts, setCounts] = useState<ReactionCounts>(() => ({
+    ...emptyReactionCounts(),
+    ...initial
+  }));
   const [picked, setPicked] = useState<ReactionType | null>(null);
   const [burst, setBurst] = useState<ReactionType | null>(null);
+  const [hover, setHover] = useState<ReactionType | null>(null);
   const [floaters, setFloaters] = useState<{ id: number; emoji: string; x: number }[]>([]);
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<string | null>(null);
 
-  const total = counts.useful + counts.love + counts.fire;
+  const total = sumReactions(counts);
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(storageKey(slug));
-      if (raw === "useful" || raw === "love" || raw === "fire") setPicked(raw);
+      if (raw && REACTION_META.some((r) => r.type === raw)) {
+        setPicked(raw as ReactionType);
+      }
     } catch {
       /* ignore */
     }
@@ -54,27 +60,27 @@ export function ReactionBar({ slug, useful, love, fire }: Props) {
 
   const spawnFloaters = useCallback((emoji: string) => {
     const id = Date.now();
-    const batch = Array.from({ length: 6 }, (_, i) => ({
+    const batch = Array.from({ length: 8 }, (_, i) => ({
       id: id + i,
       emoji,
-      x: 12 + Math.random() * 76
+      x: 6 + Math.random() * 88
     }));
-    setFloaters((prev) => [...prev, ...batch]);
+    setFloaters((prev) => [...prev.slice(-12), ...batch]);
     window.setTimeout(() => {
-      setFloaters((prev) => prev.filter((f) => f.id < id || f.id > id + 10));
-    }, 900);
+      setFloaters((prev) => prev.filter((f) => f.id < id || f.id > id + 20));
+    }, 1000);
   }, []);
 
   const react = useCallback(
     async (type: ReactionType) => {
       if (picked || busy) return;
-      const meta = REACTIONS.find((r) => r.type === type);
+      const meta = REACTION_META.find((r) => r.type === type);
       if (!meta) return;
 
       setBusy(true);
       setBurst(type);
       spawnFloaters(meta.emoji);
-      window.setTimeout(() => setBurst(null), 700);
+      window.setTimeout(() => setBurst(null), 750);
 
       setCounts((c) => ({ ...c, [type]: c[type] + 1 }));
       setPicked(type);
@@ -91,11 +97,7 @@ export function ReactionBar({ slug, useful, love, fire }: Props) {
           body: JSON.stringify({ slug, type, website: "" })
         });
         if (!res.ok) {
-          if (res.status === 503) {
-            setNote(`${meta.emoji} Locked in on this device`);
-          } else {
-            setNote("Could not sync — your pick is saved here.");
-          }
+          setNote(res.status === 503 ? `${meta.emoji} Locked in on this device` : "Saved here — sync pending.");
           return;
         }
         setNote(`${meta.emoji} ${meta.hint}`);
@@ -122,7 +124,7 @@ export function ReactionBar({ slug, useful, love, fire }: Props) {
         <p className={styles.reactSub}>{socialLine}</p>
       </div>
 
-      <div className={styles.reactStage}>
+      <div className={styles.reactDockWrap}>
         <div className={styles.reactFloatLayer} aria-hidden="true">
           {floaters.map((f) => (
             <span key={f.id} className={styles.reactFloater} style={{ left: `${f.x}%` }}>
@@ -131,38 +133,48 @@ export function ReactionBar({ slug, useful, love, fire }: Props) {
           ))}
         </div>
 
-        <div className={styles.reactRow} role="group" aria-label="Choose a reaction">
-          {REACTIONS.map(({ type, emoji, label, tone }) => {
+        <div
+          className={`${styles.reactDock} ${hover ? styles.reactDockHot : ""}`}
+          role="group"
+          aria-label="Choose a reaction"
+        >
+          {REACTION_META.map(({ type, emoji, label }) => {
             const active = picked === type;
             const popping = burst === type;
+            const lifted = hover === type;
             const dimmed = Boolean(picked) && !active;
             return (
               <button
                 key={type}
                 type="button"
                 className={[
-                  styles.reactBtn,
-                  tone,
-                  active ? styles.reactBtnActive : "",
-                  popping ? styles.reactBtnPop : "",
-                  dimmed ? styles.reactBtnDim : ""
+                  styles.reactDockItem,
+                  TONE[type],
+                  active ? styles.reactDockItemActive : "",
+                  popping ? styles.reactDockItemPop : "",
+                  lifted ? styles.reactDockItemHover : "",
+                  dimmed ? styles.reactDockItemDim : ""
                 ]
                   .filter(Boolean)
                   .join(" ")}
                 disabled={Boolean(picked) || busy}
                 onClick={() => void react(type)}
+                onMouseEnter={() => setHover(type)}
+                onMouseLeave={() => setHover(null)}
+                onFocus={() => setHover(type)}
+                onBlur={() => setHover(null)}
                 aria-pressed={active}
                 aria-label={`${label}, ${counts[type]} reactions`}
               >
-                <span className={styles.reactRing} aria-hidden="true" />
-                <span className={styles.reactEmojiWrap}>
-                  <span className={styles.reactEmoji}>{emoji}</span>
+                <span className={styles.reactDockEmoji} aria-hidden="true">
+                  {emoji}
                 </span>
-                <span className={styles.reactMeta}>
-                  <span className={styles.reactLabel}>{label}</span>
-                  <span className={styles.reactCountBadge}>{formatCount(counts[type])}</span>
-                </span>
+                <span className={styles.reactDockLabel}>{label}</span>
+                <span className={styles.reactDockCount}>{formatCount(counts[type])}</span>
                 {active ? <span className={styles.reactPickedTag}>You</span> : null}
+                <span className={styles.reactDockTip} aria-hidden="true">
+                  {label}
+                </span>
               </button>
             );
           })}
@@ -174,7 +186,7 @@ export function ReactionBar({ slug, useful, love, fire }: Props) {
           {note}
         </p>
       ) : (
-        <p className={styles.reactHint}>One tap. One vibe. Instant.</p>
+        <p className={styles.reactHint}>Hover · tap · watch it pop</p>
       )}
     </section>
   );

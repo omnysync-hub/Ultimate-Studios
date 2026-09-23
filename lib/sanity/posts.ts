@@ -42,6 +42,9 @@ type SanityPost = {
   reactionUseful?: number;
   reactionLove?: number;
   reactionFire?: number;
+  reactionWow?: number;
+  reactionLaugh?: number;
+  reactionClap?: number;
 };
 
 const postFields = `
@@ -76,7 +79,10 @@ const postFields = `
   ogImage,
   reactionUseful,
   reactionLove,
-  reactionFire
+  reactionFire,
+  reactionWow,
+  reactionLaugh,
+  reactionClap
 `;
 
 function imageUrl(img?: SanityImage, w = 1200, h = 630) {
@@ -121,7 +127,10 @@ function mapPost(doc: SanityPost): BlogPost {
     experienceNote: doc.experienceNote,
     reactionUseful: doc.reactionUseful || 0,
     reactionLove: doc.reactionLove || 0,
-    reactionFire: doc.reactionFire || 0
+    reactionFire: doc.reactionFire || 0,
+    reactionWow: doc.reactionWow || 0,
+    reactionLaugh: doc.reactionLaugh || 0,
+    reactionClap: doc.reactionClap || 0
   };
 }
 

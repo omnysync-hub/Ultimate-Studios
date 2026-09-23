@@ -343,6 +343,30 @@ export const post = defineType({
       group: "publish",
       readOnly: true,
       initialValue: 0
+    }),
+    defineField({
+      name: "reactionWow",
+      title: "Wow reactions",
+      type: "number",
+      group: "publish",
+      readOnly: true,
+      initialValue: 0
+    }),
+    defineField({
+      name: "reactionLaugh",
+      title: "Lol reactions",
+      type: "number",
+      group: "publish",
+      readOnly: true,
+      initialValue: 0
+    }),
+    defineField({
+      name: "reactionClap",
+      title: "Clap reactions",
+      type: "number",
+      group: "publish",
+      readOnly: true,
+      initialValue: 0
     })
   ],
   preview: {

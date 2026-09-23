@@ -205,7 +205,7 @@
   background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 70%);
 }
 
-/* —— Reactions —— */
+/* —— Reactions dock —— */
 .engageHeading {
   margin: 0;
   font-family: var(--font-display), "Arial Narrow", Impact, sans-serif;
@@ -243,160 +243,173 @@
   color: var(--uc-fg-muted);
 }
 
-.reactStage {
+.reactDockWrap {
   position: relative;
-  max-width: 32rem;
+  max-width: 40rem;
+  padding-top: 1.25rem;
 }
 
 .reactFloatLayer {
   position: absolute;
-  inset: -1.5rem 0 auto;
-  height: 5rem;
+  inset: 0 0 auto;
+  height: 4.5rem;
   pointer-events: none;
   overflow: visible;
-  z-index: 2;
+  z-index: 3;
 }
 
 .reactFloater {
   position: absolute;
-  bottom: 0;
-  font-size: 1.15rem;
-  animation: floatAway 0.9s ease-out forwards;
+  bottom: 0.25rem;
+  font-size: 1.2rem;
+  animation: floatAway 1s ease-out forwards;
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
 }
 
-.reactRow {
+.reactDock {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.75rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.35rem;
+  padding: 0.7rem 0.65rem 0.75rem;
+  border-radius: 1.6rem;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--uc-panel) 78%, #fff) 0%, var(--uc-panel) 100%);
+  border: 1px solid color-mix(in srgb, var(--uc-border) 80%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 16px 40px rgba(0, 0, 0, 0.28);
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-.reactBtn {
+.reactDockHot {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 20px 48px rgba(0, 0, 0, 0.34),
+    0 0 0 1px color-mix(in srgb, var(--uc-red) 25%, transparent);
+}
+
+.reactDockItem {
   appearance: none;
   position: relative;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.55rem;
-  min-height: 7.25rem;
-  padding: 1.05rem 0.6rem 0.95rem;
-  border-radius: 1.35rem;
-  border: 1px solid color-mix(in srgb, var(--uc-border) 80%, transparent);
-  background:
-    radial-gradient(120% 80% at 50% -10%, rgba(255, 255, 255, 0.08), transparent 55%),
-    linear-gradient(180deg, color-mix(in srgb, var(--uc-panel) 95%, #fff) 0%, var(--uc-panel) 100%);
+  gap: 0.28rem;
+  min-width: 0;
+  padding: 0.55rem 0.2rem 0.45rem;
+  border: none;
+  border-radius: 1.1rem;
+  background: transparent;
   color: var(--uc-fg);
   font-family: var(--font-ui), Arial, sans-serif;
   cursor: pointer;
-  overflow: hidden;
-  isolation: isolate;
+  transform-origin: 50% 100%;
   transition:
-    transform 0.22s cubic-bezier(0.2, 0.9, 0.25, 1.15),
-    border-color 0.2s ease,
-    box-shadow 0.22s ease,
+    transform 0.22s cubic-bezier(0.2, 0.9, 0.25, 1.25),
+    background 0.2s ease,
     opacity 0.2s ease;
 }
 
-.reactRing {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.reactBtn:hover:not(:disabled),
-.reactBtn:focus-visible:not(:disabled) {
+.reactDockItem:hover:not(:disabled),
+.reactDockItem:focus-visible:not(:disabled),
+.reactDockItemHover:not(:disabled) {
   outline: none;
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.32);
+  transform: translateY(-14px) scale(1.22);
+  background: color-mix(in srgb, var(--uc-bg) 35%, transparent);
+  z-index: 2;
 }
 
-.reactBtn:active:not(:disabled) {
-  transform: translateY(-1px) scale(0.98);
+.reactDockItem:active:not(:disabled) {
+  transform: translateY(-6px) scale(1.08);
 }
 
-.reactBtnDim {
-  opacity: 0.42;
-  filter: grayscale(0.35);
+.reactDockItemDim {
+  opacity: 0.38;
+  filter: grayscale(0.4);
+  transform: scale(0.92);
 }
 
-.reactBtnActive {
-  transform: translateY(-2px);
+.reactDockItemActive {
+  background: color-mix(in srgb, var(--uc-red) 14%, transparent);
+  transform: translateY(-8px) scale(1.12);
+  z-index: 2;
 }
 
-.reactBtnPop .reactEmoji {
-  animation: reactPop 0.65s cubic-bezier(0.15, 0.9, 0.25, 1.4);
+.reactDockItemPop .reactDockEmoji {
+  animation: reactPop 0.7s cubic-bezier(0.15, 0.9, 0.25, 1.45);
 }
 
-.reactEmojiWrap {
-  position: relative;
-  z-index: 1;
-  width: 3.1rem;
-  height: 3.1rem;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: color-mix(in srgb, var(--uc-bg) 40%, transparent);
-  border: 1px solid color-mix(in srgb, var(--uc-border) 70%, transparent);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.reactBtn:hover:not(:disabled) .reactEmojiWrap {
-  transform: scale(1.08);
-}
-
-.reactEmoji {
-  font-size: 1.7rem;
+.reactDockEmoji {
+  font-size: clamp(1.55rem, 3.5vw, 1.95rem);
   line-height: 1;
-  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+  transition: transform 0.2s ease;
 }
 
-.reactMeta {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-.reactLabel {
-  font-size: 0.84rem;
+.reactDockLabel {
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
+  opacity: 0.9;
 }
 
-.reactCountBadge {
-  min-width: 2rem;
-  padding: 0.15rem 0.5rem;
-  border-radius: 999px;
-  font-size: 0.72rem;
+.reactDockCount {
+  font-size: 0.68rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
   color: var(--uc-fg-muted);
-  background: color-mix(in srgb, var(--uc-bg) 45%, transparent);
-  border: 1px solid color-mix(in srgb, var(--uc-border) 70%, transparent);
+  min-width: 1.1rem;
+  text-align: center;
+}
+
+.reactDockItemActive .reactDockCount {
+  color: var(--uc-fg);
 }
 
 .reactPickedTag {
   position: absolute;
-  top: 0.55rem;
-  right: 0.55rem;
+  top: -0.15rem;
+  right: 0.1rem;
   z-index: 2;
-  padding: 0.12rem 0.4rem;
+  padding: 0.1rem 0.35rem;
   border-radius: 999px;
-  font-size: 0.62rem;
+  font-size: 0.55rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #fff;
   background: var(--uc-red);
+  box-shadow: 0 4px 12px rgba(225, 6, 0, 0.35);
+}
+
+.reactDockTip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.35rem);
+  transform: translateX(-50%) translateY(6px);
+  padding: 0.22rem 0.5rem;
+  border-radius: 999px;
+  background: #0c0c0c;
+  border: 1px solid var(--uc-border);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.reactDockItem:hover .reactDockTip,
+.reactDockItem:focus-visible .reactDockTip,
+.reactDockItemHover .reactDockTip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .reactHint,
@@ -421,65 +434,29 @@
   animation: toastIn 0.35s ease;
 }
 
-/* Per-reaction color systems */
-.toneUseful:hover:not(:disabled),
-.toneUseful:focus-visible:not(:disabled),
-.toneUseful.reactBtnActive {
-  border-color: color-mix(in srgb, #3b82f6 55%, var(--uc-border));
-  box-shadow: 0 16px 34px rgba(59, 130, 246, 0.22);
+.tone_useful.reactDockItemActive,
+.tone_useful.reactDockItemHover {
+  box-shadow: 0 10px 24px rgba(59, 130, 246, 0.2);
 }
-.toneUseful.reactBtnActive .reactRing,
-.toneUseful:hover:not(:disabled) .reactRing {
-  opacity: 1;
-  box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.35);
+.tone_love.reactDockItemActive,
+.tone_love.reactDockItemHover {
+  box-shadow: 0 10px 24px rgba(225, 6, 0, 0.22);
 }
-.toneUseful.reactBtnActive .reactEmojiWrap {
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18);
+.tone_fire.reactDockItemActive,
+.tone_fire.reactDockItemHover {
+  box-shadow: 0 10px 24px rgba(245, 158, 11, 0.22);
 }
-.toneUseful.reactBtnActive .reactCountBadge {
-  color: #93c5fd;
-  border-color: rgba(59, 130, 246, 0.35);
+.tone_wow.reactDockItemActive,
+.tone_wow.reactDockItemHover {
+  box-shadow: 0 10px 24px rgba(34, 211, 238, 0.22);
 }
-
-.toneLove:hover:not(:disabled),
-.toneLove:focus-visible:not(:disabled),
-.toneLove.reactBtnActive {
-  border-color: color-mix(in srgb, #e10600 60%, var(--uc-border));
-  box-shadow: 0 16px 34px rgba(225, 6, 0, 0.25);
+.tone_laugh.reactDockItemActive,
+.tone_laugh.reactDockItemHover {
+  box-shadow: 0 10px 24px rgba(234, 179, 8, 0.22);
 }
-.toneLove.reactBtnActive .reactRing,
-.toneLove:hover:not(:disabled) .reactRing {
-  opacity: 1;
-  box-shadow: inset 0 0 0 1px rgba(225, 6, 0, 0.4);
-}
-.toneLove.reactBtnActive .reactEmojiWrap {
-  border-color: #e10600;
-  box-shadow: 0 0 0 4px rgba(225, 6, 0, 0.2);
-}
-.toneLove.reactBtnActive .reactCountBadge {
-  color: #ffb4b0;
-  border-color: rgba(225, 6, 0, 0.35);
-}
-
-.toneFire:hover:not(:disabled),
-.toneFire:focus-visible:not(:disabled),
-.toneFire.reactBtnActive {
-  border-color: color-mix(in srgb, #f59e0b 55%, var(--uc-border));
-  box-shadow: 0 16px 34px rgba(245, 158, 11, 0.22);
-}
-.toneFire.reactBtnActive .reactRing,
-.toneFire:hover:not(:disabled) .reactRing {
-  opacity: 1;
-  box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.4);
-}
-.toneFire.reactBtnActive .reactEmojiWrap {
-  border-color: #f59e0b;
-  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
-}
-.toneFire.reactBtnActive .reactCountBadge {
-  color: #fcd34d;
-  border-color: rgba(245, 158, 11, 0.35);
+.tone_clap.reactDockItemActive,
+.tone_clap.reactDockItemHover {
+  box-shadow: 0 10px 24px rgba(34, 197, 94, 0.2);
 }
 
 @keyframes reactPop {
@@ -487,10 +464,10 @@
     transform: scale(1);
   }
   30% {
-    transform: scale(1.55) rotate(-12deg);
+    transform: scale(1.65) rotate(-14deg);
   }
   55% {
-    transform: scale(0.88) rotate(6deg);
+    transform: scale(0.88) rotate(8deg);
   }
   100% {
     transform: scale(1);
@@ -502,12 +479,12 @@
     opacity: 0;
     transform: translateY(8px) scale(0.6);
   }
-  20% {
+  18% {
     opacity: 1;
   }
   100% {
     opacity: 0;
-    transform: translateY(-64px) scale(1.15);
+    transform: translateY(-72px) scale(1.2);
   }
 }
 
@@ -538,27 +515,30 @@
     height: 44px;
   }
 
-  .reactRow {
-    gap: 0.5rem;
+  .reactDock {
+    gap: 0.15rem;
+    padding: 0.55rem 0.4rem 0.6rem;
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .reactBtn {
-    min-height: 6.4rem;
-    padding: 0.85rem 0.35rem 0.8rem;
-    border-radius: 1.1rem;
+  .reactDockItem:hover:not(:disabled),
+  .reactDockItem:focus-visible:not(:disabled),
+  .reactDockItemHover:not(:disabled) {
+    transform: translateY(-10px) scale(1.14);
   }
 
-  .reactEmojiWrap {
-    width: 2.7rem;
-    height: 2.7rem;
+  .reactDockLabel {
+    font-size: 0.58rem;
   }
 
-  .reactEmoji {
+  .reactDockEmoji {
     font-size: 1.45rem;
   }
 
-  .reactLabel {
-    font-size: 0.72rem;
+  .reactDockTip {
+    display: none;
   }
 }
 
@@ -713,8 +693,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .shareOrb,
-  .reactBtn,
-  .reactEmojiWrap,
+  .reactDockItem,
+  .reactDockEmoji,
   .reactFloater,
   .reactToast,
   .chapterToast {
@@ -723,11 +703,12 @@
   }
 
   .shareOrb:hover,
-  .reactBtn:hover:not(:disabled) {
+  .reactDockItem:hover:not(:disabled),
+  .reactDockItemHover:not(:disabled) {
     transform: none;
   }
 
-  .reactBtnPop .reactEmoji {
+  .reactDockItemPop .reactDockEmoji {
     animation: none;
   }
 }

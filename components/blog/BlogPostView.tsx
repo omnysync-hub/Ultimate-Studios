@@ -275,9 +275,14 @@ export function BlogPostView({ post, related, comments, siteUrl, brandName }: Pr
 
             <ReactionBar
               slug={post.slug}
-              useful={post.reactionUseful || 0}
-              love={post.reactionLove || 0}
-              fire={post.reactionFire || 0}
+              counts={{
+                useful: post.reactionUseful || 0,
+                love: post.reactionLove || 0,
+                fire: post.reactionFire || 0,
+                wow: post.reactionWow || 0,
+                laugh: post.reactionLaugh || 0,
+                clap: post.reactionClap || 0
+              }}
             />
 
             <CommentSection slug={post.slug} initialComments={comments} />
