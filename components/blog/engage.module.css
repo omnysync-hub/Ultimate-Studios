@@ -1,4 +1,4 @@
-/* Reader engagement — blog posts only */
+/* Reader engagement — social polish, blog only */
 
 .progressTrack {
   position: fixed;
@@ -13,103 +13,203 @@
 
 .progressBar {
   height: 100%;
-  background: var(--uc-red, #e10600);
+  background: linear-gradient(90deg, #e10600, #ff4d4d);
   transition: width 80ms linear;
 }
 
-/* —— Share —— */
+/* —— Share dock —— */
 .shareBar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem 1rem;
-  margin: 1.35rem 0 0;
-  padding: 1rem 0 0.15rem;
-  border-top: 1px solid color-mix(in srgb, var(--uc-border) 80%, transparent);
+  justify-content: space-between;
+  gap: 1rem 1.25rem;
+  margin: 1.5rem 0 0;
+  padding: 1.15rem 0 0.2rem;
+  border-top: 1px solid color-mix(in srgb, var(--uc-border) 75%, transparent);
+}
+
+.shareIntro {
+  display: grid;
+  gap: 0.2rem;
 }
 
 .shareLabel {
   font-family: var(--font-ui), Arial, sans-serif;
   font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
+  color: var(--uc-red);
+}
+
+.shareHint {
+  font-size: 0.9rem;
   color: var(--uc-fg-muted);
 }
 
-.shareActions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.shareChip {
-  appearance: none;
+.shareDock {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  min-height: 42px;
-  padding: 0.4rem 0.85rem 0.4rem 0.65rem;
+  gap: 0.55rem;
+  padding: 0.45rem;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--uc-border) 90%, var(--uc-red));
-  background: color-mix(in srgb, var(--uc-panel) 88%, transparent);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--uc-panel) 70%, #fff) 0%, var(--uc-panel) 100%);
+  border: 1px solid color-mix(in srgb, var(--uc-border) 80%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 10px 28px rgba(0, 0, 0, 0.22);
+}
+
+.shareOrb {
+  appearance: none;
+  position: relative;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  display: grid;
+  place-items: center;
   color: var(--uc-fg);
-  font-family: var(--font-ui), Arial, sans-serif;
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  text-decoration: none;
+  background: color-mix(in srgb, var(--uc-bg) 55%, transparent);
   cursor: pointer;
+  text-decoration: none;
+  overflow: visible;
   transition:
-    transform 0.15s ease,
-    border-color 0.15s ease,
-    background 0.15s ease,
-    color 0.15s ease,
-    box-shadow 0.15s ease;
+    transform 0.2s cubic-bezier(0.2, 0.9, 0.3, 1.2),
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.shareChip:hover,
-.shareChip:focus-visible {
-  outline: none;
-  border-color: var(--uc-red);
+.shareOrbGlow {
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.shareOrbIcon {
+  position: relative;
+  z-index: 1;
+  width: 1.15rem;
+  height: 1.15rem;
+  display: grid;
+  place-items: center;
+}
+
+.shareOrbIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.shareTooltip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.55rem);
+  transform: translateX(-50%) translateY(4px);
+  padding: 0.28rem 0.55rem;
+  border-radius: 999px;
+  background: #0c0c0c;
+  border: 1px solid var(--uc-border);
   color: #fff;
-  background: color-mix(in srgb, var(--uc-red) 88%, #1a0505);
-  box-shadow: 0 8px 22px color-mix(in srgb, var(--uc-red) 28%, transparent);
-  transform: translateY(-1px);
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 2;
 }
 
-.shareChipDone {
-  border-color: color-mix(in srgb, #2e7d4f 70%, var(--uc-border));
-  color: #8fd9a8;
+.shareOrb:hover,
+.shareOrb:focus-visible {
+  outline: none;
+  transform: translateY(-3px) scale(1.06);
+  color: #fff;
 }
 
-.shareIcon {
-  width: 1rem;
-  height: 1rem;
-  flex: 0 0 auto;
+.shareOrb:hover .shareTooltip,
+.shareOrb:focus-visible .shareTooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
-@media (max-width: 480px) {
-  .shareChipText {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-  }
+.shareOrb:hover .shareOrbGlow,
+.shareOrb:focus-visible .shareOrbGlow {
+  opacity: 1;
+}
 
-  .shareChip {
-    padding: 0.55rem;
-    min-width: 42px;
-    justify-content: center;
-  }
+.shareOrbPressed {
+  transform: scale(0.92) !important;
+}
+
+.shareOrbDone {
+  color: #8fd9a8 !important;
+  border-color: color-mix(in srgb, #2e7d4f 50%, transparent);
+}
+
+.toneShare:hover,
+.toneShare:focus-visible {
+  background: #e10600;
+  border-color: #e10600;
+  box-shadow: 0 10px 24px rgba(225, 6, 0, 0.35);
+}
+.toneShare .shareOrbGlow {
+  background: radial-gradient(circle, rgba(225, 6, 0, 0.45), transparent 70%);
+}
+
+.toneX:hover,
+.toneX:focus-visible {
+  background: #111;
+  border-color: #333;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+}
+.toneX .shareOrbGlow {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 70%);
+}
+
+.toneLinkedIn:hover,
+.toneLinkedIn:focus-visible {
+  background: #0a66c2;
+  border-color: #0a66c2;
+  box-shadow: 0 10px 24px rgba(10, 102, 194, 0.4);
+}
+.toneLinkedIn .shareOrbGlow {
+  background: radial-gradient(circle, rgba(10, 102, 194, 0.5), transparent 70%);
+}
+
+.toneWhatsApp:hover,
+.toneWhatsApp:focus-visible {
+  background: #1faf38;
+  border-color: #1faf38;
+  box-shadow: 0 10px 24px rgba(31, 175, 56, 0.4);
+}
+.toneWhatsApp .shareOrbGlow {
+  background: radial-gradient(circle, rgba(31, 175, 56, 0.5), transparent 70%);
+}
+
+.toneCopy:hover,
+.toneCopy:focus-visible {
+  background: #3a3a3a;
+  border-color: #555;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+.toneCopy .shareOrbGlow {
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.18), transparent 70%);
 }
 
 /* —— Reactions —— */
 .engageHeading {
   margin: 0;
   font-family: var(--font-display), "Arial Narrow", Impact, sans-serif;
-  font-size: clamp(1.55rem, 3.4vw, 2.05rem);
+  font-size: clamp(1.65rem, 3.6vw, 2.2rem);
   font-weight: 400;
   letter-spacing: -0.03em;
   text-transform: uppercase;
@@ -118,13 +218,13 @@
 
 .reactSection,
 .comments {
-  margin-top: clamp(2.25rem, 4.5vw, 3rem);
-  padding-top: 1.75rem;
+  margin-top: clamp(2.4rem, 5vw, 3.25rem);
+  padding-top: 1.85rem;
   border-top: 1px solid var(--uc-border);
 }
 
 .reactHeader {
-  margin-bottom: 1.15rem;
+  margin-bottom: 1.25rem;
 }
 
 .reactEyebrow {
@@ -132,22 +232,45 @@
   font-family: var(--font-ui), Arial, sans-serif;
   font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--uc-red);
 }
 
 .reactSub {
-  margin: 0.4rem 0 0;
-  font-size: 0.92rem;
+  margin: 0.45rem 0 0;
+  font-size: 0.95rem;
   color: var(--uc-fg-muted);
 }
 
+.reactStage {
+  position: relative;
+  max-width: 32rem;
+}
+
+.reactFloatLayer {
+  position: absolute;
+  inset: -1.5rem 0 auto;
+  height: 5rem;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 2;
+}
+
+.reactFloater {
+  position: absolute;
+  bottom: 0;
+  font-size: 1.15rem;
+  animation: floatAway 0.9s ease-out forwards;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+}
+
 .reactRow {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.65rem;
-  max-width: 28rem;
+  gap: 0.75rem;
 }
 
 .reactBtn {
@@ -156,75 +279,81 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.45rem;
-  min-height: 6.5rem;
-  padding: 0.95rem 0.65rem 0.85rem;
-  border-radius: 1.15rem;
-  border: 1px solid color-mix(in srgb, var(--uc-border) 85%, transparent);
+  gap: 0.55rem;
+  min-height: 7.25rem;
+  padding: 1.05rem 0.6rem 0.95rem;
+  border-radius: 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--uc-border) 80%, transparent);
   background:
-    linear-gradient(180deg, color-mix(in srgb, var(--uc-panel) 92%, #fff) 0%, var(--uc-panel) 100%);
+    radial-gradient(120% 80% at 50% -10%, rgba(255, 255, 255, 0.08), transparent 55%),
+    linear-gradient(180deg, color-mix(in srgb, var(--uc-panel) 95%, #fff) 0%, var(--uc-panel) 100%);
   color: var(--uc-fg);
   font-family: var(--font-ui), Arial, sans-serif;
   cursor: pointer;
   overflow: hidden;
+  isolation: isolate;
   transition:
-    transform 0.18s ease,
-    border-color 0.18s ease,
-    background 0.18s ease,
-    box-shadow 0.18s ease;
+    transform 0.22s cubic-bezier(0.2, 0.9, 0.25, 1.15),
+    border-color 0.2s ease,
+    box-shadow 0.22s ease,
+    opacity 0.2s ease;
 }
 
-.reactBtn::before {
-  content: "";
+.reactRing {
   position: absolute;
   inset: 0;
-  background: radial-gradient(80% 70% at 50% 0%, color-mix(in srgb, var(--uc-red) 22%, transparent), transparent 70%);
+  border-radius: inherit;
+  pointer-events: none;
   opacity: 0;
   transition: opacity 0.2s ease;
-  pointer-events: none;
 }
 
 .reactBtn:hover:not(:disabled),
 .reactBtn:focus-visible:not(:disabled) {
   outline: none;
-  border-color: color-mix(in srgb, var(--uc-red) 55%, var(--uc-border));
-  transform: translateY(-3px);
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.32);
 }
 
-.reactBtn:hover:not(:disabled)::before,
-.reactBtn:focus-visible:not(:disabled)::before {
-  opacity: 1;
+.reactBtn:active:not(:disabled) {
+  transform: translateY(-1px) scale(0.98);
 }
 
-.reactBtn:disabled:not(.reactBtnActive) {
-  opacity: 0.55;
-  cursor: default;
+.reactBtnDim {
+  opacity: 0.42;
+  filter: grayscale(0.35);
 }
 
 .reactBtnActive {
-  border-color: var(--uc-red);
-  background: color-mix(in srgb, var(--uc-red) 14%, var(--uc-panel));
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--uc-red) 35%, transparent),
-    0 12px 30px color-mix(in srgb, var(--uc-red) 22%, transparent);
-}
-
-.reactBtnActive::before {
-  opacity: 1;
+  transform: translateY(-2px);
 }
 
 .reactBtnPop .reactEmoji {
-  animation: reactPop 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.35);
+  animation: reactPop 0.65s cubic-bezier(0.15, 0.9, 0.25, 1.4);
+}
+
+.reactEmojiWrap {
+  position: relative;
+  z-index: 1;
+  width: 3.1rem;
+  height: 3.1rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--uc-bg) 40%, transparent);
+  border: 1px solid color-mix(in srgb, var(--uc-border) 70%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reactBtn:hover:not(:disabled) .reactEmojiWrap {
+  transform: scale(1.08);
 }
 
 .reactEmoji {
-  position: relative;
-  z-index: 1;
-  font-size: 1.85rem;
+  font-size: 1.7rem;
   line-height: 1;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
-  transition: transform 0.15s ease;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.35));
 }
 
 .reactMeta {
@@ -233,72 +362,204 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.15rem;
+  gap: 0.3rem;
 }
 
 .reactLabel {
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
 }
 
-.reactCount {
-  font-size: 0.78rem;
+.reactCountBadge {
+  min-width: 2rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color: var(--uc-fg-muted);
+  background: color-mix(in srgb, var(--uc-bg) 45%, transparent);
+  border: 1px solid color-mix(in srgb, var(--uc-border) 70%, transparent);
+}
+
+.reactPickedTag {
+  position: absolute;
+  top: 0.55rem;
+  right: 0.55rem;
+  z-index: 2;
+  padding: 0.12rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--uc-red);
+}
+
+.reactHint,
+.engageNote {
+  margin: 0.9rem 0 0;
+  font-size: 0.86rem;
   color: var(--uc-fg-muted);
 }
 
-.reactBtnActive .reactCount {
-  color: color-mix(in srgb, var(--uc-fg) 80%, var(--uc-red));
-  font-weight: 700;
+.reactToast {
+  margin: 0.95rem 0 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--uc-fg);
+  background: color-mix(in srgb, var(--uc-red) 12%, var(--uc-panel));
+  border: 1px solid color-mix(in srgb, var(--uc-red) 35%, var(--uc-border));
+  animation: toastIn 0.35s ease;
 }
 
-.reactHint {
-  margin: 0.85rem 0 0;
-  font-size: 0.82rem;
-  color: var(--uc-fg-muted);
+/* Per-reaction color systems */
+.toneUseful:hover:not(:disabled),
+.toneUseful:focus-visible:not(:disabled),
+.toneUseful.reactBtnActive {
+  border-color: color-mix(in srgb, #3b82f6 55%, var(--uc-border));
+  box-shadow: 0 16px 34px rgba(59, 130, 246, 0.22);
+}
+.toneUseful.reactBtnActive .reactRing,
+.toneUseful:hover:not(:disabled) .reactRing {
+  opacity: 1;
+  box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.35);
+}
+.toneUseful.reactBtnActive .reactEmojiWrap {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18);
+}
+.toneUseful.reactBtnActive .reactCountBadge {
+  color: #93c5fd;
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+.toneLove:hover:not(:disabled),
+.toneLove:focus-visible:not(:disabled),
+.toneLove.reactBtnActive {
+  border-color: color-mix(in srgb, #e10600 60%, var(--uc-border));
+  box-shadow: 0 16px 34px rgba(225, 6, 0, 0.25);
+}
+.toneLove.reactBtnActive .reactRing,
+.toneLove:hover:not(:disabled) .reactRing {
+  opacity: 1;
+  box-shadow: inset 0 0 0 1px rgba(225, 6, 0, 0.4);
+}
+.toneLove.reactBtnActive .reactEmojiWrap {
+  border-color: #e10600;
+  box-shadow: 0 0 0 4px rgba(225, 6, 0, 0.2);
+}
+.toneLove.reactBtnActive .reactCountBadge {
+  color: #ffb4b0;
+  border-color: rgba(225, 6, 0, 0.35);
+}
+
+.toneFire:hover:not(:disabled),
+.toneFire:focus-visible:not(:disabled),
+.toneFire.reactBtnActive {
+  border-color: color-mix(in srgb, #f59e0b 55%, var(--uc-border));
+  box-shadow: 0 16px 34px rgba(245, 158, 11, 0.22);
+}
+.toneFire.reactBtnActive .reactRing,
+.toneFire:hover:not(:disabled) .reactRing {
+  opacity: 1;
+  box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.4);
+}
+.toneFire.reactBtnActive .reactEmojiWrap {
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+}
+.toneFire.reactBtnActive .reactCountBadge {
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.35);
 }
 
 @keyframes reactPop {
   0% {
     transform: scale(1);
   }
-  35% {
-    transform: scale(1.45) rotate(-8deg);
+  30% {
+    transform: scale(1.55) rotate(-12deg);
   }
-  65% {
-    transform: scale(0.92) rotate(4deg);
+  55% {
+    transform: scale(0.88) rotate(6deg);
   }
   100% {
     transform: scale(1);
   }
 }
 
-@media (max-width: 520px) {
+@keyframes floatAway {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.6);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-64px) scale(1.15);
+  }
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 560px) {
+  .shareBar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .shareDock {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .shareOrb {
+    width: 44px;
+    height: 44px;
+  }
+
   .reactRow {
-    max-width: none;
     gap: 0.5rem;
   }
 
   .reactBtn {
-    min-height: 5.75rem;
-    padding: 0.75rem 0.4rem;
-    border-radius: 1rem;
+    min-height: 6.4rem;
+    padding: 0.85rem 0.35rem 0.8rem;
+    border-radius: 1.1rem;
+  }
+
+  .reactEmojiWrap {
+    width: 2.7rem;
+    height: 2.7rem;
   }
 
   .reactEmoji {
-    font-size: 1.55rem;
+    font-size: 1.45rem;
   }
 
   .reactLabel {
     font-size: 0.72rem;
   }
-}
-
-.engageNote {
-  margin: 0.75rem 0 0;
-  font-size: 0.9rem;
-  color: var(--uc-fg-muted);
 }
 
 .engageSuccess {
@@ -423,7 +684,7 @@
   border-left: 3px solid var(--uc-red);
   border-radius: 0.75rem;
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
-  animation: chapterIn 0.35s ease;
+  animation: toastIn 0.35s ease;
 }
 
 .chapterTitle {
@@ -441,17 +702,6 @@
   line-height: 1.4;
 }
 
-@keyframes chapterIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @media (max-width: 640px) {
   .chapterToast {
     left: 1rem;
@@ -462,19 +712,22 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .shareChip,
+  .shareOrb,
   .reactBtn,
-  .reactEmoji {
-    transition: none;
-  }
-
-  .reactBtnPop .reactEmoji,
+  .reactEmojiWrap,
+  .reactFloater,
+  .reactToast,
   .chapterToast {
+    transition: none;
     animation: none;
   }
 
-  .shareChip:hover,
+  .shareOrb:hover,
   .reactBtn:hover:not(:disabled) {
     transform: none;
+  }
+
+  .reactBtnPop .reactEmoji {
+    animation: none;
   }
 }
