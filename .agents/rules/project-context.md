@@ -29,7 +29,7 @@ YouTube portfolio pulls from a **hardcoded channel ID** in `lib/youtube.ts` (`YO
 
 ## Blog and content
 
-- **Sanity CMS** — posts in project `pbq9a26l` / `production`. Standalone Studio: sibling folder `studio-ultimate-studios`. App fetches via `lib/sanity/posts.ts`.
+- **Sanity CMS** — posts in project `pt67u261` / `production`. Standalone Studio: sibling folder `studio-ultimate-studios`. App fetches via `lib/sanity/posts.ts`.
 - Site chrome (contact, socials, about, SEO defaults) still in `content/site.json` via `lib/cms/store.ts` (`getSite`).
 - Related posts by shared tags (`getRelatedPosts`).
 - Blog JSON-LD: `BlogPosting` + `BreadcrumbList` on `[slug]` page.

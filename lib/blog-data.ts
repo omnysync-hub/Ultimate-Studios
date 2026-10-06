@@ -31,7 +31,7 @@ export async function getBlogPosts(includeDrafts = false): Promise<BlogPost[]> {
   const remote = await fetchSanityPosts(includeDrafts);
   if (!remote?.length) return local;
 
-  // Merge: local samples fill the reel; Sanity posts override matching slugs.
+  // Merge: Sanity posts override matching local slugs.
   const bySlug = new Map(local.map((p) => [p.slug, p]));
   for (const post of remote) bySlug.set(post.slug, post);
   return [...bySlug.values()];

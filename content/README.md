@@ -2,11 +2,11 @@
 
 ## Blogs
 
-Sample posts live in `content/posts.json` with covers in `public/blog/`.
+Local posts (optional fallback) live in `content/posts.json`. Covers go in `public/blog/`.
 
-The site uses **Sanity** when it has published posts; otherwise it falls back to these local samples so `/blog` never looks empty.
+The site uses **Sanity** when configured; otherwise it reads from `posts.json` (currently empty).
 
-To push samples into Sanity later:
+To import local JSON into Sanity:
 
 ```bash
 SANITY_API_WRITE_TOKEN=sk...
