@@ -40,11 +40,11 @@ const nextConfig = {
 
     const siteCsp = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://www.googlesyndication.com",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://www.googlesyndication.com https://static.cloudflareinsights.com",
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://i.ytimg.com https://img.youtube.com https://cdn.sanity.io https://*.googlesyndication.com https://*.googleusercontent.com https://www.google-analytics.com https://www.googletagmanager.com",
       "font-src 'self' data:",
-      "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.googlesyndication.com https://googleads.g.doubleclick.net https://www.google.com https://www.youtube.com https://youtube.com https://vitals.vercel-insights.com https://*.api.sanity.io https://*.sanity.io https://api.resend.com",
+      "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://pagead2.googlesyndication.com https://www.googlesyndication.com https://googleads.g.doubleclick.net https://www.google.com https://www.youtube.com https://youtube.com https://vitals.vercel-insights.com https://*.api.sanity.io https://*.sanity.io https://api.resend.com https://cloudflareinsights.com https://static.cloudflareinsights.com",
       "media-src 'self' https://storage.googleapis.com",
       "frame-src https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://www.google.com",
       "object-src 'none'",
@@ -57,11 +57,11 @@ const nextConfig = {
     // Studio needs Sanity CDN + Google OAuth popups (COOP allow-popups).
     const studioCsp = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://core.sanity-cdn.com https://*.sanity.io",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://core.sanity-cdn.com https://*.sanity.io https://static.cloudflareinsights.com",
       "style-src 'self' 'unsafe-inline' https://core.sanity-cdn.com",
       "img-src 'self' data: blob: https://cdn.sanity.io https://*.sanity.io https://*.googleusercontent.com",
       "font-src 'self' data: https://core.sanity-cdn.com",
-      "connect-src 'self' https://*.api.sanity.io https://*.sanity.io https://core.sanity-cdn.com https://cdn.sanity.io",
+      "connect-src 'self' https://*.api.sanity.io https://*.sanity.io https://core.sanity-cdn.com https://cdn.sanity.io https://api.sanity.io https://cloudflareinsights.com https://static.cloudflareinsights.com",
       "media-src 'self' blob:",
       "frame-src 'self' https://*.sanity.io https://accounts.google.com https://www.google.com",
       "worker-src 'self' blob:",
@@ -72,26 +72,27 @@ const nextConfig = {
       "upgrade-insecure-requests"
     ].join("; ");
 
+    const studioHeaders = [
+      { key: "Content-Security-Policy", value: studioCsp },
+      { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
+      { key: "Cross-Origin-Resource-Policy", value: "cross-origin" },
+      ...security
+    ];
+
+    const siteHeaders = [
+      { key: "Content-Security-Policy", value: siteCsp },
+      { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+      { key: "Cross-Origin-Resource-Policy", value: "same-site" },
+      { key: "X-Frame-Options", value: "DENY" },
+      ...security
+    ];
+
     return [
-      {
-        source: "/studio/:path*",
-        headers: [
-          { key: "Content-Security-Policy", value: studioCsp },
-          { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
-          { key: "Cross-Origin-Resource-Policy", value: "cross-origin" },
-          ...security
-        ]
-      },
-      {
-        source: "/(.*)",
-        headers: [
-          { key: "Content-Security-Policy", value: siteCsp },
-          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
-          { key: "Cross-Origin-Resource-Policy", value: "same-site" },
-          { key: "X-Frame-Options", value: "DENY" },
-          ...security
-        ]
-      }
+      // Exact /studio + nested tools — must not also get site CSP (browsers AND all CSPs).
+      { source: "/studio", headers: studioHeaders },
+      { source: "/studio/:path*", headers: studioHeaders },
+      // Everything except /studio — so site CSP never stacks on Studio.
+      { source: "/((?!studio(?:/|$)).*)", headers: siteHeaders }
     ];
   }
 };
