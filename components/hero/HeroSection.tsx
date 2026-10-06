@@ -1,7 +1,84 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import styles from "./HeroSection.module.css";
+
+const HERO_VIDEOS = {
+  top: "/hero/top.mp4",
+  bottom: "/hero/bottom.mp4"
+} as const;
+
+/** Muted looping hero clip — mounts source only when visible + motion allowed. */
+function HeroLoopVideo({
+  src,
+  active
+}: {
+  src: string;
+  active: boolean;
+}) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    if (!active) return;
+    const frame = frameRef.current;
+    if (!frame) return;
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (reduceMotion) return;
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setShouldLoad(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "80px", threshold: 0.05 }
+    );
+    io.observe(frame);
+    return () => io.disconnect();
+  }, [active]);
+
+  useEffect(() => {
+    const el = videoRef.current;
+    if (!el || !shouldLoad) return;
+    el.muted = true;
+    const play = () => {
+      void el.play().catch(() => {
+        /* autoplay can still be blocked; muted+playsInline covers most cases */
+      });
+    };
+    if (el.readyState >= 2) {
+      play();
+      return;
+    }
+    el.addEventListener("loadeddata", play, { once: true });
+    return () => el.removeEventListener("loadeddata", play);
+  }, [shouldLoad]);
+
+  return (
+    <div ref={frameRef} className={styles.videoFrame} aria-hidden="true">
+      <div className={styles.videoPlaceholder} />
+      <video
+        ref={videoRef}
+        className={styles.heroVideo}
+        muted
+        loop
+        playsInline
+        autoPlay={shouldLoad}
+        preload={shouldLoad ? "metadata" : "none"}
+        src={shouldLoad ? src : undefined}
+        disablePictureInPicture
+        disableRemotePlayback
+        tabIndex={-1}
+      />
+    </div>
+  );
+}
 
 /** Size hero words to fill available width; on mobile each word fills the row. */
 function useFitHeroType(
@@ -140,7 +217,7 @@ export function HeroSection() {
               </p>
             </div>
             <div className={`${styles.videoSlot} ${styles.videoCinematic}`}>
-              <div className={styles.videoPlaceholder} aria-hidden="true" />
+              <HeroLoopVideo src={HERO_VIDEOS.top} active={ready} />
             </div>
           </div>
 
@@ -150,7 +227,7 @@ export function HeroSection() {
 
           <div className={`${styles.heroRow} ${styles.bottomRow}`}>
             <div className={`${styles.videoSlot} ${styles.videoCinematic}`}>
-              <div className={styles.videoPlaceholder} aria-hidden="true" />
+              <HeroLoopVideo src={HERO_VIDEOS.bottom} active={ready} />
             </div>
             <div className={`${styles.wordClip} ${styles.fromLineDown}`}>
               <p ref={cineverseRef} className={styles.heroWord}>

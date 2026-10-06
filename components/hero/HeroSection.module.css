@@ -147,6 +147,7 @@
 }
 
 .videoSlot {
+  position: relative;
   flex: 1 1 0;
   min-width: 0;
   width: auto;
@@ -169,14 +170,22 @@
   will-change: transform, opacity;
 }
 
+.videoFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .videoPlaceholder {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   background:
     radial-gradient(circle at 30% 35%, #3a3a36, transparent 42%),
     radial-gradient(circle at 75% 70%, #2a2a27, transparent 40%),
     linear-gradient(120deg, #1c1c19, #0c0c0b 55%, #171714);
-  position: relative;
 }
 
 .videoPlaceholder::after {
@@ -190,10 +199,23 @@
     transparent 100%
   );
   transform: translateX(-120%);
+  pointer-events: none;
 }
 
 .revealed .videoPlaceholder::after {
   animation: scan 3.5s linear 3.2s infinite;
+}
+
+.heroVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border: 0;
+  pointer-events: none;
+  background: transparent;
 }
 
 @keyframes lineDraw {
