@@ -45,7 +45,7 @@ export function BlogPostView({ post, related, comments, siteUrl, brandName }: Pr
 
   const blogPosting: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": "BlogPosting",
+    "@type": ["NewsArticle", "BlogPosting"],
     headline: post.seoTitle || post.title,
     description: post.description,
     datePublished: post.datePublished,

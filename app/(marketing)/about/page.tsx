@@ -4,9 +4,13 @@ import { getSite, getSiteUrl } from "@/lib/cms/store";
 
 export async function generateMetadata() {
   const site = await getSite();
+  const rawDesc = site.about.paragraphs[0] ?? site.seo.defaultDescription;
+  const description =
+    rawDesc.length > 155 ? `${rawDesc.slice(0, 152).trim()}...` : rawDesc;
+
   return buildMetadata({
     title: site.about.title,
-    description: site.about.paragraphs[0] ?? site.seo.defaultDescription,
+    description,
     pathname: "/about"
   });
 }

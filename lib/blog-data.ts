@@ -10,6 +10,7 @@ function mapLocalPosts(includeDrafts = false): BlogPost[] {
   return posts
     .filter((p) => includeDrafts || !p.draft)
     .map((p) => ({
+      ...p,
       slug: p.slug,
       title: p.title,
       description: p.description,

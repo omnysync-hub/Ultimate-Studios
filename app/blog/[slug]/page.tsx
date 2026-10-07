@@ -19,7 +19,7 @@ export async function generateMetadata({
   const post = await getPostBySlug(slug);
   if (!post) return {};
   const meta = buildMetadata({
-    title: `${post.seoTitle || post.title} — Ultimate Cineverse`,
+    title: post.seoTitle || post.title,
     description: post.description,
     pathname: `/blog/${post.slug}`,
     type: "article",

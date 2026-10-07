@@ -46,6 +46,11 @@ export const metadata: Metadata = {
   },
   description:
     "Ultimate Cineverse — films, worlds, and audiences. Creative production from concept to cut.",
+  alternates: {
+    types: {
+      "application/rss+xml": `${siteUrl}/feed.xml`
+    }
+  },
   applicationName: "Ultimate Cineverse",
   appleWebApp: {
     capable: true,
