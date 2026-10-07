@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "gscServer": {
+      "command": "C:/Users/mmurt/AppData/Local/hermes/bin/uvx.exe",
+      "args": ["mcp-search-console"],
+      "env": {
+        "GSC_OAUTH_CLIENT_SECRETS_FILE": "C:/Users/mmurt/.gsc/client_secrets.json"
+      }
+    },
+    "openseo": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://app.openseo.so/mcp"
+      ]
+    }
+  }
+}
