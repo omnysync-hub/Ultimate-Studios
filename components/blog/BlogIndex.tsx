@@ -203,6 +203,14 @@ export function BlogIndex({
           </p>
         </header>
 
+        <div className={styles.introLead}>
+          <p>
+            Explore in-depth film reviews, streaming guides, box office insights, and culture breakdowns.
+            From theatrical releases to streaming premieres, our reviews provide critical analysis of storytelling,
+            cinematography, and cast performances.
+          </p>
+        </div>
+
         {query ? (
           <p className={styles.searchNote} role="status">
             Showing results for <strong>“{query}”</strong>

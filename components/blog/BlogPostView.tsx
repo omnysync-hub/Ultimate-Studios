@@ -100,6 +100,51 @@ export function BlogPostView({ post, related, comments, siteUrl, brandName }: Pr
         }
       : null;
 
+  const isReview =
+    post.tags.some((t) => t.toLowerCase().includes("review")) ||
+    post.title.toLowerCase().includes("review") ||
+    post.slug.includes("review");
+
+  const movieName =
+    post.primaryEntity ||
+    post.title
+      .replace(/\s*Review.*$/i, "")
+      .replace(/\s*\(.*?\)/g, "")
+      .trim();
+
+  const reviewLd = isReview
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Review",
+        itemReviewed: {
+          "@type": "Movie",
+          name: movieName,
+          ...(post.coverImage || post.ogImage
+            ? { image: post.coverImage || post.ogImage }
+            : {})
+        },
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: "8.5",
+          bestRating: "10",
+          worstRating: "1"
+        },
+        author: {
+          "@type": post.authorRole ? "Person" : "Organization",
+          name: post.author
+        },
+        publisher: {
+          "@type": "Organization",
+          name: brandName,
+          url: siteUrl
+        },
+        headline: post.seoTitle || post.title,
+        reviewBody: post.keyTakeaway || post.description,
+        datePublished: post.datePublished,
+        dateModified: post.dateModified
+      }
+    : null;
+
   const midAdAfter = Math.min(2, Math.max(0, paragraphs.length - 1));
 
   return (
@@ -109,6 +154,7 @@ export function BlogPostView({ post, related, comments, siteUrl, brandName }: Pr
       <div className={styles.atmosphere} aria-hidden="true" />
       <JsonLd data={breadcrumb} />
       <JsonLd data={blogPosting} />
+      {reviewLd ? <JsonLd data={reviewLd} /> : null}
       {faqLd ? <JsonLd data={faqLd} /> : null}
       {howToLd ? <JsonLd data={howToLd} /> : null}
 

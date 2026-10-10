@@ -45,6 +45,13 @@ export default async function HomePage() {
   return (
     <>
       <JsonLd data={jsonLd} />
+      <section className="sr-only">
+        <h2>Entertainment News, Film Reviews &amp; Production Studio</h2>
+        <p>
+          Ultimate Cineverse covers the stories, cinema, and creators shaping modern entertainment.
+          From in-depth theatrical reviews and streaming guides to creative studio production, explore our latest coverage across film, television, and digital culture.
+        </p>
+      </section>
       <HomeExperience
         posts={posts}
         contact={site.contact}

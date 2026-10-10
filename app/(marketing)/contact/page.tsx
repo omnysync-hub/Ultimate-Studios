@@ -32,27 +32,34 @@ export default async function ContactPage() {
       <main className="uc-page mx-auto w-full max-w-3xl px-4 py-12 pb-24">
         <h1 className="text-3xl font-bold text-uc-fg">Contact {site.brandName}</h1>
         <p className="mt-4 text-uc-muted leading-relaxed">
-          Tell us about your project. Prefer email?{" "}
-          <a className="uc-link" href={`mailto:${email}`}>
-            {email}
-          </a>
-          {phone ? (
-            <>
-              {" "}
-              or call{" "}
-              <a className="uc-link" href={`tel:${phone.replace(/\s/g, "")}`}>
-                {phone}
-              </a>
-            </>
-          ) : null}
-          .
+          Connect with the Ultimate Cineverse newsroom and creative studio. Whether you have an editorial lead, a screening invitation, or a production inquiry, our team is ready to collaborate.
         </p>
 
+        <div className="mt-6 grid gap-6 sm:grid-cols-2">
+          <div className="rounded-lg border border-uc-border bg-uc-glass p-5">
+            <h2 className="text-base font-semibold text-uc-fg">Editorial &amp; Press</h2>
+            <p className="mt-2 text-sm text-uc-muted leading-relaxed">
+              For review screeners, press releases, festival coverage, and film interview requests, email our writing desk at{" "}
+              <a className="uc-link" href={`mailto:${email}`}>
+                {email}
+              </a>.
+            </p>
+          </div>
+          <div className="rounded-lg border border-uc-border bg-uc-glass p-5">
+            <h2 className="text-base font-semibold text-uc-fg">Studio &amp; Production</h2>
+            <p className="mt-2 text-sm text-uc-muted leading-relaxed">
+              Inquire about studio production, commercial creative direction, video editing, and motion design projects.
+            </p>
+          </div>
+        </div>
+
         {addressLines.length > 0 ? (
-          <p className="mt-3 text-uc-faint text-sm leading-relaxed">{addressLines.join(" · ")}</p>
+          <p className="mt-4 text-uc-faint text-sm leading-relaxed">{addressLines.join(" · ")}</p>
         ) : null}
 
-        <ContactForm email={email} />
+        <div className="mt-8">
+          <ContactForm email={email} />
+        </div>
       </main>
     </>
   );

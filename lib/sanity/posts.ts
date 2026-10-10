@@ -110,17 +110,47 @@ function mapPost(doc: SanityPost): BlogPost {
   const socialOg = ogImageUrl(doc.ogImage) || ogImageUrl(doc.mainImage);
   const displayImage = naturalCover || socialOg;
 
+  let title = doc.title;
+  let seoTitle = doc.seoTitle;
+  let description = doc.description || doc.excerpt || "";
+  let focusKeyword = doc.focusKeyword;
+  let primaryEntity = doc.primaryEntity;
+  let tags = doc.tags || [];
+
+  if (doc.slug === "frankenstein-2025-review") {
+    if (!title.includes("2025")) {
+      title = "Frankenstein (2025) Review: Monsters Are Made Through Misunderstanding";
+    }
+    if (!seoTitle || seoTitle.length > 65) {
+      seoTitle = "Frankenstein (2025) Review: Del Toro's Gothic Vision";
+    }
+    focusKeyword = focusKeyword || "frankenstein 2025 review";
+    primaryEntity = primaryEntity || "Guillermo del Toro's Frankenstein (2025)";
+    if (!tags.includes("Frankenstein 2025")) {
+      tags = Array.from(new Set(["Frankenstein 2025", "Movie Review", "Film Reviews", "Guillermo del Toro", "Jacob Elordi", "Oscar Isaac", ...tags]));
+    }
+  } else if (doc.slug === "the-sheep-detectives-review") {
+    if (!seoTitle || seoTitle.length > 65) {
+      seoTitle = "The Sheep Detectives Movie Review & Cast Guide (2026)";
+    }
+    focusKeyword = focusKeyword || "the sheep detectives movie";
+    primaryEntity = primaryEntity || "The Sheep Detectives (Three Bags Full: A Sheep Detective Movie)";
+    if (!tags.includes("The Sheep Detectives Movie")) {
+      tags = Array.from(new Set(["The Sheep Detectives Movie", "The Sheep Detectives", "Hugh Jackman", "Three Bags Full", "Film Reviews", "Movie Review", ...tags]));
+    }
+  }
+
   return {
     _id: doc._id,
     slug: doc.slug,
-    title: doc.title,
-    seoTitle: doc.seoTitle,
-    description: doc.description || doc.excerpt || "",
+    title,
+    seoTitle,
+    description,
     datePublished: doc.datePublished,
     dateModified: doc.dateModified || doc.datePublished,
     author: doc.authorName || doc.author || "Ultimate Cineverse Team",
     authorRole: doc.authorRole || doc.authorRefRole,
-    tags: doc.tags || [],
+    tags,
     content: plain,
     body: doc.body,
     draft: Boolean(doc.draft),
@@ -128,13 +158,13 @@ function mapPost(doc: SanityPost): BlogPost {
     coverImage: naturalCover,
     ogImage: displayImage,
     coverAlt: doc.mainImage?.alt,
-    focusKeyword: doc.focusKeyword,
+    focusKeyword,
     keyTakeaway: doc.keyTakeaway,
     keyPoints: doc.keyPoints,
     faqs: doc.faqs,
     howToSteps: doc.howToSteps,
     sources: doc.sources,
-    primaryEntity: doc.primaryEntity,
+    primaryEntity,
     geoFocus: doc.geoFocus,
     updatedNote: doc.updatedNote,
     experienceNote: doc.experienceNote,
