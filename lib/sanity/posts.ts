@@ -85,10 +85,20 @@ const postFields = `
   reactionClap
 `;
 
-function imageUrl(img?: SanityImage, w = 1200, h = 630) {
+function naturalImageUrl(img?: SanityImage, maxW = 1200) {
   if (!img?.asset?._ref) return undefined;
   try {
-    return urlForImage(img)?.width(w).height(h).url() || undefined;
+    const target = img.asset || img;
+    return urlForImage(target)?.auto("format").width(maxW).fit("max").url() || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function ogImageUrl(img?: SanityImage) {
+  if (!img?.asset?._ref) return undefined;
+  try {
+    return urlForImage(img)?.width(1200).height(630).fit("crop").url() || undefined;
   } catch {
     return undefined;
   }
@@ -96,7 +106,9 @@ function imageUrl(img?: SanityImage, w = 1200, h = 630) {
 
 function mapPost(doc: SanityPost): BlogPost {
   const plain = doc.body?.length ? portableTextToPlain(doc.body) : doc.content || "";
-  const og = imageUrl(doc.ogImage) || imageUrl(doc.mainImage);
+  const naturalCover = naturalImageUrl(doc.mainImage) || naturalImageUrl(doc.ogImage);
+  const socialOg = ogImageUrl(doc.ogImage) || ogImageUrl(doc.mainImage);
+  const displayImage = naturalCover || socialOg;
 
   return {
     _id: doc._id,
@@ -113,7 +125,8 @@ function mapPost(doc: SanityPost): BlogPost {
     body: doc.body,
     draft: Boolean(doc.draft),
     noIndex: Boolean(doc.noIndex),
-    ogImage: og,
+    coverImage: naturalCover,
+    ogImage: displayImage,
     coverAlt: doc.mainImage?.alt,
     focusKeyword: doc.focusKeyword,
     keyTakeaway: doc.keyTakeaway,

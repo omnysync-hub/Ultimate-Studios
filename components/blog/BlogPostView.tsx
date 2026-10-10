@@ -120,18 +120,22 @@ export function BlogPostView({ post, related, comments, siteUrl, brandName }: Pr
           Back to Blogs
         </Link>
 
-        {post.ogImage ? (
-          <div className={styles.coverHero}>
-            <Image
-              src={post.ogImage}
-              alt={post.coverAlt || ""}
-              fill
-              priority
-              sizes="(max-width: 1240px) 100vw, 1240px"
-              className={styles.coverHeroImg}
-            />
-          </div>
-        ) : null}
+        {(() => {
+          const coverSrc = post.coverImage || post.ogImage;
+          if (!coverSrc) return null;
+          return (
+            <div className={styles.coverHero}>
+              <Image
+                src={coverSrc}
+                alt={post.coverAlt || ""}
+                fill
+                priority
+                sizes="(max-width: 1240px) 100vw, 1240px"
+                className={styles.coverHeroImg}
+              />
+            </div>
+          );
+        })()}
 
         <div className={styles.articleLayout}>
           <article>

@@ -37,15 +37,16 @@ function uniqueTags(posts: BlogPost[]) {
 
 function FeaturedCard({ post, accent }: { post: BlogPost; accent?: boolean }) {
   const minutes = getReadingMinutes(post.content);
+  const imageSrc = post.coverImage || post.ogImage;
   return (
     <Link
       href={`/blog/${post.slug}`}
       className={`${styles.featureCard} ${accent ? styles.featureCardAlt : ""}`}
     >
       <div className={styles.featureMedia} aria-hidden="true">
-        {post.ogImage ? (
+        {imageSrc ? (
           <Image
-            src={post.ogImage}
+            src={imageSrc}
             alt=""
             fill
             sizes="(max-width: 900px) 100vw, 50vw"
@@ -77,18 +78,28 @@ function FeaturedCard({ post, accent }: { post: BlogPost; accent?: boolean }) {
 function PosterCard({ post }: { post: BlogPost }) {
   const minutes = getReadingMinutes(post.content);
   const year = yearOf(post.datePublished);
+  const imageSrc = post.coverImage || post.ogImage;
 
   return (
     <Link href={`/blog/${post.slug}`} className={styles.poster}>
       <div className={styles.posterArt} aria-hidden="true">
-        {post.ogImage ? (
-          <Image
-            src={post.ogImage}
-            alt=""
-            fill
-            sizes="(max-width: 640px) 45vw, (max-width: 1100px) 30vw, 220px"
-            className={styles.posterImg}
-          />
+        {imageSrc ? (
+          <>
+            <Image
+              src={imageSrc}
+              alt=""
+              fill
+              aria-hidden="true"
+              className={styles.posterImgBackdrop}
+            />
+            <Image
+              src={imageSrc}
+              alt=""
+              fill
+              sizes="(max-width: 640px) 45vw, (max-width: 1100px) 30vw, 220px"
+              className={styles.posterImg}
+            />
+          </>
         ) : (
           <div className={styles.posterFallback} style={{ background: posterTone(post.slug) }}>
             <Image

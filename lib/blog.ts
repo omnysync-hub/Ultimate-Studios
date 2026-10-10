@@ -28,6 +28,7 @@ export type BlogPost = {
   /** Rich body from Sanity Portable Text. */
   body?: PortableTextBlock[];
   draft?: boolean;
+  coverImage?: string;
   ogImage?: string;
   coverAlt?: string;
   keyTakeaway?: string;
