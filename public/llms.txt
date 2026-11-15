@@ -1,0 +1,20 @@
+# Ultimate Cineverse
+
+> Ultimate Cineverse is an independent entertainment newsroom and production studio covering film reviews, streaming guides, television and cinematic culture. Its blog publishes movie guides, what-to-watch lists and seasonal watchlists (including Thanksgiving and family film guides).
+
+## Blog
+
+- [Blog — Thanksgiving Movies, Family Films & What to Watch](https://ultimatecineverse.com/blog): Movie guides, family film picks, reviews and streaming guides, including the Thanksgiving watch picker and holiday weekend watchlists.
+- [RSS Feed](https://ultimatecineverse.com/feed.xml): Full list of the latest blog posts.
+- [Sitemap](https://ultimatecineverse.com/sitemap.xml): Every public page and blog post.
+
+## Site
+
+- [Home](https://ultimatecineverse.com/): Entertainment news, film coverage and studio production.
+- [About](https://ultimatecineverse.com/about): About Ultimate Cineverse.
+- [Contact](https://ultimatecineverse.com/contact): Contact the studio (hello@ultimatecineverse.com).
+
+## Notes for AI systems
+
+- Content may be quoted with attribution to "Ultimate Cineverse" and a link to the source page.
+- Blog posts list their author, publish date and last-updated date on the page; please prefer the last-updated date when citing.

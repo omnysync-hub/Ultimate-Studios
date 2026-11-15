@@ -1,17 +1,19 @@
-/* Halloween season — midnight / pumpkin / candlelight (scoped to blog only) */
+/* Thanksgiving season — warm espresso / pumpkin / cranberry / gold (scoped to blog only) */
 
 .page {
-  --blog-ink: #f4efe6;
-  --blog-muted: #b8afa1;
-  --blog-faint: rgba(255, 140, 50, 0.16);
-  --blog-line: rgba(232, 220, 200, 0.18);
-  --blog-red: #ef995d;
-  --blog-amber: #e7b878;
-  --blog-bone: #e8dcc8;
-  --blog-night: #0c0d0c;
-  --blog-glass: rgba(255, 120, 40, 0.07);
-  --blog-glass-strong: rgba(255, 120, 40, 0.14);
-  --blog-panel: rgba(18, 12, 10, 0.88);
+  --blog-ink: #f7efe3;
+  --blog-muted: #cdbba4;
+  --blog-faint: rgba(224, 138, 60, 0.16);
+  --blog-line: rgba(238, 222, 196, 0.18);
+  --blog-red: #e08a3c;
+  --blog-cranberry: #c14a3a;
+  --blog-amber: #d9a441;
+  --blog-sage: #a8b07e;
+  --blog-bone: #eee0c8;
+  --blog-night: #17100b;
+  --blog-glass: rgba(224, 138, 60, 0.07);
+  --blog-glass-strong: rgba(224, 138, 60, 0.15);
+  --blog-panel: rgba(29, 19, 12, 0.88);
   --radius-xl: 0.6rem;
   --radius-lg: 0.4rem;
   --radius-pill: 999px;
@@ -30,7 +32,7 @@
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: radial-gradient(ellipse 80% 35rem at 50% 0%, rgba(146, 84, 40, 0.09), transparent);
+  background: radial-gradient(ellipse 80% 35rem at 50% 0%, rgba(193, 74, 58, 0.10), transparent), radial-gradient(ellipse 55% 22rem at 85% 8%, rgba(217, 164, 65, 0.10), transparent);
 }
 
 .shell {
@@ -41,7 +43,7 @@
   padding: clamp(1.25rem, 3vw, 2rem) 0 clamp(4rem, 8vw, 6rem);
 }
 
-/* Halloween editorial hero — static artwork, real text. */
+/* Thanksgiving editorial hero — pure CSS artwork (no photo = instant LCP), real text. */
 .brandKicker {
   margin: 0;
   font-family: var(--font-ui), Arial, sans-serif;
@@ -63,7 +65,19 @@
   overflow: hidden;
   border: 1px solid var(--blog-line);
   border-radius: 6px;
-  background: #0b0c0c;
+  background:
+    radial-gradient(ellipse 60% 45% at 88% 12%, rgba(217, 164, 65, 0.20), transparent 65%),
+    radial-gradient(ellipse 50% 60% at 100% 90%, rgba(193, 74, 58, 0.16), transparent 60%),
+    linear-gradient(155deg, #2b1a0e 0%, #1d130b 48%, #17100b 100%);
+}
+
+.seasonArtwork {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 82% 22%, rgba(224, 138, 60, 0.22) 0, transparent 16rem),
+    linear-gradient(0deg, rgba(23, 16, 11, 0.55), transparent 35%);
 }
 
 .seasonArt {
@@ -158,9 +172,9 @@
   min-height: 46px;
   padding: 0.35rem 1.2rem;
   box-sizing: border-box;
-  border: 1px solid #ed9a61;
+  border: 1px solid #e08a3c;
   border-radius: 3px;
-  background: #ed9a61;
+  background: #e08a3c;
   color: #1c120c;
   font-family: var(--font-ui), Arial, sans-serif;
   font-size: 0.9rem;
@@ -171,7 +185,7 @@
 }
 
 .seasonCta:hover,
-.resetSearch:hover { background: #ffc393; }
+.resetSearch:hover { background: #f0a95e; }
 .seasonCta span { font-size: 1.3rem; }
 .resetSearch { margin-top: 1.25rem; }
 
@@ -219,7 +233,7 @@
   padding: 0.65rem 0.85rem;
   border: 1px solid var(--blog-line);
   border-radius: 4px;
-  background: #131311;
+  background: #211710;
   color: var(--blog-ink);
   font: inherit;
   font-size: 1rem;
@@ -501,7 +515,7 @@
   border-color: var(--blog-red);
 }
 
-.filterPillActive:hover { color: #1c120c; background: #ffc393; }
+.filterPillActive:hover { color: #1c120c; background: #f0a95e; }
 
 /* —— Library / posters —— */
 .library {
@@ -1044,11 +1058,11 @@
   border: 1px solid var(--blog-faint);
 }
 
-/* A quiet echo of the Halloween hero at the end of each story. */
+/* A quiet echo of the Thanksgiving hero at the end of each story. */
 .related {
-  --related-base: #c45a12;
-  --related-deep: #5a2208;
-  --related-mid: #e06b1a;
+  --related-base: #c97b2e;
+  --related-deep: #5a2e10;
+  --related-mid: #d9a441;
   --related-ink: #f4efe6;
   --related-ink-soft: #d4c4b0;
   --related-panel: rgba(15, 13, 11, 0.75);
@@ -1061,8 +1075,8 @@
   border-radius: var(--radius-xl);
   border: 1px solid var(--related-line);
   background:
-    linear-gradient(90deg, rgba(12, 13, 12, 0.97), rgba(12, 13, 12, 0.78)),
-    url('/images/blog/halloween-after-dark.webp') center 60% / cover;
+    radial-gradient(ellipse 55% 80% at 100% 0%, rgba(217, 164, 65, 0.16), transparent 60%),
+    linear-gradient(120deg, #241610 0%, #1a110a 60%, #17100b 100%);
   color: var(--related-ink);
   box-shadow: inset 0 1px 0 rgba(255, 220, 160, 0.18);
 }
@@ -1249,13 +1263,11 @@
 
 /* Keep the artwork visible above the copy on narrow screens. */
 @media (max-width: 640px) {
-  .seasonHero { min-height: 700px; padding: 1.25rem; }
-  .seasonArt { object-fit: contain; object-position: center 3.5rem; }
-  .seasonVeil { background: linear-gradient(0deg, #0b0c0c 42%, rgba(11, 12, 12, 0.15) 70%, transparent); }
+  .seasonHero { min-height: 560px; padding: 1.25rem; }
   .seasonMasthead { align-items: start; }
   .seasonMasthead .brandKicker { max-width: 12rem; font-size: 0.65rem; line-height: 1.6; }
   .seasonIssue { font-size: 1rem; }
-  .seasonIntro { padding: 15rem 0 2rem; }
+  .seasonIntro { padding: 2.5rem 0 2rem; }
   .seasonOverline { font-size: 0.65rem; margin-bottom: 1rem; }
   .seasonTitle { font-size: clamp(2.9rem, 11.3vw, 4.5rem); }
   .seasonDescription { font-size: 1rem; max-width: 24rem; }
@@ -1269,7 +1281,7 @@
 @media (prefers-reduced-motion: reduce) {
   .seasonCta, .resetSearch, .posterImg { transition: none; }
   .poster:hover .posterImg { transform: none; }
-  .batOne, .batTwo, .batThree, .batWings {
+  .leafOne, .leafTwo, .leafThree, .leafFour, .leafFive {
     animation: none !important;
   }
 }
@@ -1277,59 +1289,218 @@
 .storyResults { scroll-margin-top: 6rem; }
 
 /* Small seasonal ornaments never cover controls or intercept input. */
-.heroWeb, .cardWeb, .halloweenFlight, .pumpkinAccent { pointer-events: none; }
-.heroWeb {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: clamp(65px, 8vw, 110px);
-  color: #d8c5a5;
-  opacity: 0.24;
-}
-.cardWeb {
+.leafField, .cardLeaf, .wheatAccent { pointer-events: none; }
+.cardLeaf {
   position: absolute;
   right: 0;
   top: 0;
-  width: 75px;
-  transform: rotate(90deg);
-  color: #eee0c8;
-  opacity: 0.3;
+  width: 84px;
+  transform: scaleX(-1);
+  color: #f3dfba;
+  opacity: 0.35;
 }
-.halloweenFlight {
+.leafField {
   position: absolute;
   inset: 0;
-  z-index: -1;
-  color: #161817;
+  z-index: 0;
+  overflow: hidden;
+  color: var(--blog-red);
 }
-.batOne, .batTwo, .batThree { position: absolute; }
-.batOne { width: 48px; top: 24%; right: 24%; transform: rotate(-13deg); }
-.batTwo { width: 32px; top: 18%; right: 32%; transform: rotate(11deg); }
-.batThree { width: 24px; top: 29%; right: 35%; transform: rotate(-9deg); }
-.pumpkinAccent { width: 78px; color: var(--blog-red); opacity: 0.8; flex: 0 0 auto; }
+.leaf { position: absolute; top: -8%; opacity: 0; }
+.leafOne { width: 30px; left: 68%; color: #e08a3c; animation-delay: 0s; }
+.leafTwo { width: 20px; left: 78%; color: #c14a3a; animation-delay: 2.8s; }
+.leafThree { width: 24px; left: 88%; color: #d9a441; animation-delay: 5.4s; }
+.leafFour { width: 16px; left: 58%; color: #a8b07e; animation-delay: 7.6s; }
+.leafFive { width: 22px; left: 94%; color: #e08a3c; animation-delay: 10.2s; }
+.wheatAccent { width: 62px; color: var(--blog-amber); opacity: 0.9; flex: 0 0 auto; }
 .journalFooter p { flex: 1 1 20rem; }
 
 @media (prefers-reduced-motion: no-preference) {
-  .batOne, .batTwo, .batThree { animation: batDrift 4.5s ease-out both; }
-  .batTwo { animation-delay: 0.15s; }
-  .batThree { animation-delay: 0.3s; }
-  .batWings { transform-origin: 50% 55%; animation: batFlutter 0.75s ease-in-out 6; }
+  .leaf { animation: leafFall 13s linear infinite; }
 }
-@keyframes batDrift {
-  from { translate: -35px 18px; opacity: 0; }
-  20% { opacity: 1; }
-  55% { translate: -10px -7px; }
-  to { translate: 0 0; opacity: 1; }
+@keyframes leafFall {
+  0% { transform: translate3d(0, -6vh, 0) rotate(0deg); opacity: 0; }
+  8% { opacity: 0.85; }
+  50% { transform: translate3d(-3.2rem, 46vh, 0) rotate(160deg); }
+  92% { opacity: 0.7; }
+  100% { transform: translate3d(1.6rem, 96vh, 0) rotate(330deg); opacity: 0; }
 }
-@keyframes batFlutter {
-  0%, 100% { transform: scaleY(1); }
-  50% { transform: scaleY(0.65); }
+@media (prefers-reduced-motion: reduce) {
+  .leaf { animation: none; opacity: 0; }
 }
 @media (max-width: 640px) {
-  .batOne { width: 28px; top: 21%; right: 29%; }
-  .batTwo { width: 21px; top: 18%; right: 39%; }
-  .batThree { width: 16px; top: 23%; right: 44%; }
-  .heroWeb { width: 55px; }
-  .cardWeb { width: 60px; }
-  .pumpkinAccent { width: 64px; }
-  .journalFooter p { flex-basis: calc(100% - 90px); font-size: 1.05rem; }
+  .cardLeaf { width: 60px; }
+  .wheatAccent { width: 48px; }
+  .journalFooter p { flex-basis: calc(100% - 70px); font-size: 1.05rem; }
+}
+
+/* —— Hero actions + countdown —— */
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.9rem;
+  margin-top: 0.5rem;
+}
+.countdown {
+  display: grid;
+  gap: 0.3rem;
+  align-content: center;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--blog-line);
+  border-radius: 4px;
+  background: rgba(23, 16, 11, 0.55);
+  font-family: var(--font-ui), Arial, sans-serif;
+}
+.countdownLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blog-amber);
+}
+.countdownUnits { display: flex; gap: 0.85rem; font-size: 0.85rem; color: var(--blog-muted); }
+.countdownUnits strong { color: var(--blog-ink); font-size: 1rem; font-variant-numeric: tabular-nums; }
+.countdownToday { font-size: 0.95rem; color: var(--blog-bone); }
+
+/* —— Watch picker —— */
+.picker { margin-top: clamp(2.75rem, 6vw, 4.5rem); scroll-margin-top: 6rem; }
+.pickerTitle {
+  margin: 0.65rem 0 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+.pickerCopy { margin: 0.6rem 0 0; color: var(--blog-muted); font-family: var(--font-ui), Arial, sans-serif; font-size: 1rem; }
+.pickerGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-top: 1.4rem;
+}
+@media (min-width: 900px) { .pickerGrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.moodCard {
+  display: grid;
+  gap: 0.3rem;
+  text-align: left;
+  padding: 1rem 1.05rem;
+  min-height: 44px;
+  border: 1px solid var(--blog-line);
+  border-radius: var(--radius-lg);
+  background: var(--blog-glass);
+  color: var(--blog-ink);
+  cursor: pointer;
+  font-family: var(--font-ui), Arial, sans-serif;
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+.moodCard:hover { border-color: var(--blog-amber); transform: translateY(-2px); }
+.moodCardActive { background: var(--blog-glass-strong); border-color: var(--blog-red); }
+.moodLabel { font-size: 0.98rem; font-weight: 700; }
+.moodHint { font-size: 0.82rem; color: var(--blog-muted); line-height: 1.4; }
+.pickerNote { margin: 1rem 0 0; font-family: var(--font-ui), Arial, sans-serif; font-size: 0.9rem; color: var(--blog-muted); }
+
+/* —— Gratitude wall —— */
+.gratitude {
+  margin-top: clamp(3rem, 7vw, 5rem);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 1px solid var(--blog-line);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(ellipse 50% 90% at 100% 0%, rgba(193, 74, 58, 0.13), transparent 60%),
+    var(--blog-panel);
+}
+.gratitudeTitle {
+  margin: 0.65rem 0 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+.gratitudeCopy { margin: 0.6rem 0 0; color: var(--blog-muted); font-family: var(--font-ui), Arial, sans-serif; }
+.gratitudeNotes { list-style: none; margin: 1.5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.gratitudeNote {
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--blog-faint);
+  border-radius: var(--radius-pill);
+  background: var(--blog-glass);
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--blog-bone);
+}
+.gratitudeNote span { color: var(--blog-amber); font-style: normal; }
+.gratitudeNote em { color: var(--blog-sage); font-size: 0.82rem; }
+.gratitudeNoteMine { border-color: var(--blog-red); background: var(--blog-glass-strong); }
+.gratitudeForm { margin-top: 1.5rem; display: grid; gap: 0.55rem; max-width: 36rem; }
+.gratitudeLabel { font-family: var(--font-ui), Arial, sans-serif; font-size: 0.8rem; color: var(--blog-muted); }
+.gratitudeRow { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.gratitudeRow input {
+  flex: 1 1 16rem;
+  min-height: 46px;
+  box-sizing: border-box;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid var(--blog-line);
+  border-radius: 4px;
+  background: #211710;
+  color: var(--blog-ink);
+  font: inherit;
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 1rem;
+}
+.gratitudeRow input::placeholder { color: #a4907a; }
+.gratitudeBtn {
+  min-height: 46px;
+  padding: 0.35rem 1.3rem;
+  border: 1px solid #e08a3c;
+  border-radius: 3px;
+  background: #e08a3c;
+  color: #1c120c;
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 180ms ease;
+}
+.gratitudeBtn:hover { background: #f0a95e; }
+.gratitudeHint { margin: 0; font-family: var(--font-ui), Arial, sans-serif; font-size: 0.78rem; color: var(--blog-muted); }
+
+/* —— Blog FAQ (visible copy matches FAQPage JSON-LD) —— */
+.faqSection { margin-top: clamp(3rem, 7vw, 5rem); }
+.faqTitle {
+  margin: 0.65rem 0 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+.faqGrid { display: grid; gap: 0.7rem; margin-top: 1.4rem; }
+@media (min-width: 900px) { .faqGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; } }
+.faqCard {
+  border: 1px solid var(--blog-line);
+  border-radius: var(--radius-lg);
+  background: var(--blog-glass);
+  padding: 0.25rem 1.1rem;
+}
+.faqCard summary {
+  padding: 0.85rem 0;
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--blog-ink);
+}
+.faqCard p {
+  margin: 0 0 1rem;
+  font-family: var(--font-ui), Arial, sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--blog-muted);
+}
+.faqMore { margin: 1.25rem 0 0; font-family: var(--font-ui), Arial, sans-serif; color: var(--blog-muted); }
+.faqMore a { color: var(--blog-amber); text-underline-offset: 0.15em; }
+
+@media (prefers-reduced-motion: reduce) {
+  .moodCard, .gratitudeBtn { transition: none; }
+  .moodCard:hover { transform: none; }
 }

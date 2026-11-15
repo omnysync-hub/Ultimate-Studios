@@ -25,14 +25,23 @@ export async function GET() {
       const title = escapeXml(post.title);
       const author = escapeXml(post.author || site.brandName || "Ultimate Cineverse Team");
 
+      const image = post.coverImage || post.ogImage;
+      const mime = image?.endsWith(".webp")
+        ? "image/webp"
+        : image?.endsWith(".png")
+          ? "image/png"
+          : "image/jpeg";
+      const categories = (post.tags || [])
+        .map((t) => `\n      <category>${escapeXml(t)}</category>`)
+        .join("");
       return `    <item>
       <title>${title}</title>
       <link>${postUrl}</link>
       <guid isPermaLink="true">${postUrl}</guid>
       <pubDate>${pubDate}</pubDate>
       <description>${description}</description>
-      <author>${author}</author>
-      ${post.ogImage ? `<enclosure url="${escapeXml(post.ogImage)}" type="image/jpeg" length="0" />` : ""}
+      <author>${author}</author>${categories}
+      ${image ? `<enclosure url="${escapeXml(image)}" type="${mime}" length="0" />` : ""}
     </item>`;
     })
     .join("\n");
@@ -43,7 +52,7 @@ export async function GET() {
     <title>${escapeXml(site.brandName || "Ultimate Cineverse")}</title>
     <link>${siteUrl}/blog</link>
     <description>${escapeXml(site.seo.defaultDescription || site.tagline)}</description>
-    <language>en-us</language>
+    <language>en-us</language>\n    <copyright>Copyright ${new Date().getFullYear()} Ultimate Cineverse</copyright>\n    <ttl>60</ttl>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${siteUrl}/feed.xml" rel="self" type="application/rss+xml"/>
 ${itemsXml}

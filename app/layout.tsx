@@ -41,11 +41,38 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Ultimate Cineverse",
+    default: "Ultimate Cineverse — Entertainment News, Film Reviews & Streaming Guides",
     template: "%s | Ultimate Cineverse"
   },
   description:
-    "Ultimate Cineverse — films, worlds, and audiences. Creative production from concept to cut.",
+    "Ultimate Cineverse — entertainment news, film reviews, streaming guides and the stories shaping film, TV and digital media. Creative production from concept to cut.",
+  keywords: [
+    "entertainment news",
+    "film reviews",
+    "streaming guides",
+    "what to watch",
+    "movie guides",
+    "Ultimate Cineverse"
+  ],
+  authors: [{ name: "Ultimate Cineverse", url: siteUrl }],
+  creator: "Ultimate Cineverse",
+  publisher: "Ultimate Cineverse",
+  category: "Entertainment",
+  // Search-engine verification — set the env vars in production (see .env.example).
+  // Values are never hardcoded; unset vars simply omit the tag.
+  verification: {
+    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+      : {}),
+    ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+      ? { other: { "msvalidate.01": process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION } }
+      : {})
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 }
+  },
   alternates: {
     types: {
       "application/rss+xml": `${siteUrl}/feed.xml`
@@ -74,7 +101,21 @@ export const metadata: Metadata = {
     "msapplication-TileImage": "/android-chrome-192x192.png"
   },
   openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: siteUrl,
+    siteName: "Ultimate Cineverse",
+    title: "Ultimate Cineverse — Entertainment News, Film Reviews & Streaming Guides",
+    description:
+      "Entertainment news, film reviews, streaming guides and the stories shaping film, TV and digital media.",
     images: [{ url: "/logo.png", width: 512, height: 512, alt: "Ultimate Cineverse" }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ultimate Cineverse — Entertainment News, Film Reviews & Streaming Guides",
+    description:
+      "Entertainment news, film reviews, streaming guides and the stories shaping film, TV and digital media.",
+    images: ["/logo.png"]
   }
 };
 

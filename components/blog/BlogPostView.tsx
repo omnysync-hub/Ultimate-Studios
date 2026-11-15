@@ -38,7 +38,7 @@ export function BlogPostView({ post, related, comments, siteUrl, brandName }: Pr
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: `${siteUrl}/` },
-      { "@type": "ListItem", position: 2, name: "Halloween Blog", item: `${siteUrl}/blog` },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${siteUrl}/blog` },
       { "@type": "ListItem", position: 3, name: post.title, item: postUrl }
     ]
   };
@@ -58,9 +58,14 @@ export function BlogPostView({ post, related, comments, siteUrl, brandName }: Pr
     publisher: {
       "@type": "Organization",
       name: brandName,
-      url: siteUrl
+      url: siteUrl,
+      logo: { "@type": "ImageObject", url: `${siteUrl}/logo.png`, width: 512, height: 512 }
     },
-    mainEntityOfPage: postUrl,
+    inLanguage: "en-US",
+    isAccessibleForFree: true,
+    ...(post.tags.length ? { articleSection: post.tags[0], keywords: post.tags.join(", ") } : {}),
+    ...(post.focusKeyword ? { keywords: [post.focusKeyword, ...post.tags].join(", ") } : {}),
+    mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
     url: postUrl,
     wordCount,
     ...(post.keyTakeaway ? { abstract: post.keyTakeaway } : {}),
@@ -112,36 +117,21 @@ export function BlogPostView({ post, related, comments, siteUrl, brandName }: Pr
       .replace(/\s*\(.*?\)/g, "")
       .trim();
 
-  const reviewLd = isReview
+  // NOTE (SEO integrity): never emit a Review/rating the post does not
+  // actually contain. There is no rating field in the CMS, so reviews get
+  // a plain Movie entity instead of a fabricated 8.5/10 AggregateRating —
+  // invented ratings risk a Google structured-data manual action.
+  const movieLd = isReview
     ? {
         "@context": "https://schema.org",
-        "@type": "Review",
-        itemReviewed: {
-          "@type": "Movie",
-          name: movieName,
-          ...(post.coverImage || post.ogImage
-            ? { image: post.coverImage || post.ogImage }
-            : {})
-        },
-        reviewRating: {
-          "@type": "Rating",
-          ratingValue: "8.5",
-          bestRating: "10",
-          worstRating: "1"
-        },
-        author: {
-          "@type": post.authorRole ? "Person" : "Organization",
-          name: post.author
-        },
-        publisher: {
-          "@type": "Organization",
-          name: brandName,
-          url: siteUrl
-        },
-        headline: post.seoTitle || post.title,
-        reviewBody: post.keyTakeaway || post.description,
+        "@type": "Movie",
+        name: movieName,
+        ...(post.coverImage || post.ogImage
+          ? { image: post.coverImage || post.ogImage }
+          : {}),
+        ...(post.primaryEntity ? { alternateName: post.primaryEntity } : {}),
         datePublished: post.datePublished,
-        dateModified: post.dateModified
+        url: postUrl
       }
     : null;
 
@@ -154,7 +144,7 @@ export function BlogPostView({ post, related, comments, siteUrl, brandName }: Pr
       <div className={styles.atmosphere} aria-hidden="true" />
       <JsonLd data={breadcrumb} />
       <JsonLd data={blogPosting} />
-      {reviewLd ? <JsonLd data={reviewLd} /> : null}
+      {movieLd ? <JsonLd data={movieLd} /> : null}
       {faqLd ? <JsonLd data={faqLd} /> : null}
       {howToLd ? <JsonLd data={howToLd} /> : null}
 
@@ -163,7 +153,7 @@ export function BlogPostView({ post, related, comments, siteUrl, brandName }: Pr
           <span className={styles.backArrow} aria-hidden="true">
             ←
           </span>
-          Back to Halloween Blog
+          Back to the blog
         </Link>
 
         {(() => {
@@ -194,7 +184,7 @@ export function BlogPostView({ post, related, comments, siteUrl, brandName }: Pr
                   /
                 </li>
                 <li>
-                  <Link href="/blog">Halloween Blog</Link>
+                  <Link href="/blog">Blog</Link>
                 </li>
                 <li className={styles.crumbSep} aria-hidden="true">
                   /
@@ -206,7 +196,7 @@ export function BlogPostView({ post, related, comments, siteUrl, brandName }: Pr
             <header className={styles.articleHeader}>
               <div className={styles.eyebrowRow}>
                 <span className={styles.redTick} aria-hidden="true" />
-                <p className={styles.eyebrow}>Halloween read</p>
+                <p className={styles.eyebrow}>From the blog · Thanksgiving season</p>
               </div>
               <ul className={styles.entryTags} aria-label="Topics">
                 {post.tags.map((tag) => (
@@ -339,7 +329,7 @@ export function BlogPostView({ post, related, comments, siteUrl, brandName }: Pr
 
             <section className={styles.related} aria-labelledby="related-heading">
               <h2 id="related-heading" className={styles.relatedTitle}>
-                More Halloween reads
+                More stories to gather around
               </h2>
               <ul className={styles.relatedList}>
                 {related.map((item, i) => (

@@ -25,7 +25,10 @@ export async function generateMetadata({
     type: "article",
     publishedTime: post.datePublished,
     modifiedTime: post.dateModified,
-    openGraphImageUrl: post.ogImage
+    openGraphImageUrl: post.ogImage,
+    authorName: post.author,
+    section: post.tags[0],
+    keywords: [...(post.focusKeyword ? [post.focusKeyword] : []), ...post.tags]
   });
   if (post.noIndex) {
     return { ...meta, robots: { index: false, follow: false } };
